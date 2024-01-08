@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{store-layout}">
+
+<head>
+    <title>Ecomm</title>
+</head>
+
+<body>
+    <main layout:fragment="body">
+        <!-- Header-->
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Store Products</h1>
+            <ol class="breadcrumb mb-4 row">
+                <li class="col text-start"></li>
+                <li class="col text-end">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        + Add New Product
+                    </button>
+                </li>
+            </ol>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">New Product</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="login-form">
+
+                                    <form method="post" th:action="@{/store/product}" th:object="${product}">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" placeholder="Name"
+                                                th:field="*{name}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Category</label>
+                                            <div class="input-group mb-1">
+                                                <select class="form-select" id="category">
+                                                    <option selected="selected" value="" th:field="*{category}">Choose..</option>
+                                                    <option th:each="c : ${categories}" th:text="${c.name}"
+                                                        th:value="${c.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <p th:if="${#fields.hasErrors('category')}" class="text-danger"
+                                            th:errors="*{category}"></p>
+
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <input type="text" class="form-control" placeholder="Description"
+                                                th:field="*{desc}">
+                                        </div>
+
+                                        <p th:if="${#fields.hasErrors('desc')}" class="text-danger" th:errors="*{desc}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Image URL</label>
+                                            <input type="text" class="form-control" placeholder="Image URL"
+                                                th:field="*{image}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('image')}" class="text-danger"
+                                            th:errors="*{image}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>SKU</label>
+                                            <input type="text" class="form-control" placeholder="SKU"
+                                                th:field="*{sku}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('sku')}" class="text-danger"
+                                            th:errors="*{sku}">
+                                        </p>
+                                        
+                                        <div class="form-group">
+                                            <label>Price</label>
+                                            <input type="number" class="form-control" placeholder="Price in US $"
+                                                th:field="*{price}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('price')}" class="text-danger"
+                                            th:errors="*{price}"></p>
+
+                                        <div class="form-group">
+                                            <label>Quantity</label>
+                                            <input type="number" class="form-control" placeholder="Quantity"
+                                                th:field="*{quantity}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('quantity')}" class="text-danger"
+                                            th:errors="*{quantity}"></p>
+                                        <button type="button" class="btn btn-light mt-4"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-secondary mt-4">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <svg class="svg-inline--fa fa-table me-1" aria-hidden="true" focusable="false" data-prefix="fas"
+                        data-icon="table" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                        data-fa-i2svg="">
+                        <path fill="currentColor"
+                            d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z">
+                        </path>
+                    </svg><!-- <i class="fas fa-table me-1"></i> Font Awesome fontawesome.com -->
+                    DataTable Example
+                </div>
+                <div class="card-body">
+                    <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                        <div class="datatable-top">
+                            <div class="datatable-dropdown">
+                                <label>
+                                    <select class="datatable-selector">
+                                        <option value="5">5</option>
+                                        <option value="10" selected="">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="25">25</option>
+                                    </select> entries per page
+                                </label>
+                            </div>
+                            <div class="datatable-search">
+                                <input class="datatable-input" placeholder="Search..." type="search"
+                                    title="Search within table" aria-controls="datatablesSimple">
+                            </div>
+                        </div>
+                        <div class="datatable-container">
+                            <table id="datatablesSimple" class="datatable-table">
+                                <thead>
+                                    <tr>
+                                        <th data-sortable="true" style="width: 19.674185463659146%;"><a href="#"
+                                                class="datatable-sorter">Name</a></th>
+                                        <th data-sortable="true" style="width: 30.200501253132835%;"><a href="#"
+                                                class="datatable-sorter">Category</a></th>
+                                        <th data-sortable="true" style="width: 14.661654135338345%;"><a href="#"
+                                                class="datatable-sorter">Price</a></th>
+                                        <th data-sortable="true" style="width: 8.521303258145362%;"><a href="#"
+                                                class="datatable-sorter">SKU</a></th>
+                                        <th data-sortable="true" style="width: 14.411027568922306%;"><a href="#"
+                                                class="datatable-sorter">Sales</a></th>
+                                        <th data-sortable="true" style="width: 12.531328320802004%;"><a href="#"
+                                                class="datatable-sorter">Action</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-index="0" th:each="p:${products}">
+                                        <td th:text="${p.name}"></td>
+                                        <td th:text="${p.category.name}"></td>
+                                        <td th:text="${p.price}"></td>
+                                        <td th:text="${p.sku}"></td>
+                                        <td th:text="899"></td>
+                                        <td>
+                                            <a th:href="@{/product/delete}">Delete</a>
+                                            <a th:href="@{/product/edit}">Edit</a>                                     
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="datatable-bottom">
+                            <div class="datatable-info">Showing 1 to 10 of 57 entries</div>
+                            <nav class="datatable-pagination">
+                                <ul class="datatable-pagination-list">
+                                    <li class="datatable-pagination-list-item datatable-hidden datatable-disabled"><a
+                                            data-page="1" class="datatable-pagination-list-item-link">‹</a></li>
+                                    <li class="datatable-pagination-list-item datatable-active"><a data-page="1"
+                                            class="datatable-pagination-list-item-link">1</a></li>
+                                    <li class="datatable-pagination-list-item"><a data-page="2"
+                                            class="datatable-pagination-list-item-link">2</a></li>
+                                    <li class="datatable-pagination-list-item"><a data-page="3"
+                                            class="datatable-pagination-list-item-link">3</a></li>
+                                    <li class="datatable-pagination-list-item"><a data-page="4"
+                                            class="datatable-pagination-list-item-link">4</a></li>
+                                    <li class="datatable-pagination-list-item"><a data-page="5"
+                                            class="datatable-pagination-list-item-link">5</a></li>
+                                    <li class="datatable-pagination-list-item"><a data-page="6"
+                                            class="datatable-pagination-list-item-link">6</a></li>
+                                    <li class="datatable-pagination-list-item"><a data-page="2"
+                                            class="datatable-pagination-list-item-link">›</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

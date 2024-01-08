@@ -1,0 +1,52 @@
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{user-layout}">
+
+<head>
+    <title>User - Profile</title>
+</head>
+<section layout:fragment="body">
+    <div class="main">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Profile</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Tables</li>
+            </ol>
+            
+            <div class="col-md-6 col-sm-12">
+                <div th:if="${param.fail}" class="alert alert-danger">
+                    Username already exists</div>
+                <div th:if="${param.success}" class="alert alert-success">
+                    Save successfully</div>
+                    
+                <div class="login-form">
+                    <form id="profileForm" method="post" th:action="@{/user/profile}" th:object="${profile}">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" placeholder="Username" th:field="*{username}">
+                        </div>
+                        <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" class="form-control" placeholder="First name" th:field="*{firstName}">
+                        </div>
+                        <p th:if="${#fields.hasErrors('firstName')}" class="text-danger" th:errors="*{firstName}"></p>
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" placeholder="Last name" th:field="*{lastName}">
+                        </div>
+                        <p th:if="${#fields.hasErrors('lastName')}" class="text-danger" th:errors="*{lastName}"></p>
+                        <div class="form-group">
+                            <label>Telephone</label>
+                            <input type="text" class="form-control" placeholder="Telephone" th:field="*{telephone}">
+                        </div>
+                        <p th:if="${#fields.hasErrors('telephone')}" class="text-danger" th:errors="*{telephone}"></p>
+                        <button id="saveButton" type="submit" class="btn btn-secondary mt-4">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

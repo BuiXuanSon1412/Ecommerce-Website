@@ -1,0 +1,62 @@
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{store-layout}">
+
+<head>
+    <title>Store - Register</title>
+</head>
+<section layout:fragment="body">
+    <style>
+        .main {
+            padding: 0px 10px;
+        }
+
+        @media screen and (max-width: 450px) {
+            .login-form {
+                margin-top: 10%;
+            }
+
+            .register-form {
+                margin-top: 10%;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .main {
+                margin-left: 30%;
+            }
+
+            .sidenav {
+                width: 40%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+            }
+        }
+    </style>
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div th:if="${param.fail}" class="alert alert-success">
+                Username or email already exists</div>
+            <div class="login-form">
+                <form method="post" th:action="@{/store/register}" th:object="${store}">
+                    <div class="form-group">
+                        <label>Store name</label>
+                        <input type="text" class="form-control" placeholder="Store name" th:field="*{name}">
+                    </div>
+                    <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control" placeholder="Description" th:field="*{description}">
+                    </div>
+                    <p th:if="${#fields.hasErrors('description')}" class="text-danger" th:errors="*{description}"></p>
+                    <a th:href="@{/home}" class="text-dark mt-3">Cancel</a>
+                    <button type="submit" class="btn btn-secondary mt-3">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

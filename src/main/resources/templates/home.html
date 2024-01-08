@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shopping-layout}">
+
+<head>
+    <title>Ecomm</title>
+</head>
+
+<body>
+
+    <section layout:fragment="body">
+        <!-- Header-->
+        <header class="bg-dark py-1">
+            <div class="container px-4 px-lg-5 my-2">
+                <form class="form-inline my-2 my-lg-0 mb-3" method="get" th:action="@{/search/product}">
+                    <div class="input-group">
+                        
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Category</button>
+                    
+                        <select class="dropdown-menu form-select w-auto" id="inputGroupSelect02" type="number"
+                            name="categoryId">
+                            <option selected="selected" value="">Choose...</option>
+                            <option th:each="c:${categories}" th:text="${c.name}"
+                                th:value="${c.id}"></option>
+                        </select>
+                        <input class="form-control" type="search" placeholder="Search for..." aria-label="Search for..."
+                            aria-describedby="btnNavbarSearch" name="name" />
+                        <button class="btn btn-secondary" id="btnNavbarSearch" type="submit"><i
+                                class="fas fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+        </header>
+        <!-- Section-->
+        <section class="py-5">
+
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <div th:each="product:${products}" class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" style="max-height: 200px; width: auto; object-fit: contain;"
+                                th:src="${product.image}" alt="..." />
+
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <!--<h5 class="fw-bolder" th:text="${product.name}"></h5> -->
+                                    <!-- Product price-->
+                                    <div th:text="'US $' + ${product.price}"></div>
+                                </div>
+                            </div>
+
+                            <!-- Product actions-->
+
+
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                        th:href="@{/product/{productId}(productId=${product.id})}">View
+                                        product </a></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</body>
+
+</html>

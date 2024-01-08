@@ -1,0 +1,104 @@
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{store-layout}">
+
+<head>
+    <title>User - Address</title>
+    <script th:src="@{/js/user.js}"></script>
+</head>
+<section layout:fragment="body">
+    <div class="main">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">My Discounts</h1>
+            <ol class="breadcrumb mb-4 row">
+                <li class="col text-start"></li>
+                <li class="col text-end">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        + Add New Discount
+                    </button>
+                </li>
+            </ol>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">New Discount</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <!--<div class="login-form">-->
+                                <form method="post" th:action="@{/store/discount}" th:object="${discount}">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" placeholder="Name" th:field="*{name}">
+                                    </div>
+                                    <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <input type="text" class="form-control" placeholder="Description"
+                                            th:field="*{desc}">
+                                    </div>
+
+                                    <p th:if="${#fields.hasErrors('desc')}" class="text-danger" th:errors="*{desc}">
+                                    </p>
+                                    <div class="form-group">
+                                        <label>Discount percent</label>
+                                        <input type="number" class="form-control" placeholder="Discount percent"
+                                            th:field="*{disc}">
+                                    </div>
+                                    <p th:if="${#fields.hasErrors('disc')}" class="text-danger" th:errors="*{disc}">
+                                    </p>
+                                    <div class="form-group">
+                                        <label>Start date:</label>
+                                        <input type="date" class="form-control" placeholder="Start date"
+                                            th:field="*{startDate}">
+                                    </div>
+                                    <p th:if="${#fields.hasErrors('startDate')}" class="text-danger"
+                                        th:errors="*{startDate}"></p>
+                                    <div class="form-group">
+                                        <label>End date:</label>
+                                        <input type="date" class="form-control" placeholder="End date"
+                                            th:field="*{endDate}">
+                                    </div>
+                                    <p th:if="${#fields.hasErrors('endDate')}" class="text-danger"
+                                        th:errors="*{endDate}"></p>
+
+                                    <button type="button" class="btn btn-light mt-4"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-secondary mt-4">Add</button>
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group" th:each="d:${discounts}">
+            <div class="list-group-item list-group-item-action" style="position: relative;">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Voucher</h5>
+                    <small></small>
+                </div>
+                <p class="mb-1" th:text="'Name: '+${d.name}"></p>
+                <p class="mb-1" th:text="'Description: '+${d.desc}"></p>
+                <p class="mb-1" th:text="'Percent: '+${d.disc}"></p>
+                <p class="mb-1" th:text="'Start date: '+${d.startDate}"></p>
+                <p class="mb-1" th:text="'Start date: '+${d.endDate}"></p>
+                
+                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-1 me-4"><a class="" th:href="@{/discount/delete}">Delete</a></button>
+                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-5 me-4">Edit</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

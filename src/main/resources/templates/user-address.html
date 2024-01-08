@@ -1,0 +1,101 @@
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{user-layout}">
+
+<head>
+    <title>User - Address</title>
+    <script th:src="@{/js/user.js}"></script>
+</head>
+<section layout:fragment="body">
+    <div class="main">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">My Addresses</h1>
+            <ol class="breadcrumb mb-4 row">
+                <li class="col text-start"></li>
+                <li class="col text-end">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        + Add New Address
+                    </button>
+                </li>
+            </ol>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">New Address</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="login-form">
+                                    <form method="post" th:action="@{/user/address}" th:object="${address}">
+
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <input type="text" class="form-control" placeholder="Address"
+                                                th:field="*{address}">
+                                        </div>
+
+                                        <p th:if="${#fields.hasErrors('address')}" class="text-danger"
+                                            th:errors="*{address}"></p>
+
+                                        <div class="form-group">
+                                            <label>City</label>
+                                            <input type="text" class="form-control" placeholder="City"
+                                                th:field="*{city}">
+                                        </div>
+
+                                        <p th:if="${#fields.hasErrors('city')}" class="text-danger" th:errors="*{city}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Postal code</label>
+                                            <input type="text" class="form-control" placeholder="Portal code"
+                                                th:field="*{postalCode}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('postalCode')}" class="text-danger"
+                                            th:errors="*{postalCode}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Country</label>
+                                            <input type="text" class="form-control" placeholder="Country"
+                                                th:field="*{country}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('country')}" class="text-danger"
+                                            th:errors="*{country}"></p>
+                                        <button type="button" class="btn btn-light mt-4"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-secondary mt-4">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group" th:each="a:${addresses}">
+            <div class="list-group-item list-group-item-action" style="position: relative;">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Address</h5>
+                    <small></small>
+                </div>
+                <p class="mb-1" th:text="'Details: '+${a.address}"></p>
+                <p class="mb-1" th:text="'City: '+${a.city}"></p>
+                <p class="mb-1" th:text="'Postal code: '+${a.postalCode}"></p>
+                <p class="mb-1" th:text="'Country: '+${a.country}"></p>
+                <small>Pickup Address</small>
+                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-1 me-4">Delete</button>
+                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-5 me-4">Edit</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

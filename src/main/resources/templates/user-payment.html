@@ -1,0 +1,107 @@
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{user-layout}">
+
+<head>
+    <title>User - Profile</title>
+    <script th:src="@{/js/user.js}"></script>
+</head>
+<section layout:fragment="body">
+    <div class="main">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">My Bank Accounts</h1>
+            <ol class="breadcrumb mb-4 row">
+                <li class="col text-start"></li>
+                <li class="col text-end">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        + Add New Bank Account
+                    </button>
+                </li>
+            </ol>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">New Bank Account</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="login-form">
+                                    <form method="post" th:action="@{/user/payment}" th:object="${payment}">
+
+                                        <div class="form-group">
+                                            <label>Payment Type</label>
+                                            <div class="input-group mb-1">
+                                                <select class="form-select" id="inputGroupSelect02"
+                                                    th:field="*{paymentType}">
+                                                    <option selected="selected" value="Visa">Visa</option>   
+                                                    <option value="PayPal">Paypal</option>
+                                                    <option value="Mastercard">Mastercard</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <p th:if="${#fields.hasErrors('paymentType')}" class="text-danger"
+                                            th:errors="*{paymentType}"></p>
+
+                                        <div class="form-group">
+                                            <label>Provider</label>
+                                            <input type="text" class="form-control" placeholder="Provider"
+                                                th:field="*{provider}">
+                                        </div>
+
+                                        <p th:if="${#fields.hasErrors('provider')}" class="text-danger"
+                                            th:errors="*{provider}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Account number</label>
+                                            <input type="text" class="form-control" placeholder="Account number"
+                                                th:field="*{accountNo}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('accountNo')}" class="text-danger"
+                                            th:errors="*{accountNo}">
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Expiry Date</label>
+                                            <input type="date" class="form-control" placeholder="Expiry Date"
+                                                th:field="*{expiry}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('expiry')}" class="text-danger"
+                                            th:errors="*{expiry}"></p>
+                                        <button type="button" class="btn btn-light mt-4"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-secondary mt-4">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group" th:each="p:${payments}">
+            <div class="list-group-item list-group-item-action" style="position: relative;">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Payment</h5>
+                    <small></small>
+                </div>
+                <p class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></p>
+                <p class="mb-1" th:text="'Provider: '+${p.provider}"></p>
+                <p class="mb-1" th:text="'Account Number: '+${p.accountNo}"></p>
+                <p class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></p>
+                <small></small>
+                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-1 me-4">Delete</button>
+                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-5 me-4">Edit</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

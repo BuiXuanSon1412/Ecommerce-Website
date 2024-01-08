@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shopping-layout}">
+
+<head>
+    <title>Ecomm - Cart</title>
+</head>
+
+<body>
+    <style>
+        @media (min-width: 1025px) {
+            .h-custom {
+                height: 100vh !important;
+            }
+        }
+    </style>
+    <section layout:fragment="body">
+        <section class="h-100 h-custom">
+            <div class="container h-100 py-5">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="h5">Product</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Discount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="item-row" th:each="cartItem:${cartItems}" th:id="'cartItem' + ${cartItem.id}">
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <img th:src="${cartItem.product.image}" class="img-fluid rounded-3"
+                                                    style="width: 120px; max-height: 120px; width: auto" alt="Book">
+                                                <div class="flex-column ms-4">
+                                                    <p class="mb-2" th:text="${cartItem.product.name}"></p>
+                                                    <p class="mb-0"></p>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="align-middle">
+                                            <p class="mb-0" style="font-weight: 500;"></p>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="d-flex flex-row">
+                                                <input id="form1" min="1" name="quantity"
+                                                    th:value="${cartItem.quantity}" type="number"
+                                                    class="form-control form-control-sm quantity-input" style="max-width: 3rem;" />
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <p class="mb-0 price" style="font-weight: 500;" th:data-price="${cartItem.product.price}"
+                                                th:text="${'$' + cartItem.product.price}"></p>
+                                        </td>
+                                        <td class="align-middle">
+                                            <p th:if="${cartItem.product.discount} != null" class="mb-0 discount" style="font-weight: 500;"
+                                                th:text="${cartItem.product.discount.disc}+'%'"
+                                                th:data-discount="${cartItem.product.discount.disc}"
+                                            ></p>
+                                        </td>
+                                        <td class="align-middle">
+                                            <a th:href="@{'/cart/remove?ciid=' + ${cartItem.id}}" th:data-ciid="${cartItem.id}" class="text-muted link-remove" style="cursor: pointer"><i
+                                                    class="fas fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card shadow-2-strong mb-5 mb-lg-0 d-inline-block float-end" style="border-radius: 16px; width: 300px;">
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="">
+                                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                                            <p class="mb-2" >Total cost</p>
+                                            <p class="mb-2" id="totalCost" th:text="'$' + ${total}"></p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                                            <p class="mb-0">Discount</p>
+                                            <p class="mb-0" id="discount" th:text="'$' + ${discount}"></p>
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
+                                            <p class="mb-2">After discount</p>
+                                            <p class="mb-0" id="afterDiscount" th:text="'$' + ${afterDiscount}"></p>
+                                        </div>
+
+                                        <button type="button" class="btn btn-secondary btn-block btn-lg">
+                                            <a class="d-flex justify-content-between text-decoration-none text-reset" th:href="@{/pay}">
+                                                <span>Checkout</span>
+                                            </a>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+
+</body>
+
+</html>
