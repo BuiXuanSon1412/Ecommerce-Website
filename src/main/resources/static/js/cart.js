@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $("#buttonAdd2Cart").on("click", function (e) {
+        e.preventDefault()
         addToCart();
     });
     $(".link-remove").on("click", function (e) {
