@@ -48,7 +48,7 @@ function minusQty(el) {
 function plusQty(el) {
     ++el.value;
 }
-/*
+
 function updateTotalCost() {
     var totalCost = 0;
     var discount = 0;
@@ -64,4 +64,3 @@ function updateTotalCost() {
     $('#totalCost').text('$' + totalCost.toFixed(2));
     $('#discount').text('$' + discount.toFixed(2));
 }
-*/

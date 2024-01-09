@@ -38,10 +38,10 @@ public class CartServiceImpl implements CartService {
             }
         }
         CartItem cartItem = CartItem.builder()
-                                        .user(user)
-                                        .product(product)
-                                        .quantity(quantity)
-                                        .build();
+                                    .user(user)
+                                    .product(product)
+                                    .quantity(quantity)
+                                    .build();
         cartItemRepository.save(cartItem);
         return true;
     }
