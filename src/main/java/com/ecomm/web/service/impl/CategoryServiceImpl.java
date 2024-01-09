@@ -25,23 +25,16 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> productCategories = categoryRepository.findAllBaseCategories();
         return productCategories.stream().map((productCategory) -> mapToCategoryDto(productCategory)).collect(Collectors.toList());
     }
-    /*
-    @Override
-    public List<CategoryDto> findAllLevelByCategory(CategoryDto productId) {
-        Product product = productRepository.findById(productId).get();
-        
-    }
-    */
     @Override
     public List<CategoriesDto> findAllLevelCategories() {
         List<CategoriesDto> categoriesByBase = new ArrayList<>();;
         List<Category> baseCategories = categoryRepository.findAllBaseCategories();
         for(Category c : baseCategories) {
-            List<Category> categories = categoryRepository.findCategoriesByBaseCategories(c.getId());
+            List<Category> categories = categoryRepository.findSubCategoriesByBaseCategories(c.getId());
             List<CategoryDto> categoryDtoes = categories.stream().map((category) -> mapToCategoryDto(category)).collect(Collectors.toList());
             CategoriesDto categoriesDto = CategoriesDto.builder()
                                                         .baseCategory(mapToCategoryDto(c))
-                                                        .categories(categoryDtoes)
+                                                        .subCategories(categoryDtoes)
                                                         .build();
             categoriesByBase.add(categoriesDto);
         }

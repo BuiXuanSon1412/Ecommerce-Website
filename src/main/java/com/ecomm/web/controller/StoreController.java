@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.ecomm.web.dto.product.AddProductForm;
 import com.ecomm.web.dto.product.CategoriesDto;
 import com.ecomm.web.dto.product.CategoryDto;
 import com.ecomm.web.dto.product.DiscountDto;
@@ -100,8 +101,8 @@ public class StoreController {
     public String listProduct(Model model) {
         String username = SecurityUtil.getSessionUser();
         List<ProductDto> products = productService.findProductByUser(username);
-        ProductDto product = ProductDto.builder().build();
-        List<CategoryDto> categories = categoryService.findAllBaseCategories();
+        AddProductForm product = AddProductForm.builder().build();
+        List<CategoriesDto> categories = categoryService.findAllLevelCategories();
         model.addAttribute("product", product);
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
@@ -109,20 +110,20 @@ public class StoreController {
     }
 
     @PostMapping("/store/product")
-    public String addProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult result,
+    public String addProduct(@Valid @ModelAttribute("product") AddProductForm addProductForm, BindingResult result,
             Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("product", productDto);
+            //model.addAttribute("product", addProductForm);
             String username = SecurityUtil.getSessionUser();
             List<ProductDto> products = productService.findProductByUser(username);
-            ProductDto product = ProductDto.builder().build();
+            //AddProductForm product = AddProductForm.builder().build();
             List<CategoryDto> categories = categoryService.findAllBaseCategories();
-            model.addAttribute("product", product);
+            model.addAttribute("product", addProductForm);
             model.addAttribute("products", products);
             model.addAttribute("categories", categories);
             return "store-product";
         }
-        productService.saveProduct(productDto);
+        productService.saveProduct(addProductForm);
         return "redirect:/store/product";
     }
 

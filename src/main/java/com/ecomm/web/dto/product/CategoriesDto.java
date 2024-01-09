@@ -9,5 +9,5 @@ import lombok.Data;
 @Builder
 public class CategoriesDto {
     private CategoryDto baseCategory;
-    private List<CategoryDto> categories;
+    private List<CategoryDto> subCategories;
 }

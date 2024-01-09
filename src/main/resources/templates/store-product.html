@@ -3,6 +3,7 @@
 
 <head>
     <title>Ecomm</title>
+    
 </head>
 
 <body>
@@ -43,17 +44,54 @@
                                         </div>
                                         <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}">
                                         </p>
-                                        <div class="form-group">
-                                            <label>Category</label>
-                                            <div class="input-group mb-1">
-                                                <select class="form-select" id="category">
-                                                    <option selected="selected" value="" th:field="*{category}">Choose..</option>
-                                                    <option th:each="c : ${categories}" th:text="${c.name}"
-                                                        th:value="${c.name}"></option>
-                                                </select>
+                                        <div class="form-group row">
+                                            <div class="col">
+                                                <label>Category</label>
+                                                <div class="input-group mb-1">
+                                                    <select class="form-select" id="baseCategory">
+                                                        <option selected="selected" value="">
+                                                            Choose..</option>
+                                                        <option th:each="c : ${categories}"
+                                                            th:text="${c.baseCategory.name}"
+                                                            th:value="${c.baseCategory.id}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <script th:inline="javascript">
+
+                                                $("#baseCategory").change(function () {
+                                                    var categories = /*[[${categories}]]*/[];
+                                                    var baseCategory = $("#baseCategory").val();
+                                                    console.log(baseCategory);
+                                                    for (let i = 0; i < categories.length; i++) {
+                                                        let category = categories[i];
+                                                        if (category.baseCategory.id == baseCategory) {
+                                                            console.log(baseCategory);
+                                                            $("#subCategory").empty();
+                                                            for (let i = 0; i < category.subCategories.length; i++) {
+                                                                let c = category.subCategories[i];
+                                                                console.log(c.name);
+                                                                $("#subCategory").append($('<option>')
+                                                                    .text(c.name)
+                                                                    .attr('value', c.id));
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
+
+                                                })
+                                            </script>
+                                        
+                                            <div class="col">
+                                                <label>Sub Category</label>
+                                                <div class="input-group mb-1">
+                                                    <select class="form-select" id="subCategory" th:field="*{category}">
+                                                        
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-
                                         <p th:if="${#fields.hasErrors('category')}" class="text-danger"
                                             th:errors="*{category}"></p>
 
@@ -75,13 +113,11 @@
                                         </p>
                                         <div class="form-group">
                                             <label>SKU</label>
-                                            <input type="text" class="form-control" placeholder="SKU"
-                                                th:field="*{sku}">
+                                            <input type="text" class="form-control" placeholder="SKU" th:field="*{sku}">
                                         </div>
-                                        <p th:if="${#fields.hasErrors('sku')}" class="text-danger"
-                                            th:errors="*{sku}">
+                                        <p th:if="${#fields.hasErrors('sku')}" class="text-danger" th:errors="*{sku}">
                                         </p>
-                                        
+
                                         <div class="form-group">
                                             <label>Price</label>
                                             <input type="number" class="form-control" placeholder="Price in US $"
@@ -165,7 +201,7 @@
                                         <td th:text="899"></td>
                                         <td>
                                             <a th:href="@{/product/delete}">Delete</a>
-                                            <a th:href="@{/product/edit}">Edit</a>                                     
+                                            <a th:href="@{/product/edit}">Edit</a>
                                         </td>
                                     </tr>
 

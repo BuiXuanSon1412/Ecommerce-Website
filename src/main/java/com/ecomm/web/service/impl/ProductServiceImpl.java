@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.model.product.Product;
+import com.ecomm.web.dto.product.AddProductForm;
 import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.model.product.Category;
 import com.ecomm.web.model.product.Inventory;
@@ -20,8 +21,7 @@ import com.ecomm.web.repository.UserRepository;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.ProductService;
 
-import static com.ecomm.web.mapper.ProductMapper.mapToProductDto;
-import static com.ecomm.web.mapper.ProductMapper.mapToProduct;
+import static com.ecomm.web.mapper.ProductMapper.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -36,19 +36,21 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public void saveProduct(ProductDto productDto) {
-        Category category = categoryRepository.findById(productDto.getCategory().getId()).get();
+    public void saveProduct(AddProductForm productForm) {
+        Category category = categoryRepository.findById(productForm.getCategory()).get();
         String username = SecurityUtil.getSessionUser();
         UserEntity user = userRepository.findByUsername(username);
         Store store = storeRepository.findByUser(user);
         
-        Product product = mapToProduct(productDto);
+        Product product = mapFromAddProductFormToProduct(productForm);
         product.setStore(store);
         product.setCategory(category);
+        product.setIsActive(true);
         productRepository.save(product);
         Inventory productInventory = Inventory.builder()
                                             .product(product)
-                                            .quantity(productDto.getQuantity())
+                                            .quantity(productForm.getQuantity())
+                                            .status(true)
                                             .build();
         productInventoryRepository.save(productInventory);
     }
