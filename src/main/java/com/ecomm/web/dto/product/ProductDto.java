@@ -2,7 +2,7 @@ package com.ecomm.web.dto.product;
 
 import lombok.Builder;
 
-import java.util.List;
+import org.springframework.data.util.Pair;
 
 import com.ecomm.web.dto.store.StoreDto;
 
@@ -24,7 +24,7 @@ public class ProductDto {
     @NotEmpty
     private String sku;
     @NotNull
-    private CategoryDto category;
+    private Pair<CategoryDto, CategoryDto> category;
     @NotNull(message = "must not be empty")
     private Double price;
     private DiscountDto discount;

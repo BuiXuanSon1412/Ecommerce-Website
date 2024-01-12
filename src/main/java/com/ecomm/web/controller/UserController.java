@@ -90,17 +90,19 @@ public class UserController {
         userService.savePayment(payment);
         return "redirect:/user/payment";
     }
+
     @GetMapping("/user/purchase")
     public String viewPurchase(Model model) {
+        //List<OrderItemDto>  
         return "user-purchase";
     }
     @PostMapping("/address/delete")
-    public String deleteAddress(@RequestParam(name = "addressId") Integer addressId) {
+    public String deleteAddress(@RequestParam(name = "aid") Integer addressId) {
         userService.deleteAddressById(addressId);
         return "redirect:/user/address";
     } 
     @PostMapping("/payment/delete")
-    public String deletePayment(@RequestParam(name = "paymentId") Integer paymentId) {
+    public String deletePayment(@RequestParam(name = "pid") Integer paymentId) {
         userService.deletePaymentById(paymentId);
         return "redirect:/user/address";
     }

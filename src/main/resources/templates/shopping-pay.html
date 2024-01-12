@@ -2,12 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shopping-layout}">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Ecomm - Cart</title>
-
+    <title>Ecomm - Place Order</title>
 </head>
 
 <body>
@@ -19,8 +14,9 @@
         }
     </style>
     <section layout:fragment="body">
+        <!-- Modal Payment -->
         <div class="modal" id="myModalPayment">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
                     <!-- Modal Header -->
@@ -32,18 +28,17 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <div class="list-group" th:each="p:${payments}">
+                            <div class="list-group" th:each="p:${payments}" th:id="'payment'+${p.id}">
                                 <div class="list-group-item list-group-item-action" style="position: relative;">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5 class="mb-1">Payment</h5>
                                     </div>
-                                    <p class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></p>
-                                    <p class="mb-1" th:text="'Provider: '+${p.provider}"></p>
-                                    <p class="mb-1" th:text="'Account Number: '+${p.accountNo}"></p>
-                                    <p class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></p>
-                                    <small></small>
-                                    <button type="button"
-                                        class="btn btn-secondary btn-sm position-absolute top-0 end-0 mt-1 me-4">Select</button>
+                                    <small class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></small><br>
+                                    <small class="mb-1" th:text="'Provider: '+${p.provider}"></small><br>
+                                    <small class="mb-1" th:text="'Account Number: '+${p.accountNo}"></small><br>
+                                    <small class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></small>
+                                    <button type="button" th:data-pid="${p.id}" data-bs-dismiss="modal"
+                                        class="btn btn-secondary btn-sm position-absolute top-0 end-0 mt-1 me-4 btn-p-select">Select</button>
                                 </div>
                             </div>
                         </div>
@@ -51,30 +46,33 @@
                 </div>
             </div>
         </div>
+        <!-- Model Address -->
         <div class="modal" id="myModalAddress">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Saved Payment</h4>
+                        <h4 class="modal-title">Saved Address</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <!-- Modal body -->
-                    <div class="list-group" th:each="a:${addresses}">
-                        <div class="list-group-item list-group-item-action" style="position: relative;">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Address</h5>
-                                <small></small>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="list-group" th:each="a:${addresses}" th:id="'address'+${a.id}">
+                                <div class="list-group-item list-group-item-action" style="position: relative;">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Address</h5>
+                                    </div>
+                                    <small class="mb-1" th:text="'Details: '+${a.address}"></small><br>
+                                    <small class="mb-1" th:text="'City: '+${a.city}"></small><br>
+                                    <small class="mb-1" th:text="'Postal code: '+${a.postalCode}"></small><br>
+                                    <small class="mb-1" th:text="'Country: '+${a.country}"></small>
+                                    <button type="button" th:data-aid="${a.id}" data-bs-dismiss="modal"
+                                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-1 me-4 btn-a-select">Select</button>
+                                </div>
                             </div>
-                            <p class="mb-1" th:text="'Details: '+${a.address}"></p>
-                            <p class="mb-1" th:text="'City: '+${a.city}"></p>
-                            <p class="mb-1" th:text="'Postal code: '+${a.postalCode}"></p>
-                            <p class="mb-1" th:text="'Country: '+${a.country}"></p>
-                            <small>Pickup Address</small>
-                            <button type="button"
-                                class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-1 me-4">Select</button>
                         </div>
                     </div>
                 </div>
@@ -85,19 +83,19 @@
             <div class="container h-100 py-5">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col">
-
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="h5">Product</th>
+                                        <th scope="col">Product</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Price</th>
+                                        <th scope="col">Delivery Method</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="cartItem:${cartItems}">
+                                    <tr class="item-row" th:each="cartItem:${cartItems}" th:data-ciid="${cartItem.id}">
                                         <th scope="row">
                                             <div class="d-flex align-items-center">
                                                 <img th:src="${cartItem.product.image}" class="img-fluid rounded-3"
@@ -113,18 +111,28 @@
                                         </td>
                                         <td class="align-middle">
                                             <div class="d-flex flex-row">
-
                                                 <input id="form1" min="0" name="quantity"
                                                     th:value="${cartItem.quantity}" type="num"
                                                     class="form-control form-control-sm text-center"
                                                     style="width: 50px;" readonly />
-
-
                                             </div>
                                         </td>
                                         <td class="align-middle">
                                             <p class="mb-0" style="font-weight: 500;"
                                                 th:text="${cartItem.product.price}"></p>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <div class="form-group">
+                                                <label>Delivery method</label>
+                                                <div class="input-group">
+                                                    <select class="form-select delivery">
+                                                        <option value="business">Business</option>
+                                                        <option value="fast">Fast</option>
+                                                        <option value="express">Express</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
 
@@ -134,17 +142,48 @@
 
                         <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
                             <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="col-9 mb-4 mb-md-0">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <div class="row container-fluid">
+                                                <button type="button" class="btn btn-light mb-5 col-3"
+                                                    data-bs-toggle="modal" data-bs-target="#myModalPayment">Use saved
+                                                    payment</button>
+                                                <div class="list-group col-9 d-none" id="payment">
+                                                    <div class="list-group-item list-group-item-action"
+                                                        style="position: relative;">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h5 class="mb-1">Payment</h5>
+                                                        </div>
+                                                        <small class="mb-1" id="paymentType"></small><br>
+                                                        <small class="mb-1" id="provider"></small><br>
+                                                        <small class="mb-1" id="accountNo"></small><br>
+                                                        <small class="mb-1" id="expiry"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div class="row justify-content-between">
-                                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4 mb-md-0">
-                                        <form>
-                                            <button type="button" class="btn btn-secondary mb-5" data-bs-toggle="modal"
-                                                data-bs-target="#myModalPayment">Use saved payment</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                                                data-bs-target="#myModalAddress">Use saved addressed</button>
-                                        </form>
+                                            <div class="row container-fluid">
+                                                <button type="button" class="btn btn-light mb-5 col-3" data-bs-toggle="modal"
+                                                    data-bs-target="#myModalAddress">Use
+                                                    saved address</button>
+                                                <div class="list-group col-9 d-none">
+                                                    <div class="list-group-item list-group-item-action"
+                                                        style="position: relative;">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h5 class="mb-1">Address</h5>
+                                                        </div>
+                                                        <small class="mb-1" id="details"></small><br>
+                                                        <small class="mb-1" id="city"></small><br>
+                                                        <small class="mb-1" id="postalCode"></small><br>
+                                                        <small class="mb-1" id="country"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="col-lg-4 col-xl-3">
+                                    <div class="col-3 ms-auto">
                                         <div class="d-flex justify-content-between" style="font-weight: 500;">
                                             <p class="mb-2">Total cost</p>
                                             <p class="mb-2" id="totalCost" th:text="'$' + ${total}"></p>
@@ -158,16 +197,16 @@
                                         <hr class="my-4">
 
                                         <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                                            <p class="mb-2">Total (tax included)</p>
-                                            <p class="mb-2" id="afterDiscount" th:text="'$' + ${afterDiscount}">$26.48
+                                            <p class="mb-2">Total(discount included)</p>
+                                            <p class="mb-2" id="afterDiscount" th:data-total="${afterDiscount}"
+                                                th:text="'$' + ${afterDiscount}">
                                             </p>
                                         </div>
 
-                                        <button type="button" class="btn btn-secondary btn-block btn-lg">
-                                            <a class="d-flex justify-content-between text-decoration-none text-reset"
-                                                th:href="@{/pay}">
+                                        <button type="button" class="btn btn-secondary btn-block btn-lg" id="orderBtn">
+                                            <div class="d-flex justify-content-between text-decoration-none text-reset">
                                                 <span>Place Order</span>
-                                            </a>
+                                            </div>
                                         </button>
 
                                     </div>

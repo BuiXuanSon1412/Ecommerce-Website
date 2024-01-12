@@ -4,12 +4,6 @@ $(document).ready(function() {
         e.preventDefault();
         saveProfile();
     })
-    /*
-    $("#profileForm").submit(function(e) {
-        saveProfile();
-        return false;
-    })
-    */
     
 })
 function saveProfile() {

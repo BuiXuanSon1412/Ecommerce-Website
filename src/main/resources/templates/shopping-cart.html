@@ -74,8 +74,8 @@
                                 <div class="row">
                                     <div class="">
                                         <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                            <p class="mb-2" >Total cost</p>
-                                            <p class="mb-2" id="totalCost" th:text="'$' + ${total}"></p>
+                                            <p class="mb-2" >Total Cost</p>
+                                            <p class="mb-2" id="total" th:text="'$' + ${total}"></p>
                                         </div>
 
                                         <div class="d-flex justify-content-between" style="font-weight: 500;">
@@ -86,7 +86,7 @@
                                         <hr class="my-4">
 
                                         <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                                            <p class="mb-2">After discount</p>
+                                            <p class="mb-2">Total(discount included)</p>
                                             <p class="mb-0" id="afterDiscount" th:text="'$' + ${afterDiscount}"></p>
                                         </div>
 
@@ -106,8 +106,5 @@
             </div>
         </section>
     </section>
-
-
 </body>
-
 </html>

@@ -1,5 +1,9 @@
 package com.ecomm.web.model.shopping;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.ecomm.web.model.delivery.DeliveryProvider;
 import com.ecomm.web.model.product.Product;
 
@@ -12,10 +16,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(schema = "shopping", name = "order_item")
 public class OrderItem {
@@ -33,6 +41,9 @@ public class OrderItem {
     private String condition;
     @ManyToOne
     @JoinColumn(name = "delivery_provider_id")
-    private DeliveryProvider deliveryProvider;  
+    private DeliveryProvider deliveryProvider;
+    private String deliveryMethod;
+    @UpdateTimestamp
+    private LocalDateTime modifiedAt;
 }
 

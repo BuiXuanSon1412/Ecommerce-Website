@@ -6,6 +6,7 @@ import com.ecomm.web.model.user.Address;
 public class AddressMapper {
     public static AddressDto mapToAddressDto(Address address) {
         return AddressDto.builder()
+                    .id(address.getId())
                     .address(address.getAddress())
                     .city(address.getCity())
                     .postalCode(address.getPostalCode())

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.shopping.CartItemDto;
@@ -15,6 +16,7 @@ import com.ecomm.web.repository.ProductRepository;
 import com.ecomm.web.repository.UserRepository;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.CartService;
+import com.ecomm.web.service.DiscountService;
 
 import static com.ecomm.web.mapper.CartItemMapper.mapToCartItemDto;
 
@@ -26,6 +28,8 @@ public class CartServiceImpl implements CartService {
     private UserRepository userRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private DiscountService discountService;
     @Override
     public boolean saveCartItem(Integer productId, Integer quantity) {
         String username = SecurityUtil.getSessionUser();
@@ -46,8 +50,7 @@ public class CartServiceImpl implements CartService {
         return true;
     }
     @Override
-    public List<CartItemDto> listCartItems() {
-        String username = SecurityUtil.getSessionUser();
+    public List<CartItemDto> listCartItems(String username) {
         UserEntity user = userRepository.findByUsername(username);
         List<CartItem> cartItems = cartItemRepository.findByUser(user);
         return cartItems.stream().map((cartItem) -> mapToCartItemDto(cartItem)).collect(Collectors.toList());
@@ -55,5 +58,21 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCartItemById(Integer cartItemId) {
         cartItemRepository.deleteById(cartItemId);
+    }
+
+    @Override
+    public Pair<Double, Double> totalAndDiscount(String username) {
+        Double total = (double)0;
+        Double discount = (double)0;
+        List<CartItemDto> cartItems = listCartItems(username);
+        for(CartItemDto cartItem : cartItems) {
+            Double totalPerItem = cartItem.getQuantity() * cartItem.getProduct().getPrice();
+            total += totalPerItem;
+            Double disc = discountService.productDiscount(cartItem.getProduct());
+            Double discountPerItem = total * disc / 100;
+            discount += discountPerItem;
+        }
+        return Pair.of(total, discount);
+
     }
 }

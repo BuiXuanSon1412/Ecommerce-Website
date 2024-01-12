@@ -14,11 +14,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(schema = "shopping", name = "order_detail")
 public class OrderDetail {
@@ -30,7 +34,6 @@ public class OrderDetail {
     @JoinColumn(name = "user_id")
     private UserEntity user;
     private Double total;
-    private String deliveryMethod;
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;

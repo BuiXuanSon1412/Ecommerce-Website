@@ -2,8 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{store-layout}">
 
 <head>
-    <title>Ecomm</title>
-    
+    <title>Store - Product</title>   
 </head>
 
 <body>
@@ -120,7 +119,7 @@
 
                                         <div class="form-group">
                                             <label>Price</label>
-                                            <input type="number" class="form-control" placeholder="Price in US $"
+                                            <input type="number" step="0.01" min="0" class="form-control" placeholder="Price in US $"
                                                 th:field="*{price}">
                                         </div>
                                         <p th:if="${#fields.hasErrors('price')}" class="text-danger"
@@ -179,7 +178,7 @@
                                 <thead>
                                     <tr>
                                         <th data-sortable="true" style="width: 19.674185463659146%;"><a href="#"
-                                                class="datatable-sorter">Name</a></th>
+                                                class="datatable-sorter">Product</a></th>
                                         <th data-sortable="true" style="width: 30.200501253132835%;"><a href="#"
                                                 class="datatable-sorter">Category</a></th>
                                         <th data-sortable="true" style="width: 14.661654135338345%;"><a href="#"
@@ -187,17 +186,17 @@
                                         <th data-sortable="true" style="width: 8.521303258145362%;"><a href="#"
                                                 class="datatable-sorter">SKU</a></th>
                                         <th data-sortable="true" style="width: 14.411027568922306%;"><a href="#"
-                                                class="datatable-sorter">Sales</a></th>
+                                                class="datatable-sorter">Stock</a></th>
                                         <th data-sortable="true" style="width: 12.531328320802004%;"><a href="#"
                                                 class="datatable-sorter">Action</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-index="0" th:each="p:${products}">
-                                        <td th:text="${p.name}"></td>
-                                        <td th:text="${p.category.name}"></td>
-                                        <td th:text="${p.price}"></td>
-                                        <td th:text="${p.sku}"></td>
+                                    <tr data-index="0" th:each="p:${products}" th:object="${p}">
+                                        <td th:text="*{name}"></td>
+                                        <td th:text="*{category.first.name} + *{category.second.name}"></td>
+                                        <td th:text="*{price}"></td>
+                                        <td th:text="*{sku}"></td>
                                         <td th:text="899"></td>
                                         <td>
                                             <a th:href="@{/product/delete}">Delete</a>

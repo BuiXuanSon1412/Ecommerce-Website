@@ -16,7 +16,7 @@ import lombok.Data;
 public class DeliveryProvider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "delivery_provider")
+    @Column(name = "delivery_provider_id")
     private Integer id;
     private String name;
     private String contactEmail;

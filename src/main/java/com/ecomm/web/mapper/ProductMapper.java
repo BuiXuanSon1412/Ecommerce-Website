@@ -3,13 +3,17 @@ package com.ecomm.web.mapper;
 import com.ecomm.web.dto.product.AddProductForm;
 import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.model.product.Product;
+import com.ecomm.web.service.CategoryService;
 
 import static com.ecomm.web.mapper.StoreMapper.mapToStoreDto;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import static com.ecomm.web.mapper.CategoryMapper.mapToCategoryDto;
 import static com.ecomm.web.mapper.DiscountMapper.mapToDiscountDto;
 
 public class ProductMapper {
-    
+    @Autowired
     public static ProductDto mapToProductDto(Product product) {
         return ProductDto.builder()
                 .id(product.getId())
@@ -18,7 +22,6 @@ public class ProductMapper {
                 .desc(product.getDesc())
                 .image(product.getImage())
                 .sku(product.getSku())
-                .category(mapToCategoryDto(product.getCategory()))
                 .price(product.getPrice())
                 .discount(mapToDiscountDto(product.getDiscount()))
                 .build();

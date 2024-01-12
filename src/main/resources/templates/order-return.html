@@ -2,100 +2,24 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{store-layout}">
 
 <head>
-    <title>Store - Order</title>
+    <title>Ecomm - Order</title>
 </head>
 
 <body>
     <main layout:fragment="body">
         <!-- Header-->
-
-        <!-- The Modal -->
-        <div class="modal" id="myModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Prepare Order</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="login-form">
-                                <form method="post">
-
-                                    <div class="form-group">
-                                        <label>Prepare Order</label>
-                                        <div class="input-group">
-                                            <select class="form-select" id="inputGroupSelect02">
-                                                <option selected="selected" value="">Choose..</option>
-                                                <option value="Credit Card">Credit Card</option>
-                                                <option value="Debit Card">Debit Card</option>
-                                                <option value="Bank Account">Bank Account</option>
-                                                <option value="Visa">Visa</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!--
-                                    <p th:if="${#fields.hasErrors('paymentType')}" class="text-danger"
-                                        th:errors="*{paymentType}"></p>
-
-                                    <div class="form-group">
-                                        <label>Provider</label>
-                                        <input type="text" class="form-control" placeholder="Provider"
-                                            th:field="*{provider}">
-                                    </div>
-
-                                    <p th:if="${#fields.hasErrors('provider')}" class="text-danger"
-                                        th:errors="*{provider}">
-                                    </p>
-                                    <div class="form-group">
-                                        <label>Account number</label>
-                                        <input type="text" class="form-control" placeholder="Account number"
-                                            th:field="*{accountNo}">
-                                    </div>
-                                    <p th:if="${#fields.hasErrors('accountNo')}" class="text-danger"
-                                        th:errors="*{accountNo}">
-                                    </p>
-                                    <div class="form-group">
-                                        <label>Expiry Date</label>
-                                        <input type="date" class="form-control" placeholder="Expiry Date"
-                                            th:field="*{expiry}">
-                                    </div>
-                                    <p th:if="${#fields.hasErrors('expiry')}" class="text-danger" th:errors="*{expiry}">
-                                    </p> -->
-                                    <button type="button" class="btn btn-light mt-4"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-secondary mt-4">Submit</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
         <div class="container-fluid px-4">
+            
             <h1 class="my-4"> Store Orders</h1>
             <div class="container card mb-4">
                 <div class="card-header row">
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/store/order}">All</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/order/confirm}">Pending Confirmation</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/order/pickup}">Pending Pickup</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/order/transit}">In Transit</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/order/deliver}">Delivered</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/order/return}">Return Initiated</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none"
-                            th:href="@{/order/cancel}">Order Cancelled</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/store/order}">All</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/confirm}">Pending Confirmation</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/pickup}">Pending Pickup</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/transit}">In Transit</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/deliver}">Delivered</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/return}">Return Initiated</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/cancel}">Order Cancelled</a></small>
                 </div>
                 <div class="card-body">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
@@ -133,8 +57,7 @@
                                         <th data-sortable="true" style="width: 15%;"><a href="#"
                                                 class="datatable-sorter text-center">Lastest modified</a></th>
                                         <th data-sortable="true" style="width: 8%;"><a href="#"
-                                                class="datatable-sorter text-center" data-bs-toggle="modal"
-                                                data-bs-target="#myModal">Handling</a></th>
+                                                class="datatable-sorter text-center">Handling</a></th>
 
                                     </tr>
                                 </thead>
@@ -146,11 +69,7 @@
                                         <td class="text-center" th:text="${oi.deliveryMethod}"></td>
                                         <td th:text="${oi.condition}"></td>
                                         <td th:text="${#temporals.format(oi.modifiedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                        <td class="text-center" th:if="${oi.condition == 'Pending Pickup'}"><button
-                                                class="btn btn-sm btn-secondary" data-bs-toggle="modal"
-                                                data-bs-target="#myModal">
-                                                Prepare</button></td>
-                                        <td class="text-center" th:if="${oi.condition != 'Pending Pickup'}"><a
+                                        <td class="text-center"><a
                                                 class="text-dark"></a></td>
                                     </tr>
 

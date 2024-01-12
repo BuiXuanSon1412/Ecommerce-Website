@@ -67,13 +67,12 @@ public class StoreController {
     }
 
     @GetMapping("/store/order")
-    public String listOrder(Model model) {
+    public String allOrder(Model model) {
         String username = SecurityUtil.getSessionUser();
         List<OrderItemDto> orderItems = orderService.findOrderItemsTimeOrderByUser(username);
         model.addAttribute("orderItems", orderItems);
         return "store-order";
     }
-
     @GetMapping("/store/discount")
     public String listDiscount(Model model) {
         String username = SecurityUtil.getSessionUser();
@@ -126,5 +125,8 @@ public class StoreController {
         productService.saveProduct(addProductForm);
         return "redirect:/store/product";
     }
-
+    @GetMapping("/store/delivery")
+    public String deliverySetting(Model model) {
+        return "store-delivery";
+    }
 }

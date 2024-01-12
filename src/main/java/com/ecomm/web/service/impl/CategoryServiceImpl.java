@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.product.CategoriesDto;
@@ -39,5 +40,26 @@ public class CategoryServiceImpl implements CategoryService {
             categoriesByBase.add(categoriesDto);
         }
         return categoriesByBase;
+    }
+    @Override
+    public Pair<CategoryDto, CategoryDto> findCategoryByProduct(Integer productId) {
+        List<Object[]> resultSet = categoryRepository.findCategoryByProduct(productId);
+        CategoryDto sub = CategoryDto.builder().build();
+        CategoryDto base = CategoryDto.builder().build();
+        for(Object[] result : resultSet) {
+            sub = CategoryDto.builder()
+                                            .id((Integer)result[0])
+                                            .name((String)result[1])
+                                            .desc((String)result[2])
+                                            .build();
+            base = CategoryDto.builder()
+                                            .id((Integer)result[3])
+                                            .name((String)result[4])
+                                            .desc((String)result[5])
+                                            .build();
+        }
+        Pair<CategoryDto, CategoryDto> category = Pair.of(base, sub);
+        return category;
+                                                      
     }
 }

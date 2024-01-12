@@ -20,7 +20,7 @@
             </ol>
             <!-- The Modal -->
             <div class="modal" id="myModal">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
 
                         <!-- Modal Header -->
@@ -37,12 +37,14 @@
 
                                         <div class="form-group">
                                             <label>Payment Type</label>
-                                            <div class="input-group mb-1">
+                                            <div class="input-group">
                                                 <select class="form-select" id="inputGroupSelect02"
                                                     th:field="*{paymentType}">
-                                                    <option selected="selected" value="Visa">Visa</option>   
-                                                    <option value="PayPal">Paypal</option>
-                                                    <option value="Mastercard">Mastercard</option>
+                                                    <option selected="selected" value="">Choose..</option>
+                                                    <option value="Credit Card">Credit Card</option>
+                                                    <option value="Debit Card">Debit Card</option>
+                                                    <option value="Bank Account">Bank Account</option>
+                                                    <option value="Visa">Visa</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -85,20 +87,20 @@
                 </div>
             </div>
         </div>
-
-        <div class="list-group" th:each="p:${payments}">
-            <div class="list-group-item list-group-item-action" style="position: relative;">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Payment</h5>
-                    <small></small>
+        <div class="container-fluid">
+            <div class="list-group" th:each="p:${payments}">
+                <div class="list-group-item list-group-item-action" style="position: relative;">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></h6>
+                    </div>
+                    <small class="mb-1" th:text="'Provider: '+${p.provider}"></small><br>
+                    <small class="mb-1" th:text="'Account Number: '+${p.accountNo}"></small><br>
+                    <small class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></small>
+                    <button type="button"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-2 me-2">Delete</button>
+                    <button type="button"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-5 me-2">Edit</button>
                 </div>
-                <p class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></p>
-                <p class="mb-1" th:text="'Provider: '+${p.provider}"></p>
-                <p class="mb-1" th:text="'Account Number: '+${p.accountNo}"></p>
-                <p class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></p>
-                <small></small>
-                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-1 me-4">Delete</button>
-                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-5 me-4">Edit</button>
             </div>
         </div>
     </div>

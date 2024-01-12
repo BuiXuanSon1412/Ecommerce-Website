@@ -19,25 +19,26 @@
                     <div class="col-md-6">
                         <div class="small mb-1" th:text="'SKU: ' + *{sku}"></div>
                         <h1 class="display-6 fw-bolder" th:text="*{name}"></h1>
-                        <div class="fs-4 my-3" th:text="${product.store.name}">
-                            <a href="!#">
-                            </a>
+                        <small>by: </small>
+                        <a class="fs-3 mx-4 my-2 text-dark text-decoration-none" th:href="@{/store/view}" th:text="${product.store.name}"></a>
+                        <div class="fs-5 my-2">
+                            <div th:if="*{discount} != null">
+                                <span class="text-decoration-line-through" th:text="'US $' + *{price}"></span>
+                                <span th:text="'US $' + ${product.price * (1-product.discount.disc/100)}"></span>
+                            </div>
+                            <span th:if="*{discount} == null" th:text="'US $' + *{price}"></span><br>
+                            <small th:if="*{quantity} > 0">In Stock</small>
+                            <small th:if="*{quantity} == 0">Out of Stock</small>
                         </div>
-                        <div class="fs-5 mb-3">
-                            <span class="text-decoration-line-through" th:text="'US $' + *{price}"></span>
-                            <span></span>
-                        </div>
-                        <p class="lead" th:text="*{desc}"></p>
-                        <div class="d-flex">
+                        <p class="lead fs-6" th:text="*{desc}"></p>
+                        <div class="d-flex mt-3">
                             <input id="productId" type="hidden" th:value="*{id}" name="pid">
-                            <button class="btn px-2"
-                                onclick="minusQty(document.getElementById('quantity'))">
+                            <button class="btn px-2" onclick="minusQty(document.getElementById('quantity'))">
                                 <i class="fas fa-minus"></i>
                             </button>
                             <input id="quantity" min="1" class="form-control text-center" type="num" value="1"
                                 style="max-width: 3rem" name="qty" />
-                            <button class="btn px-2"
-                                onclick="plusQty(document.getElementById('quantity'))">
+                            <button class="btn px-2" onclick="plusQty(document.getElementById('quantity'))">
                                 <i class="fas fa-plus"></i>
                             </button>
                             <button type="submit" class="btn btn-outline-dark flex-shrink-0 ms-5" id="buttonAdd2Cart">
@@ -71,39 +72,6 @@
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View
                                         options</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                Sale</div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Special Item</h5>
-                                    <!-- Product reviews-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">$20.00</span>
-                                    $18.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to
-                                        cart</a></div>
                             </div>
                         </div>
                     </div>

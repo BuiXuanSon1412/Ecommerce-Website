@@ -1,0 +1,29 @@
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{store-layout}">
+
+<head>
+    <title>Store - Delivery</title>
+</head>
+<section layout:fragment="body">
+    <div class="main">
+        <div class="container-fluid px-4">
+            <h1 class="my-4">Delivery Settings</h1>
+            <h5 class="pt-1">Delivery Methods</h5>
+            <small>Activate suitable methods for Store</small>
+            <div class="form-check form-switch mt-4">
+                <input class="form-check-input" type="checkbox" role="switch" id="businessSwitch">
+                <label class="form-check-label" for="businessSwitch">Business</label>
+            </div>
+            <div class="form-check form-switch mt-4">
+                <input class="form-check-input" type="checkbox" role="switch" id="fastBusiness">
+                <label class="form-check-label" for="fastBusiness">Fast</label>
+            </div>
+            <div class="form-check form-switch mt-4">
+                <input class="form-check-input" type="checkbox" role="switch" id="expressBusiness">
+                <label class="form-check-label" for="expressBusiness">Express</label>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

@@ -41,20 +41,20 @@
                             <!-- Product image-->
                             <img class="card-img-top" style="max-height: 200px; width: auto; object-fit: contain;"
                                 th:src="${product.image}" alt="..." />
-
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
                                     <!-- Product name-->
-                                    <!--<h5 class="fw-bolder" th:text="${product.name}"></h5> -->
+                                    <small class="fw-bolder" th:text="${product.name}"></small><br>
                                     <!-- Product price-->
-                                    <div th:text="'US $' + ${product.price}"></div>
+                                    <div th:if="${product.discount} != null">
+                                        <span class="text-decoration-line-through" th:text="'US $' + ${product.price}"></span>
+                                        <span th:text="'US $' + ${product.price * (1-product.discount.disc/100)}"></span>
+                                    </div>
+                                    <span th:if="${product.discount} == null" th:text="'US $' + ${product.price}"></span><br>        
                                 </div>
                             </div>
-
                             <!-- Product actions-->
-
-
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center"><a class="btn btn-outline-dark mt-auto"
                                         th:href="@{/product/{productId}(productId=${product.id})}">View

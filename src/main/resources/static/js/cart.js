@@ -5,14 +5,11 @@ $(document).ready(function () {
     });
     $(".link-remove").on("click", function (e) {
         e.preventDefault();
-        rmFromCart($(this), function() {
-            updateTotalCost();
-        });
-        
+        rmFromCart($(this));
+
     });
-    // Event listener for quantity change
     $(".quantity-input").on('change', function () {
-        updateTotalCost();
+        updateTotal($(this));
     });
 
 });
@@ -25,12 +22,13 @@ function addToCart() {
         url: "/cart/add?pid=" + pid + "&qty=" + qty,
     }).done(function (response) {
         alert(response);
-    });
+    })
 }
 
 
-function rmFromCart(link, callback) {
-    url = link.attr("href");
+function rmFromCart(link) {
+    var url = link.attr("href");
+
     $.ajax({
         type: "POST",
         url: url,
@@ -38,7 +36,7 @@ function rmFromCart(link, callback) {
         ciid = link.attr("data-ciid");
         $("#cartItem" + ciid).remove();
         alert(response);
-        callback();
+        updateTotal();
     })
 }
 
@@ -49,18 +47,21 @@ function plusQty(el) {
     ++el.value;
 }
 
-function updateTotalCost() {
-    var totalCost = 0;
+function updateTotal() {
+    var total = 0;
     var discount = 0;
     $(".item-row").each(function () {
         var quantity = $(this).find('.quantity-input').val();
         var price = $(this).find('.price').data('price');
-        var itemTotal = parseFloat(quantity) * parseFloat(price);
-        totalCost += itemTotal;
+        var totalItem = parseFloat(quantity) * parseFloat(price);
+        total += totalItem;
         var disc = $(this).find('.discount').data('discount');
-        var itemDisc = parseFloat(quantity) * parseFloat(price) * disc / 100;
-        discount += disc;
+        if(disc == null) disc = 0;
+        var discItem = parseFloat(quantity) * parseFloat(price) * disc / 100;
+        discount += discItem;
     });
-    $('#totalCost').text('$' + totalCost.toFixed(2));
+    var afterDiscount = total - discount;
+    $('#total').text('$' + total.toFixed(2));
     $('#discount').text('$' + discount.toFixed(2));
+    $('#afterDiscount').text('$' + afterDiscount.toFixed(2));
 }

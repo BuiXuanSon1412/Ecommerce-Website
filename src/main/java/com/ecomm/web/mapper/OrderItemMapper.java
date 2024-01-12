@@ -10,8 +10,9 @@ public class OrderItemMapper {
         return OrderItemDto.builder()
                             .product(mapToProductDto(orderItem.getProduct()))
                             .quantity(orderItem.getQuantity())
-                            //.paymentType(orderItem.getOrderDetail().getPayment().getPaymentType())
-                            .condition(orderItem.getCondition())                    
+                            .condition(orderItem.getCondition())
+                            .deliveryMethod(orderItem.getDeliveryMethod())
+                            .modifiedAt(orderItem.getModifiedAt())      
                             .build();
     }
 }

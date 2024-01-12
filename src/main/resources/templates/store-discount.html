@@ -2,8 +2,7 @@
     layout:decorate="~{store-layout}">
 
 <head>
-    <title>User - Address</title>
-    <script th:src="@{/js/user.js}"></script>
+    <title>Store - Discount</title>
 </head>
 <section layout:fragment="body">
     <div class="main">
@@ -81,21 +80,22 @@
                 </div>
             </div>
         </div>
+        <div class="container-fluid">
+            <div class="list-group" th:each="d:${discounts}">
+                <div class="list-group-item list-group-item-action" style="position: relative;">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1" th:text="${d.name}">Voucher</h6>
+                    </div>
+                    <small class="mb-1" th:text="'Description: '+${d.desc}"></small><br>
+                    <small class="mb-1" th:text="'Percent: '+${d.disc}+'%'"></small><br>
+                    <small class="mb-1 me-2" th:text="'Start date: '+${d.startDate}"></small>
+                    <small class="mb-1" th:text="'End date: '+${d.endDate}"></small>
 
-        <div class="list-group" th:each="d:${discounts}">
-            <div class="list-group-item list-group-item-action" style="position: relative;">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Voucher</h5>
-                    <small></small>
+                    <button type="button"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-2 me-2">Delete</button>
+                    <button type="button"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-5 me-2">Edit</button>
                 </div>
-                <p class="mb-1" th:text="'Name: '+${d.name}"></p>
-                <p class="mb-1" th:text="'Description: '+${d.desc}"></p>
-                <p class="mb-1" th:text="'Percent: '+${d.disc}"></p>
-                <p class="mb-1" th:text="'Start date: '+${d.startDate}"></p>
-                <p class="mb-1" th:text="'Start date: '+${d.endDate}"></p>
-                
-                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-1 me-4"><a class="" th:href="@{/discount/delete}">Delete</a></button>
-                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-5 me-4">Edit</button>
             </div>
         </div>
     </div>

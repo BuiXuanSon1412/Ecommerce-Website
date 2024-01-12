@@ -20,7 +20,7 @@
             </ol>
             <!-- The Modal -->
             <div class="modal" id="myModal">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
 
                         <!-- Modal Header -->
@@ -79,20 +79,21 @@
                 </div>
             </div>
         </div>
-
-        <div class="list-group" th:each="a:${addresses}">
-            <div class="list-group-item list-group-item-action" style="position: relative;">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Address</h5>
-                    <small></small>
+        <div class="container-fluid">
+            <div class="list-group" th:each="a:${addresses}">
+                <div class="list-group-item list-group-item-action" style="position: relative;">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-0"><sup>Pickup Address</sup></h6>
+                    </div>
+                    <small class="mb-1" th:text="'Details: '+${a.address}"></small><br>
+                    <small class="mb-1" th:text="'City: '+${a.city}"></small><br>
+                    <small class="mb-1" th:text="'Postal code: '+${a.postalCode}"></small><br>
+                    <small class="mb-1" th:text="'Country: '+${a.country}"></small><br>
+                    <button type="button"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-2 me-2">Delete</button>
+                    <button type="button"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-5 me-2">Edit</button>
                 </div>
-                <p class="mb-1" th:text="'Details: '+${a.address}"></p>
-                <p class="mb-1" th:text="'City: '+${a.city}"></p>
-                <p class="mb-1" th:text="'Postal code: '+${a.postalCode}"></p>
-                <p class="mb-1" th:text="'Country: '+${a.country}"></p>
-                <small>Pickup Address</small>
-                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-1 me-4">Delete</button>
-                <button type="button" class="btn btn-secondary position-absolute top-0 end-0 mt-5 me-4">Edit</button>
             </div>
         </div>
     </div>
