@@ -1,6 +1,7 @@
 package com.ecomm.web.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.store.StoreDto;
@@ -15,6 +16,7 @@ import com.ecomm.web.service.StoreService;
 
 import static com.ecomm.web.mapper.StoreMapper.mapToStore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,9 +39,9 @@ public class StoreServiceImpl implements StoreService {
         roles.add(role);
         user.setRoles(roles);
         userRepository.save(user);
-        Store store = mapToStore(storeDto);
-        store.setUser(user);
-        storeRepository.save(store);
+        Store s = mapToStore(storeDto);
+        s.setUser(user);
+        storeRepository.save(s);
         SecurityUtil.reloadUserDetails();
     }
 }

@@ -15,6 +15,7 @@ import static com.ecomm.web.mapper.DiscountMapper.mapToDiscountDto;
 public class ProductMapper {
     @Autowired
     public static ProductDto mapToProductDto(Product product) {
+        if(product == null) return null;
         return ProductDto.builder()
                 .id(product.getId())
                 .name(product.getName())

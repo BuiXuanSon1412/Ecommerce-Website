@@ -32,8 +32,8 @@
                                 <span th:text="'US $' + ${product.price * (1-product.discount.disc/100)}"></span>
                             </div>
                             <span th:if="*{discount} == null" th:text="'US $' + *{price}"></span><br>
-                            <small th:if="*{quantity} > 0">In Stock</small>
-                            <small th:if="*{quantity} == 0">Out of Stock</small>
+                            <small th:if="*{quantity != null && quantity > 0}">In Stock</small>
+                            <small th:if="*{quantity == null || quantity == 0}">Out of Stock</small>
                         </div>
                         <p class="lead fs-6" th:text="*{desc}"></p>
                         <div class="d-flex mt-3">

@@ -49,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
     private CartService cartService;
     @Autowired
     private InventoryRepository inventoryRepository;
+
     @Override
     public List<OrderItemDto> findOrderItemsTimeOrderByUser(String username) {
         UserEntity user = userRepository.findByUsername(username);
@@ -56,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderItemRepository.findOrderItemsByStore(store.getId());
         return orderItems.stream().map((orderItem) -> mapToOrderItemDto(orderItem)).collect(Collectors.toList());
     }
+
     @Override
     public List<OrderItemDto> findOrderItemsTimeOrderByUserAndCondition(String username, String condition) {
         UserEntity user = userRepository.findByUsername(username);
@@ -63,43 +65,52 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderItemRepository.findOrderItemsByStoreAndCondition(store.getId(), condition);
         return orderItems.stream().map((orderItem) -> mapToOrderItemDto(orderItem)).collect(Collectors.toList());
     }
+
     @Override
-    public Boolean saveOrderByUser(String username, Integer addressId, Integer paymentId, List<Pair<Integer, String>> deliveryMethods) {
+    public Boolean saveOrderByUser(String username, Integer addressId, Integer paymentId,
+            List<Pair<Integer, String>> deliveryMethods) {
         UserEntity user = userRepository.findByUsername(username);
-        List<CartItem> cartItems = cartItemRepository.findAll();
-        Pair<Double,Double> td = cartService.totalAndDiscount(username);
+        List<CartItem> cartItems = cartItemRepository.findByUser(user);
+        Pair<Double, Double> td = cartService.totalAndDiscount(username);
         Address address = addressRepository.findById(addressId).get();
         Payment payment = paymentRepository.findById(paymentId).get();
         OrderDetail orderDetail = OrderDetail.builder()
-                                            .user(user)
-                                            .total(td.getFirst() - td.getSecond())
-                                            .address(address)
-                                            .payment(payment)
-                                            .build();
+                .user(user)
+                .total(td.getFirst() - td.getSecond())
+                .address(address)
+                .payment(payment)
+                .build();
         orderDetailRepository.save(orderDetail);
         orderDetail = orderDetailRepository.findLastestOrderDetail(username);
-        for(CartItem cartItem : cartItems) {
+        for (CartItem cartItem : cartItems) {
             cartItemRepository.delete(cartItem);
             Inventory inventory = inventoryRepository.findByProduct(cartItem.getProduct());
-            if(cartItem.getQuantity() > inventory.getQuantity()) return false;
-            for(Pair<Integer, String> deliveryMethod : deliveryMethods) {
-                if(deliveryMethod.getFirst() ==  cartItem.getId()) {
+            if (cartItem.getQuantity() > inventory.getQuantity())
+                return false;
+            for (Pair<Integer, String> deliveryMethod : deliveryMethods) {
+                if (deliveryMethod.getFirst() == cartItem.getId()) {
                     OrderItem orderItem = OrderItem.builder()
-                                            .orderDetail(orderDetail)
-                                            .product(cartItem.getProduct())
-                                            .quantity(cartItem.getQuantity())
-                                            .condition("Pending Confirmation")
-                                            .deliveryMethod(deliveryMethod.getSecond())
-                                            .build();
+                            .orderDetail(orderDetail)
+                            .product(cartItem.getProduct())
+                            .quantity(cartItem.getQuantity())
+                            .condition("Pending Confirmation")
+                            .deliveryMethod(deliveryMethod.getSecond())
+                            .build();
                     inventory.setQuantity(inventory.getQuantity() - cartItem.getQuantity());
                     inventoryRepository.save(inventory);
                     orderItemRepository.save(orderItem);
                     break;
                 }
             }
-            
+
         }
         return true;
     }
+
+    //@Override
+    //public List<OrderItemDto> findPurchasesByUser(String username) {
+
+        //List<OrderItem> orderItems = orderItemRepository.findPurchaseByUser(username)
+    //}
 
 }

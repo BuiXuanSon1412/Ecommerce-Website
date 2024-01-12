@@ -21,7 +21,6 @@ $(document).ready(function () {
         if (pid == null) alert("Select payment method");
         else if (aid == null) alert("Select pickup address");
         else {
-            console.log("hello");
             pay(pid, aid);
         }
     })
@@ -41,7 +40,8 @@ function pay(pid, aid) {
         contentType: "application/json",
         data: jsonDels
     }).done(function (response) {
+        console.log(1);
         alert(response);
-        //window.location.href = "/cart";
+        window.location.href = "/cart";
     })
 }

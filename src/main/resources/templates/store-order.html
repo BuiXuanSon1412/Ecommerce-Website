@@ -146,11 +146,11 @@
                                         <td class="text-center" th:text="${oi.deliveryMethod}"></td>
                                         <td th:text="${oi.condition}"></td>
                                         <td th:text="${#temporals.format(oi.modifiedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                        <td class="text-center" th:if="${oi.condition == 'Pending Pickup'}"><button
+                                        <td class="text-center" th:if="${oi.condition} == 'Pending Pickup'"><button
                                                 class="btn btn-sm btn-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#myModal">
                                                 Prepare</button></td>
-                                        <td class="text-center" th:if="${oi.condition != 'Pending Pickup'}"><a
+                                        <td class="text-center" th:if="${oi.condition != 'Pending Pickup' &&  oi.condition != 'Completed Setup'}"><a
                                                 class="text-dark"></a></td>
                                     </tr>
 

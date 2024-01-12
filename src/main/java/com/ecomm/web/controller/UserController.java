@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecomm.web.dto.shopping.OrderItemDto;
 import com.ecomm.web.dto.user.AddressDto;
 import com.ecomm.web.dto.user.PaymentDto;
 import com.ecomm.web.dto.user.Profile;
 import com.ecomm.web.dto.user.UserEntityDto;
 import com.ecomm.web.security.SecurityUtil;
+import com.ecomm.web.service.OrderService;
 import com.ecomm.web.service.UserService;
 
 import jakarta.validation.Valid;
@@ -24,6 +26,8 @@ import jakarta.validation.Valid;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
     @GetMapping("/user/profile")
     public String viewProfile(Model model) {
         UserEntityDto user = userService.findByUsername(SecurityUtil.getSessionUser());
@@ -93,7 +97,8 @@ public class UserController {
 
     @GetMapping("/user/purchase")
     public String viewPurchase(Model model) {
-        //List<OrderItemDto>  
+        String username = SecurityUtil.getSessionUser();
+        //List<OrderItemDto> orderItem = orderService.findPurchasesByUser(username);
         return "user-purchase";
     }
     @PostMapping("/address/delete")

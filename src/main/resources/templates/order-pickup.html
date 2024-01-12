@@ -9,17 +9,24 @@
     <main layout:fragment="body">
         <!-- Header-->
         <div class="container-fluid px-4">
-            
+
             <h1 class="my-4"> Store Orders</h1>
             <div class="container card mb-4">
                 <div class="card-header row">
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/store/order}">All</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/confirm}">Pending Confirmation</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/pickup}">Pending Pickup</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/transit}">In Transit</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/deliver}">Delivered</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/return}">Return Initiated</a></small>
-                    <small class="col text-center"><a class="text-dark text-decoration-none" th:href="@{/order/cancel}">Order Cancelled</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/store/order}">All</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/order/confirm}">Pending Confirmation</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/order/pickup}">Pending Pickup</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/order/transit}">In Transit</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/order/deliver}">Delivered</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/order/return}">Return Initiated</a></small>
+                    <small class="col text-center"><a class="text-dark text-decoration-none"
+                            th:href="@{/order/cancel}">Order Cancelled</a></small>
                 </div>
                 <div class="card-body">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
@@ -69,9 +76,10 @@
                                         <td class="text-center" th:text="${oi.deliveryMethod}"></td>
                                         <td th:text="${oi.condition}"></td>
                                         <td th:text="${#temporals.format(oi.modifiedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                        <td class="text-center" th:if="${oi.condition == 'Pending Pickup'}"><a
-                                                class="text-dark" th:href="@{/store/prepare}">
-                                                Prepare</a></td>
+                                        <td class="text-center" th:if="${oi.condition == 'Pending Pickup'}"><button
+                                                class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#myModal">
+                                                Prepare</button>
                                         <td class="text-center" th:if="${oi.condition != 'Pending Pickup'}"><a
                                                 class="text-dark"></a></td>
                                     </tr>

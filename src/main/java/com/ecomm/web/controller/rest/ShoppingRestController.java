@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecomm.web.security.SecurityUtil;
@@ -37,11 +40,11 @@ public class ShoppingRestController {
         return "The item is updatde uncessfully";
     }
     @PostMapping("/pay")
-    public String pay(@RequestParam("pid") Integer paymentId, @RequestParam("aid") Integer addressId, @RequestBody List<Pair<Integer, String>> deliveryMethods) {
+    public ResponseEntity pay(@RequestParam("pid") Integer paymentId, @RequestParam("aid") Integer addressId, @RequestBody List<Pair<Integer, String>> deliveryMethods) {
         String username = SecurityUtil.getSessionUser();
         Boolean isDone = orderService.saveOrderByUser(username, addressId, paymentId, deliveryMethods);
-        if(isDone) return "Ordered successfully";
-        return "Ordered unseccessfully";
+        if(isDone) return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
     }
     
 }

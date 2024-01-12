@@ -79,6 +79,7 @@ public class ProductServiceImpl implements ProductService {
         for(Product product : products) {
             ProductDto productDto = mapToProductDto(product);
             productDto.setCategory(categoryService.findCategoryByProduct(product.getId()));
+            productDto.setQuantity(inventoryRepository.findByProduct(product).getQuantity());
             productDtos.add(productDto);
         }
         return productDtos;
@@ -86,6 +87,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findProductByNameAndCategory(String name, Integer categoryId) {
         List<Product> products = new ArrayList<>();
+        name = name.toLowerCase();
         if(name == "" && categoryId != 0) {
             products = productRepository.findByBaseCategory(categoryId);
         }
