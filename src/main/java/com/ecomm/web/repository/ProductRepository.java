@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.model.product.Product;
 import com.ecomm.web.model.store.Store;
 
@@ -21,4 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(value = "SELECT DISTINCT p.* FROM product.product p WHERE LOWER(p.name) LIKE CONCAT('%', :name, '%')", nativeQuery = true)
     Product findByName(String name);
+    @Query(value = "SELECT * FROM product.product ORDER BY created_at DESC", nativeQuery = true)
+    List<Product> findNewReleases();
+    @Query(value = "select distinct p.* from product.product as p join (select oi.product_id,sum(quantity) as quantity from shopping.order_item as oi group by oi.product_id) as tempo on tempo.product_id=p.product_id order by tempo.quantity desc", nativeQuery = true)
+    List<Product> findPopularItems();
 }

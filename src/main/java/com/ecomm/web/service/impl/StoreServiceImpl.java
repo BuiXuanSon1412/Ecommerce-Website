@@ -4,20 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import com.ecomm.web.dto.delivery.DeliveryProviderDto;
 import com.ecomm.web.dto.store.StoreDto;
+import com.ecomm.web.model.delivery.DeliveryProvider;
 import com.ecomm.web.model.store.Store;
 import com.ecomm.web.model.user.Role;
 import com.ecomm.web.model.user.UserEntity;
+import com.ecomm.web.repository.DeliveryProviderRepository;
 import com.ecomm.web.repository.RoleRepository;
 import com.ecomm.web.repository.StoreRepository;
 import com.ecomm.web.repository.UserRepository;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.StoreService;
 
-import static com.ecomm.web.mapper.StoreMapper.mapToStore;
+import jakarta.validation.OverridesAttribute;
 
-import java.util.ArrayList;
+import static com.ecomm.web.mapper.StoreMapper.mapToStore;
+import static com.ecomm.web.mapper.DeliveryProviderMapper.mapToDeliveryProviderDto;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 
@@ -30,6 +35,8 @@ public class StoreServiceImpl implements StoreService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private DeliveryProviderRepository deliveryProviderRepository;
     @Override
     public void registerStore(StoreDto storeDto) {
         String username = SecurityUtil.getSessionUser();
@@ -43,5 +50,14 @@ public class StoreServiceImpl implements StoreService {
         s.setUser(user);
         storeRepository.save(s);
         SecurityUtil.reloadUserDetails();
+    }
+    @Override
+    public List<DeliveryProviderDto> findAll() {
+        return deliveryProviderRepository.findAll().stream().map((deliveryProvider) -> mapToDeliveryProviderDto(deliveryProvider)).collect(Collectors.toList());
+    }
+    @Override
+    public void registerDeliveryProvider(Integer dpid) {
+        DeliveryProvider deliveryProvider = deliveryProviderRepository.findById(dpid).get();
+        
     }
 }

@@ -3,9 +3,7 @@ $(document).ready(function () {
     var pid, aid;
     $(".btn-p-select").on('click', function () {
         pid = $(this).data('pid');
-        console.log($("#payment"+pid).find("small:nth-child(1)").text())
         $("#paymentType").text($("#payment"+pid).find("small:nth-child(2)").text());
-        console.log($("#paymentType").text());
         $("#provider").text($("#payment"+pid).find("small:nth-child(3)").text());
         $("#accountNo").text($("#payment"+pid).find("small:nth-child(4)").text());
         $("#expiry").text($("#payment"+pid).find("small:nth-child(5)").text());       
@@ -14,6 +12,10 @@ $(document).ready(function () {
     });
     $(".btn-a-select").on('click', function () {
         aid = $(this).data('aid');
+        $("#details").text($("address"+aid).find("small:nth-child(2)").text());
+        $("#city").text($("address"+aid).find("small:nth-child(3)").text());
+        $("#postalCode").text($("address"+aid).find("small:nth-child(4)").text());
+        $("#country").text($("address"+aid).find("small:nth-child(5)").text());
         $("#address").removeClass("d-none");
         console.log(aid);
     });

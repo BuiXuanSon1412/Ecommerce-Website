@@ -101,5 +101,16 @@ public class ProductServiceImpl implements ProductService {
         else products = productRepository.findAll();
         return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
     }
+    @Override
+    public List<ProductDto> findPopolarItems() {
+        List<Product> products = productRepository.findPopularItems();
+        return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<ProductDto> findNewReleases() {
+        List<Product> products = productRepository.findNewReleases();
+        return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
+    }
     
 }

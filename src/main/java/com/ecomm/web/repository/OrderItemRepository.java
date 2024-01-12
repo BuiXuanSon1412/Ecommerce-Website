@@ -10,9 +10,8 @@ import com.ecomm.web.model.shopping.OrderItem;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
-    @Query(value = "SELECT * FROM shopping.order_item ORDER BY modified_at DESC", nativeQuery = true)
+    @Query(value = "SELECT oi.* FROM shopping.order_item oi JOIN product.product p USING (product_id) WHERE store_id = :storeId ORDER BY oi.modified_at DESC", nativeQuery = true)
     List<OrderItem> findOrderItemsByStore(Integer storeId);
     @Query(value = "SELECT oi.* FROM shopping.order_item oi JOIN product.product p USING (product_id) where oi.condition = :condition AND p.store_id = :storeId ORDER BY modified_at DESC", nativeQuery = true)
     List<OrderItem> findOrderItemsByStoreAndCondition(Integer storeId, String condition);
-    //@Query(value = "SELCT oi.* FROM shopping.order_item oi JOIN shopping.order_detail ")
 }

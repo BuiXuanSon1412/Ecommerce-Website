@@ -39,4 +39,20 @@ public class PublicController {
         model.addAttribute("products", products);
         return "home";
     }
+    @GetMapping("/newreleases")
+    public String newReleases(Model model) {
+        List<ProductDto> products = productService.findNewReleases();
+        List<CategoryDto> categories = categoryService.findAllBaseCategories();
+        model.addAttribute("categories", categories);
+        model.addAttribute("products", products);
+        return "home";
+    }
+    @GetMapping("/popularitems")
+    public String popularItems(Model model) {
+        //List<ProductDto> products = productService.findPopolarItems();
+        List<CategoryDto> categories = categoryService.findAllBaseCategories();
+        model.addAttribute("categories", categories);
+        //model.addAttribute("products", products);
+        return "home";
+    }
 }

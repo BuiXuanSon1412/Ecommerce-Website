@@ -11,5 +11,6 @@ public interface ProductService {
     ProductDto findProductById(Integer productId);
     List<ProductDto> findProductByUser(String username);
     List<ProductDto> findProductByNameAndCategory(String name, Integer categoryId);
-    
+    List<ProductDto> findPopolarItems();
+    List<ProductDto> findNewReleases();
 }
