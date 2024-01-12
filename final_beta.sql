@@ -5,7 +5,7 @@
 -- Dumped from database version 16.0
 -- Dumped by pg_dump version 16.0
 
--- Started on 2024-01-12 13:41:02
+-- Started on 2024-01-12 15:59:02
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1892,9 +1892,9 @@ CREATE TABLE shopping.order_item (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
     delivery_provider_id integer,
-    delivery_method_id integer,
     delivery_method character varying(255),
-    CONSTRAINT condition_check CHECK (((condition)::text = ANY ((ARRAY['Pending Confirmation'::character varying, 'Pending Pickup'::character varying, 'Complete Setup'::character varying, 'In transit'::character varying, 'Delivered'::character varying, 'Return Initiated'::character varying, 'Order Cancelled'::character varying])::text[])))
+    CONSTRAINT check_deli_method CHECK (((delivery_method)::text = ANY ((ARRAY['fast'::character varying, 'express'::character varying, 'business'::character varying])::text[]))),
+    CONSTRAINT condition_check CHECK (((condition)::text = ANY ((ARRAY['Pending Confirmation'::character varying, 'Pending Pickup'::character varying, 'Completed Setup'::character varying, 'In Transit'::character varying, 'Delivered'::character varying, 'Return Initiated'::character varying, 'Order Cancelled'::character varying])::text[])))
 );
 
 
@@ -7083,12 +7083,12 @@ COPY shopping.order_detail (order_detail_id, user_id, total, created_at, modifie
 -- Data for Name: order_item; Type: TABLE DATA; Schema: shopping; Owner: postgres
 --
 
-COPY shopping.order_item (order_item_id, order_detail_id, product_id, quantity, condition, created_at, modified_at, delivery_provider_id, delivery_method_id, delivery_method) FROM stdin;
-15	3	2	1	Pending Confirmation	2024-01-12 11:32:45.836303+07	2024-01-12 11:32:45.834592+07	\N	\N	business
-16	12	77	4	Pending Confirmation	2024-01-12 12:14:13.055464+07	2024-01-12 12:14:13.045217+07	\N	\N	fast
-17	13	79	3	Pending Confirmation	2024-01-12 12:15:31.861673+07	2024-01-12 12:15:31.860299+07	\N	\N	business
-18	19	77	3	Pending Confirmation	2024-01-12 12:19:02.388855+07	2024-01-12 12:19:02.378236+07	\N	\N	business
-19	21	4	2	Pending Confirmation	2024-01-12 12:20:34.522771+07	2024-01-12 12:20:34.519268+07	\N	\N	business
+COPY shopping.order_item (order_item_id, order_detail_id, product_id, quantity, condition, created_at, modified_at, delivery_provider_id, delivery_method) FROM stdin;
+16	12	77	4	Pending Confirmation	2024-01-12 12:14:13.055464+07	2024-01-12 12:14:13.045217+07	\N	fast
+17	13	79	3	Pending Confirmation	2024-01-12 12:15:31.861673+07	2024-01-12 12:15:31.860299+07	\N	business
+18	19	77	3	Pending Confirmation	2024-01-12 12:19:02.388855+07	2024-01-12 12:19:02.378236+07	\N	business
+19	21	4	2	Pending Confirmation	2024-01-12 12:20:34.522771+07	2024-01-12 12:20:34.519268+07	\N	business
+15	3	2	1	Pending Confirmation	2024-01-12 11:32:45.836303+07	2024-01-12 15:49:52.604783+07	\N	express
 \.
 
 
@@ -7592,7 +7592,7 @@ SELECT pg_catalog.setval('timetable.task_task_id_seq', 9, true);
 
 
 --
--- TOC entry 4920 (class 2606 OID 30263)
+-- TOC entry 4921 (class 2606 OID 30263)
 -- Name: address address_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7601,7 +7601,7 @@ ALTER TABLE ONLY account.address
 
 
 --
--- TOC entry 4922 (class 2606 OID 30265)
+-- TOC entry 4923 (class 2606 OID 30265)
 -- Name: payment payment_register_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7610,7 +7610,7 @@ ALTER TABLE ONLY account.payment
 
 
 --
--- TOC entry 4924 (class 2606 OID 30267)
+-- TOC entry 4925 (class 2606 OID 30267)
 -- Name: role role_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7619,7 +7619,7 @@ ALTER TABLE ONLY account.role
 
 
 --
--- TOC entry 4926 (class 2606 OID 30474)
+-- TOC entry 4927 (class 2606 OID 30474)
 -- Name: user user_name; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7628,7 +7628,7 @@ ALTER TABLE ONLY account."user"
 
 
 --
--- TOC entry 4928 (class 2606 OID 30269)
+-- TOC entry 4929 (class 2606 OID 30269)
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7637,7 +7637,7 @@ ALTER TABLE ONLY account."user"
 
 
 --
--- TOC entry 4930 (class 2606 OID 30271)
+-- TOC entry 4931 (class 2606 OID 30271)
 -- Name: delivery_provider delivery_provider_pkey; Type: CONSTRAINT; Schema: delivery; Owner: postgres
 --
 
@@ -7646,7 +7646,7 @@ ALTER TABLE ONLY delivery.delivery_provider
 
 
 --
--- TOC entry 4932 (class 2606 OID 30273)
+-- TOC entry 4933 (class 2606 OID 30273)
 -- Name: category category_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7655,7 +7655,7 @@ ALTER TABLE ONLY product.category
 
 
 --
--- TOC entry 4934 (class 2606 OID 30275)
+-- TOC entry 4935 (class 2606 OID 30275)
 -- Name: discount discount_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7664,7 +7664,7 @@ ALTER TABLE ONLY product.discount
 
 
 --
--- TOC entry 4936 (class 2606 OID 30277)
+-- TOC entry 4937 (class 2606 OID 30277)
 -- Name: inventory inventory_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7673,7 +7673,7 @@ ALTER TABLE ONLY product.inventory
 
 
 --
--- TOC entry 4938 (class 2606 OID 30468)
+-- TOC entry 4939 (class 2606 OID 30468)
 -- Name: product name; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7682,7 +7682,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4940 (class 2606 OID 30279)
+-- TOC entry 4941 (class 2606 OID 30279)
 -- Name: product product_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7691,7 +7691,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4942 (class 2606 OID 30281)
+-- TOC entry 4943 (class 2606 OID 30281)
 -- Name: cart_item cart_item_pkey; Type: CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -7700,7 +7700,7 @@ ALTER TABLE ONLY shopping.cart_item
 
 
 --
--- TOC entry 4944 (class 2606 OID 30283)
+-- TOC entry 4945 (class 2606 OID 30283)
 -- Name: order_detail order_detail_pkey; Type: CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -7709,7 +7709,7 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4946 (class 2606 OID 30285)
+-- TOC entry 4947 (class 2606 OID 30285)
 -- Name: order_item order_item_pkey; Type: CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -7718,7 +7718,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4948 (class 2606 OID 30287)
+-- TOC entry 4949 (class 2606 OID 30287)
 -- Name: delivery_method delivery_methods_pkey; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7727,7 +7727,7 @@ ALTER TABLE ONLY store.delivery_method
 
 
 --
--- TOC entry 4950 (class 2606 OID 30458)
+-- TOC entry 4951 (class 2606 OID 30458)
 -- Name: store name; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7736,7 +7736,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4952 (class 2606 OID 30289)
+-- TOC entry 4953 (class 2606 OID 30289)
 -- Name: store store_pkey; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7745,7 +7745,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4954 (class 2606 OID 30491)
+-- TOC entry 4955 (class 2606 OID 30491)
 -- Name: store user; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7754,7 +7754,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4956 (class 2606 OID 30291)
+-- TOC entry 4957 (class 2606 OID 30291)
 -- Name: chain chain_chain_name_key; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7763,7 +7763,7 @@ ALTER TABLE ONLY timetable.chain
 
 
 --
--- TOC entry 4958 (class 2606 OID 30293)
+-- TOC entry 4959 (class 2606 OID 30293)
 -- Name: chain chain_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7772,7 +7772,7 @@ ALTER TABLE ONLY timetable.chain
 
 
 --
--- TOC entry 4960 (class 2606 OID 30295)
+-- TOC entry 4961 (class 2606 OID 30295)
 -- Name: migration migration_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7781,7 +7781,7 @@ ALTER TABLE ONLY timetable.migration
 
 
 --
--- TOC entry 4962 (class 2606 OID 30297)
+-- TOC entry 4963 (class 2606 OID 30297)
 -- Name: parameter parameter_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7790,7 +7790,7 @@ ALTER TABLE ONLY timetable.parameter
 
 
 --
--- TOC entry 4964 (class 2606 OID 30299)
+-- TOC entry 4965 (class 2606 OID 30299)
 -- Name: task task_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7927,7 +7927,7 @@ CREATE TRIGGER update_store BEFORE UPDATE ON store.store FOR EACH ROW EXECUTE FU
 
 
 --
--- TOC entry 4967 (class 2606 OID 30315)
+-- TOC entry 4968 (class 2606 OID 30315)
 -- Name: user_role role_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7936,7 +7936,7 @@ ALTER TABLE ONLY account.user_role
 
 
 --
--- TOC entry 4966 (class 2606 OID 30320)
+-- TOC entry 4967 (class 2606 OID 30320)
 -- Name: payment user_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7945,7 +7945,7 @@ ALTER TABLE ONLY account.payment
 
 
 --
--- TOC entry 4968 (class 2606 OID 30325)
+-- TOC entry 4969 (class 2606 OID 30325)
 -- Name: user_role user_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7954,7 +7954,7 @@ ALTER TABLE ONLY account.user_role
 
 
 --
--- TOC entry 4965 (class 2606 OID 30330)
+-- TOC entry 4966 (class 2606 OID 30330)
 -- Name: address user_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7963,7 +7963,7 @@ ALTER TABLE ONLY account.address
 
 
 --
--- TOC entry 4969 (class 2606 OID 30335)
+-- TOC entry 4970 (class 2606 OID 30335)
 -- Name: category cate_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7972,7 +7972,7 @@ ALTER TABLE ONLY product.category
 
 
 --
--- TOC entry 4972 (class 2606 OID 30340)
+-- TOC entry 4973 (class 2606 OID 30340)
 -- Name: product cate_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7981,7 +7981,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4973 (class 2606 OID 30345)
+-- TOC entry 4974 (class 2606 OID 30345)
 -- Name: product dis_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7990,7 +7990,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4971 (class 2606 OID 30350)
+-- TOC entry 4972 (class 2606 OID 30350)
 -- Name: inventory prod_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7999,7 +7999,7 @@ ALTER TABLE ONLY product.inventory
 
 
 --
--- TOC entry 4974 (class 2606 OID 30355)
+-- TOC entry 4975 (class 2606 OID 30355)
 -- Name: product store_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -8008,7 +8008,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4970 (class 2606 OID 30483)
+-- TOC entry 4971 (class 2606 OID 30483)
 -- Name: discount store_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -8017,7 +8017,7 @@ ALTER TABLE ONLY product.discount
 
 
 --
--- TOC entry 4977 (class 2606 OID 30360)
+-- TOC entry 4978 (class 2606 OID 30360)
 -- Name: order_detail add_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8026,21 +8026,12 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4980 (class 2606 OID 30365)
+-- TOC entry 4981 (class 2606 OID 30365)
 -- Name: order_item deli_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
 ALTER TABLE ONLY shopping.order_item
     ADD CONSTRAINT deli_fk FOREIGN KEY (delivery_provider_id) REFERENCES delivery.delivery_provider(delivery_provider_id) ON DELETE SET NULL NOT VALID;
-
-
---
--- TOC entry 4981 (class 2606 OID 30501)
--- Name: order_item deli_method; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
---
-
-ALTER TABLE ONLY shopping.order_item
-    ADD CONSTRAINT deli_method FOREIGN KEY (delivery_method_id) REFERENCES store.delivery_method(delivery_method_id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -8053,7 +8044,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4978 (class 2606 OID 30375)
+-- TOC entry 4979 (class 2606 OID 30375)
 -- Name: order_detail pay_id; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8062,7 +8053,7 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4975 (class 2606 OID 30380)
+-- TOC entry 4976 (class 2606 OID 30380)
 -- Name: cart_item prod_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8080,7 +8071,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4976 (class 2606 OID 30390)
+-- TOC entry 4977 (class 2606 OID 30390)
 -- Name: cart_item user_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8089,7 +8080,7 @@ ALTER TABLE ONLY shopping.cart_item
 
 
 --
--- TOC entry 4979 (class 2606 OID 30395)
+-- TOC entry 4980 (class 2606 OID 30395)
 -- Name: order_detail user_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8133,10 +8124,9 @@ ALTER TABLE ONLY timetable.task
     ADD CONSTRAINT task_chain_id_fkey FOREIGN KEY (chain_id) REFERENCES timetable.chain(chain_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2024-01-12 13:41:03
+-- Completed on 2024-01-12 15:59:03
 
 --
 -- PostgreSQL database dump complete
 --
-
 
