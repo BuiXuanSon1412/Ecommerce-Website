@@ -22,7 +22,7 @@ public class OrderController {
         model.addAttribute("orderItems", orderItems);
         return "order-confirm";
     }
-    @GetMapping("/store/order/pickup")
+    @GetMapping("/order/pickup")
     public String pickupOrder(Model model) {
         String username = SecurityUtil.getSessionUser();
         List<OrderItemDto> orderItems = orderService.findOrderItemsTimeOrderByUserAndCondition(username, "Pending Pickup");

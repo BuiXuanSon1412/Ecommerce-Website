@@ -11,4 +11,5 @@ public interface CartService {
     public List<CartItemDto> listCartItems(String username);
     public void deleteCartItemById(Integer cartItemId);
     public Pair<Double, Double> totalAndDiscount(String username);
+    public boolean updateCartItem(Integer cartItemId, Integer quantity);
 }

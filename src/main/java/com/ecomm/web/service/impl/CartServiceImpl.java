@@ -8,10 +8,12 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.shopping.CartItemDto;
+import com.ecomm.web.model.product.Inventory;
 import com.ecomm.web.model.product.Product;
 import com.ecomm.web.model.shopping.CartItem;
 import com.ecomm.web.model.user.UserEntity;
 import com.ecomm.web.repository.CartItemRepository;
+import com.ecomm.web.repository.InventoryRepository;
 import com.ecomm.web.repository.ProductRepository;
 import com.ecomm.web.repository.UserRepository;
 import com.ecomm.web.security.SecurityUtil;
@@ -30,6 +32,8 @@ public class CartServiceImpl implements CartService {
     private ProductRepository productRepository;
     @Autowired
     private DiscountService discountService;
+    @Autowired
+    private InventoryRepository inventoryRepository;
     @Override
     public boolean saveCartItem(Integer productId, Integer quantity) {
         String username = SecurityUtil.getSessionUser();
@@ -73,6 +77,16 @@ public class CartServiceImpl implements CartService {
             discount += discountPerItem;
         }
         return Pair.of(total, discount);
-
+    }
+    @Override
+    public boolean updateCartItem(Integer cartItemId, Integer quantity) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).get();
+        Inventory inventory = inventoryRepository.findByProduct(cartItem.getProduct());
+        if(quantity <= inventory.getQuantity()) {
+            cartItem.setQuantity(quantity);
+            cartItemRepository.save(cartItem);
+            return true;
+        }
+        return false;
     }
 }

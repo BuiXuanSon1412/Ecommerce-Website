@@ -9,7 +9,8 @@ $(document).ready(function () {
 
     });
     $(".quantity-input").on('change', function () {
-        updateTotal($(this));
+        console.log($(this).data('ciid'));
+        updateTotal($(this).data('ciid'), $(this).val());
     });
 
 });
@@ -47,7 +48,7 @@ function plusQty(el) {
     ++el.value;
 }
 
-function updateTotal() {
+function updateTotal(ciid, qty) {
     var total = 0;
     var discount = 0;
     $(".item-row").each(function () {
@@ -64,4 +65,10 @@ function updateTotal() {
     $('#total').text('$' + total.toFixed(2));
     $('#discount').text('$' + discount.toFixed(2));
     $('#afterDiscount').text('$' + afterDiscount.toFixed(2));
+    $.ajax({
+        method: "POST",
+        url: "/cart/update?ciid=" + ciid + "&qty=" + qty,
+    }).done(function(response) {
+        alert(response);
+    })
 }

@@ -14,5 +14,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     List<CartItem> findByUser(UserEntity user);
     void deleteById(Integer cartItemId);
     @Query(value = "SELECT * FROM shopping.cart_item WHERE user_id = :userId ORDER BY created_at DESC", nativeQuery = true)
-    List<CartItem> findByUserOrderedByTime(Integer userId); 
+    List<CartItem> findByUserOrderedByTime(Integer userId);
 }

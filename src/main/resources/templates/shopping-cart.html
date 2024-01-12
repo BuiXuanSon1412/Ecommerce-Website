@@ -48,7 +48,7 @@
                                             <div class="d-flex flex-row">
                                                 <input id="form1" min="1" name="quantity"
                                                     th:value="${cartItem.quantity}" type="number"
-                                                    class="form-control form-control-sm quantity-input" style="max-width: 3rem;" />
+                                                    class="form-control form-control-sm quantity-input" th:data-ciid="${cartItem.id}" style="max-width: 3rem;" />
                                             </div>
                                         </td>
                                         <td class="align-middle">

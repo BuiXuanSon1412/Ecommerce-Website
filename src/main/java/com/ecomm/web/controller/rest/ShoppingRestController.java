@@ -30,6 +30,12 @@ public class ShoppingRestController {
         cartService.deleteCartItemById(cartItemId);
         return "The item is removed";
     }
+    @PostMapping("/cart/update")
+    public String updateCart(@RequestParam(name = "ciid") Integer cartItemId, @RequestParam(name = "qty") Integer quantity) {
+        Boolean updated = cartService.updateCartItem(cartItemId, quantity);
+        if(updated) return "The item is updated successfully";
+        return "The item is updatde uncessfully";
+    }
     @PostMapping("/pay")
     public String pay(@RequestParam("pid") Integer paymentId, @RequestParam("aid") Integer addressId, @RequestBody List<Pair<Integer, String>> deliveryMethods) {
         String username = SecurityUtil.getSessionUser();

@@ -14,13 +14,18 @@
         <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center" th:object="${product}">
-                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0"
-                            style="max-height: 700px; object-fit: contain;" th:src="*{image}" alt="..." /></div>
                     <div class="col-md-6">
+                        <img class="card-img-top mb-5 mb-md-0" style="max-height: 700px; object-fit: contain;"
+                            th:src="*{image}" alt="..." />
+                    </div>
+                    <div class="col-md-6">
+                        <small class="mb-3 me-2"><a class="text-dark" th:href="@{/}" th:text="*{category.first.name}"></a></small><small> / </small>
+                        <small class="mb-3 ms-2"><a class="text-dark" th:href="@{/}" th:text="*{category.second.name}"></a></small><br>
                         <div class="small mb-1" th:text="'SKU: ' + *{sku}"></div>
                         <h1 class="display-6 fw-bolder" th:text="*{name}"></h1>
                         <small>by: </small>
-                        <a class="fs-3 mx-4 my-2 text-dark text-decoration-none" th:href="@{/store/view}" th:text="${product.store.name}"></a>
+                        <a class="fs-3 mx-4 my-2 text-dark text-decoration-none" th:href="@{/store/view}"
+                            th:text="${product.store.name}"></a>
                         <div class="fs-5 my-2">
                             <div th:if="*{discount} != null">
                                 <span class="text-decoration-line-through" th:text="'US $' + *{price}"></span>

@@ -85,7 +85,18 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<ProductDto> findProductByNameAndCategory(String name, Integer categoryId) {
-        List<Product> products = productRepository.findByNameAndCategory(name, categoryId);
+        List<Product> products = new ArrayList<>();
+        if(name == "" && categoryId != 0) {
+            products = productRepository.findByBaseCategory(categoryId);
+        }
+        else if(name != "" && categoryId == 0) {
+            Product product = productRepository.findByName(name);
+            products.add(product);
+        }
+        else if(name != "" && categoryId != 0) {
+            products = productRepository.findByNameAndCategory(name, categoryId);
+        }
+        else products = productRepository.findAll();
         return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
     }
     

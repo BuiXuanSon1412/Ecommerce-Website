@@ -19,6 +19,7 @@ public class PublicController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
+
     @GetMapping("/home")
     public String displayHome(Model model) {
         List<ProductDto> products = productService.findAllProducts();
@@ -26,14 +27,12 @@ public class PublicController {
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
         return "home";
-    }   
-    
+    }
+
     @GetMapping("/search/product")
-    public String searchProduct(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "categoryId", required = false) Integer categoryId, Model model) {
-        if(name == null && categoryId == null) return "redirect:/home";
-        else if(name == null) {
-            //List<ProductDto> products = productService.findProductByBaseCategory(name)
-        }
+    public String searchProduct(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "categoryId", required = false) Integer categoryId, Model model) {
+        if(name == "" && categoryId == 0) return "redirect:/home";
         List<ProductDto> products = productService.findProductByNameAndCategory(name, categoryId);
         List<CategoryDto> categories = categoryService.findAllBaseCategories();
         model.addAttribute("categories", categories);

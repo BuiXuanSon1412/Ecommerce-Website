@@ -11,9 +11,19 @@ import com.ecomm.web.service.StoreService;
 public class StoreRestController {
     @Autowired
     StoreService storeService;
-    @PostMapping("/store/deliver")
+    /*@PostMapping("/store/deliver")
     public String updateBusiness(@RequestParam(name = "business") Boolean business){
         
         return "Changed successfully";
     }
+    @PostMapping("/store/deliver")
+    public String updateFast(@RequestParam(name = "fast") Boolean fast){
+        
+        return "Changed successfully";
+    }
+    @PostMapping("/store/deliver")
+    public String updateExpress(@RequestParam(name = "express") Boolean express){
+        
+        return "Changed successfully";
+    }*/
 }
