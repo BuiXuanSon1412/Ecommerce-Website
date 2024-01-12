@@ -54,12 +54,16 @@
                                         <td th:text="${oi.product.name}"></td>
                                         <td class="text-center" th:text="${oi.product.quantity}"></td>
                                         <td class="text-center" th:text="${oi.deliveryMethod}"></td>
-                                        <td class="text-center"
-                                            th:text="${oi.product * (1-oi.product.discount.disc) * oi.quantity}"></td>
-                                        <td
-                                            th:if="${oi.condition = 'Pending Confirmation' || oi.condition = 'Pending Pickup' || oi.condition == 'Completed Setup'}">
+                                        <td class="text-center" th:if="${oi.product.discount != null}"
+                                            th:text="${oi.product.price * (1-oi.product.discount.disc/100) * oi.quantity}">
                                         </td>
-                                        <td th:if="${oi.condition == 'In Transit'}"> In Transit
+                                        <td class="text-center" th:if="${oi.product.discount == null}"
+                                            th:text="${oi.product.price * oi.quantity}">
+                                        </td>
+
+                                        <td>
+                                        </td>
+                                        <td th:if="${oi.condition == 'In transit'}"> In Transit
                                         </td>
                                         <td th:if="${oi.condition == 'Delivered'}"> Completed</td>
                                         <td th:if="${oi.condition == 'Order Cancelled'}">Cancelled</td>

@@ -98,7 +98,8 @@ public class UserController {
     @GetMapping("/user/purchase")
     public String viewPurchase(Model model) {
         String username = SecurityUtil.getSessionUser();
-        //List<OrderItemDto> orderItem = orderService.findPurchasesByUser(username);
+        List<OrderItemDto> orderItems = userService.findPurchasesByUser(username);
+        model.addAttribute("orderItems", orderItems);
         return "user-purchase";
     }
     @PostMapping("/address/delete")

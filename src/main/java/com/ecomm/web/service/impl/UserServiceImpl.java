@@ -8,15 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ecomm.web.dto.shopping.OrderItemDto;
 import com.ecomm.web.dto.user.AddressDto;
 import com.ecomm.web.dto.user.PaymentDto;
 import com.ecomm.web.dto.user.Profile;
 import com.ecomm.web.dto.user.UserEntityDto;
+import com.ecomm.web.model.shopping.OrderItem;
 import com.ecomm.web.model.user.Address;
 import com.ecomm.web.model.user.Payment;
 import com.ecomm.web.model.user.Role;
 import com.ecomm.web.model.user.UserEntity;
 import com.ecomm.web.repository.AddressRepository;
+import com.ecomm.web.repository.OrderItemRepository;
 import com.ecomm.web.repository.PaymentRepository;
 import com.ecomm.web.repository.RoleRepository;
 import com.ecomm.web.repository.UserRepository;
@@ -25,6 +28,7 @@ import com.ecomm.web.service.UserService;
 
 import static com.ecomm.web.mapper.UserEntityMapper.*;
 import static com.ecomm.web.mapper.AddressMapper.mapToAddressDto;
+import static com.ecomm.web.mapper.OrderItemMapper.mapToOrderItemDto;
 import static com.ecomm.web.mapper.AddressMapper.mapToAddress;
 import static com.ecomm.web.mapper.PaymentMapper.mapToPayment;
 import static com.ecomm.web.mapper.PaymentMapper.mapToPaymentDto;
@@ -42,6 +46,8 @@ public class UserServiceImpl implements UserService {
     private AddressRepository addressRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
     @Override
     public void register(UserEntityDto userEntityDto) {     
         //UserEntity user = mapToUserEntity(userEntityDto);
@@ -115,4 +121,11 @@ public class UserServiceImpl implements UserService {
     public void deletePaymentById(Integer paymentId) {
         paymentRepository.deleteById(paymentId);
     }
+    @Override
+    public List<OrderItemDto> findPurchasesByUser(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        List<OrderItem> orderItems = orderItemRepository.findPurchasesByUser(user.getId());
+        return orderItems.stream().map((orderItem) -> mapToOrderItemDto(orderItem)).collect(Collectors.toList());
+    }
+
 }

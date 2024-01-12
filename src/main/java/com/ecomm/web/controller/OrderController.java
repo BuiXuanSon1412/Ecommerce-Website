@@ -45,7 +45,7 @@ public class OrderController {
     @GetMapping("/order/transit")
     public String transitOrder(Model model) {
         String username = SecurityUtil.getSessionUser();
-        List<OrderItemDto> orderItems = orderService.findOrderItemsTimeOrderByUserAndCondition(username, "In Transit");
+        List<OrderItemDto> orderItems = orderService.findOrderItemsTimeOrderByUserAndCondition(username, "In transit");
         model.addAttribute("orderItems", orderItems);
         return "order-transit";
     }
@@ -70,12 +70,13 @@ public class OrderController {
         model.addAttribute("orderItems", orderItems);
         return "order-cancel";
     }
-    //@PostMapping("/order/update")
-    //public String updateOrder(@ModelAttribute("dpid") Integer dpid, @RequestParam(name = "oi") Integer oiid) {
-    //    
-    //    
-    //    return entity;
-    //}
+    /*@PostMapping("/order/update")
+    public String updateOrder(@ModelAttribute("dpid") Integer dpid, @RequestParam(name = "oi") Integer oiid) {
+        
+        
+        return entity;
+    }
+    */
     
     
 }

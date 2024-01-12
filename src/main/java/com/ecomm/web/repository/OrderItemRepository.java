@@ -14,4 +14,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
     List<OrderItem> findOrderItemsByStore(Integer storeId);
     @Query(value = "SELECT oi.* FROM shopping.order_item oi JOIN product.product p USING (product_id) where oi.condition = :condition AND p.store_id = :storeId ORDER BY modified_at DESC", nativeQuery = true)
     List<OrderItem> findOrderItemsByStoreAndCondition(Integer storeId, String condition);
+    @Query(value = "SELECT oi.* FROM shopping.order_item oi JOIN shopping.order_detail USING (order_detail_id) WHERE user_id = :userId", nativeQuery = true)
+    List<OrderItem> findPurchasesByUser(Integer userId);
 }

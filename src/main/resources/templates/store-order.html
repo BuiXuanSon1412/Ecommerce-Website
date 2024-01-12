@@ -92,7 +92,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="item-row" th:each="oi:${orderItems}" th:id="'oi' + ${oi.id}" >
+                                    <tr class="item-row" th:each="oi:${orderItems}">
                                         <td th:text="${oi.product.name}"></td>
                                         <td class="text-center" th:text="${oi.product.sku}"></td>
                                         <td class="text-center" th:text="${oi.quantity}"></td>
@@ -106,6 +106,7 @@
                                         <td class="text-center"
                                             th:if="${oi.condition != 'Pending Pickup' &&  oi.condition != 'Completed Setup'}">
                                             <a class="text-dark"></a></td>
+    
                                     </tr>
 
                                 </tbody>

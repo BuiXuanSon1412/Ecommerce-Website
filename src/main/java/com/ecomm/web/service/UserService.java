@@ -2,6 +2,7 @@ package com.ecomm.web.service;
 
 import java.util.List;
 
+import com.ecomm.web.dto.shopping.OrderItemDto;
 import com.ecomm.web.dto.user.AddressDto;
 import com.ecomm.web.dto.user.PaymentDto;
 import com.ecomm.web.dto.user.Profile;
@@ -18,4 +19,5 @@ public interface UserService {
     void savePayment(PaymentDto paymentDto);
     void deleteAddressById(Integer addressId);
     void deletePaymentById(Integer paymentId);
+    List<OrderItemDto> findPurchasesByUser(String username);
 }

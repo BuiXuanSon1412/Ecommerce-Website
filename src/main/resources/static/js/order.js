@@ -1,9 +1,8 @@
-/*$(document).ready(function () {
+$(document).ready(function () {
     $(".prepare").on("click", function () {
         $.ajax({
             method: "POST",
-            url: "/order/update
+            url: "/order/update"
         })
     })
 })
-*/
