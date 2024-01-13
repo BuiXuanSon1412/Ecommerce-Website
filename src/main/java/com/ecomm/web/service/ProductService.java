@@ -13,4 +13,5 @@ public interface ProductService {
     List<ProductDto> findProductByNameAndCategory(String name, Integer categoryId);
     List<ProductDto> findPopolarItems();
     List<ProductDto> findNewReleases();
+    boolean pinDiscountToProduct(Integer productId, Integer discountId);
 }

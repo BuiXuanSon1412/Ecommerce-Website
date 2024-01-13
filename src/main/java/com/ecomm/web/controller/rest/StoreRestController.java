@@ -6,13 +6,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecomm.web.security.SecurityUtil;
+import com.ecomm.web.service.ProductService;
 import com.ecomm.web.service.StoreService;
 
 @RestController
 public class StoreRestController {
     @Autowired
-    StoreService storeService;
-    
+    private StoreService storeService;
+    @Autowired
+    private ProductService productService;
     @PostMapping("/store/delivery")
     public String updateBusiness(@RequestParam(name = "method") String methodName){
         String username = SecurityUtil.getSessionUser();
@@ -21,7 +23,11 @@ public class StoreRestController {
         return "Changed unsuccessfully";
     }
 
-    //@PostMapping("/discount/pin")
-    //public String pinDiscount
+    @PostMapping("/discount/pin")
+    public String pinDiscount(@RequestParam(name = "pid") Integer productId, @RequestParam(name = "did") Integer discountId) {
+        boolean status = productService.pinDiscountToProduct(productId, discountId);
+        if(status) return "successfully";
+        return "unsuccessfully";
+    }
     
 }

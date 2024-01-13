@@ -11,16 +11,19 @@ import com.ecomm.web.model.product.Product;
 import com.ecomm.web.dto.product.AddProductForm;
 import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.model.product.Category;
+import com.ecomm.web.model.product.Discount;
 import com.ecomm.web.model.product.Inventory;
 import com.ecomm.web.model.store.Store;
 import com.ecomm.web.model.user.UserEntity;
 import com.ecomm.web.repository.CategoryRepository;
+import com.ecomm.web.repository.DiscountRepository;
 import com.ecomm.web.repository.InventoryRepository;
 import com.ecomm.web.repository.ProductRepository;
 import com.ecomm.web.repository.StoreRepository;
 import com.ecomm.web.repository.UserRepository;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.CategoryService;
+import com.ecomm.web.service.DiscountService;
 import com.ecomm.web.service.ProductService;
 
 import static com.ecomm.web.mapper.ProductMapper.*;
@@ -39,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
     private UserRepository userRepository;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private DiscountRepository discountRepository;
     @Override
     public void saveProduct(AddProductForm productForm) {
         Category category = categoryRepository.findById(productForm.getCategory()).get();
@@ -55,6 +60,7 @@ public class ProductServiceImpl implements ProductService {
                                             .product(product)
                                             .quantity(productForm.getQuantity())
                                             .status(true)
+                                            .minimumStock(10)
                                             .build();
         inventoryRepository.save(inventory);
     }
@@ -114,5 +120,16 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findNewReleases();
         return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
     }
-    
-}
+    @Override
+    public boolean pinDiscountToProduct(Integer productId, Integer discountId){
+        Product product = productRepository.findById(productId).get();
+        Discount discount = discountRepository.findById(discountId).get();
+        if(product != null && discount != null) {
+            product.setDiscount(discount);
+            productRepository.save(product);
+            return true;
+        }
+        return false;
+    }
+}    
+
