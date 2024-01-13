@@ -92,8 +92,10 @@ public class ProductServiceImpl implements ProductService {
             products = productRepository.findByBaseCategory(categoryId);
         }
         else if(name != "" && categoryId == 0) {
-            Product product = productRepository.findByName(name);
-            products.add(product);
+            List<Product> subproducts = productRepository.findByName(name);
+            for(Product product : subproducts) {
+                products.add(product);
+            }
         }
         else if(name != "" && categoryId != 0) {
             products = productRepository.findByNameAndCategory(name, categoryId);

@@ -8,6 +8,7 @@ import com.ecomm.web.model.shopping.OrderItem;
 public class OrderItemMapper {
     public static OrderItemDto mapToOrderItemDto(OrderItem orderItem) {
         return OrderItemDto.builder()
+                            .id(orderItem.getId())
                             .product(mapToProductDto(orderItem.getProduct()))
                             .quantity(orderItem.getQuantity())
                             .condition(orderItem.getCondition())

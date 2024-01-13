@@ -13,7 +13,6 @@ import com.ecomm.web.dto.user.AddressDto;
 import com.ecomm.web.dto.user.PaymentDto;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.CartService;
-import com.ecomm.web.service.OrderService;
 import com.ecomm.web.service.UserService;
 
 
@@ -24,9 +23,6 @@ public class ShoppingController {
     private CartService cartService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private OrderService orderService;
-    
     @GetMapping("/cart")
     public String viewCart(Model model) {
         String username = SecurityUtil.getSessionUser();

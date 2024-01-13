@@ -11,4 +11,5 @@ public interface OrderService {
     Boolean saveOrderByUser(String username, Integer addressId, Integer paymentId, List<Pair<Integer, String>> deliveryMethods);
     List<OrderItemDto> findOrderItemsTimeOrderByUserAndCondition(String username, String condition);
     //List<OrderItemDto> findPurchasesByUser(String username);
+    boolean prepareOrder(Integer dpid, Integer ooid);
 }

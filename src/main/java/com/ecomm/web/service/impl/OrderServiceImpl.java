@@ -8,6 +8,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.shopping.OrderItemDto;
+import com.ecomm.web.model.delivery.DeliveryProvider;
 import com.ecomm.web.model.product.Inventory;
 import com.ecomm.web.model.shopping.CartItem;
 import com.ecomm.web.model.shopping.OrderDetail;
@@ -18,6 +19,7 @@ import com.ecomm.web.model.user.Payment;
 import com.ecomm.web.model.user.UserEntity;
 import com.ecomm.web.repository.AddressRepository;
 import com.ecomm.web.repository.CartItemRepository;
+import com.ecomm.web.repository.DeliveryProviderRepository;
 import com.ecomm.web.repository.InventoryRepository;
 import com.ecomm.web.repository.OrderDetailRepository;
 import com.ecomm.web.repository.OrderItemRepository;
@@ -49,7 +51,8 @@ public class OrderServiceImpl implements OrderService {
     private CartService cartService;
     @Autowired
     private InventoryRepository inventoryRepository;
-
+    @Autowired
+    private DeliveryProviderRepository deliveryProviderRepository;
     @Override
     public List<OrderItemDto> findOrderItemsTimeOrderByUser(String username) {
         UserEntity user = userRepository.findByUsername(username);
@@ -107,10 +110,17 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    //@Override
-    //public List<OrderItemDto> findPurchasesByUser(String username) {
-
-        //List<OrderItem> orderItems = orderItemRepository.findPurchaseByUser(username)
-    //}
+    @Override
+    public boolean prepareOrder(Integer dpid, Integer ooid) {
+        OrderItem orderItem = orderItemRepository.findById(ooid).get();
+        DeliveryProvider deliveryProvider = deliveryProviderRepository.findById(dpid).get();
+        if(orderItem != null && deliveryProvider != null) {
+            orderItem.setDeliveryProvider(deliveryProvider);
+            orderItem.setCondition("Completed Setup");
+            orderItemRepository.save(orderItem);
+            return true;
+        }
+        return false;
+    }
 
 }

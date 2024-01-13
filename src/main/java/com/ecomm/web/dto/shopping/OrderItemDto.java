@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 @Builder
 public class OrderItemDto {
+    private Integer id;
     private ProductDto product;
     private Integer quantity;
     private String condition;

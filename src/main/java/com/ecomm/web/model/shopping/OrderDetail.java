@@ -1,7 +1,5 @@
 package com.ecomm.web.model.shopping;
 
-import java.time.LocalDate;
-
 import com.ecomm.web.model.user.Address;
 import com.ecomm.web.model.user.Payment;
 import com.ecomm.web.model.user.UserEntity;

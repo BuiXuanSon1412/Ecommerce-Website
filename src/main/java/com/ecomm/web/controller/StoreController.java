@@ -18,7 +18,8 @@ import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.dto.shopping.OrderItemDto;
 import com.ecomm.web.dto.store.DeliveryMethodDto;
 import com.ecomm.web.dto.store.StoreDto;
-import com.ecomm.web.model.store.DeliveryMethod;
+import com.ecomm.web.model.delivery.DeliveryProvider;
+import com.ecomm.web.repository.DeliveryProviderRepository;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.CategoryService;
 import com.ecomm.web.service.DiscountService;
@@ -40,7 +41,8 @@ public class StoreController {
     private DiscountService discountService;
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private DeliveryProviderRepository deliveryProviderRepository;
     @GetMapping("/store/register")
     public String registerStore(Model model) {
         StoreDto store = StoreDto.builder().build();
@@ -67,6 +69,8 @@ public class StoreController {
     public String allOrder(Model model) {
         String username = SecurityUtil.getSessionUser();
         List<OrderItemDto> orderItems = orderService.findOrderItemsTimeOrderByUser(username);
+        List<DeliveryProvider> deliveryProviders = deliveryProviderRepository.findAll();
+        model.addAttribute("deliveryProviders", deliveryProviders);
         model.addAttribute("orderItems", orderItems);
         return "store-order";
     }
