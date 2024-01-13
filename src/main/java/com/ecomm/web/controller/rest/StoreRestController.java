@@ -20,5 +20,8 @@ public class StoreRestController {
         if(status) return "Changed successfully";
         return "Changed unsuccessfully";
     }
+
+    //@PostMapping("/discount/pin")
+    //public String pinDiscount
     
 }

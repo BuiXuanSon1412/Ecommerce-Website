@@ -15,24 +15,26 @@
 
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">List of active Discounts</h4>
+                        <h4 class="modal-title">Active Discounts</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <div class="list-group" th:each="a:${addresses}" th:id="'address'+${a.id}">
+                            <div class="list-group" th:each="d:${discounts}">
                                 <div class="list-group-item list-group-item-action" style="position: relative;">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1">Address</h5>
+                                        <h6 class="mb-1" th:text="${d.name}">Voucher</h6>
                                     </div>
-                                    <small class="mb-1" th:text="'Details: '+${a.address}"></small><br>
-                                    <small class="mb-1" th:text="'City: '+${a.city}"></small><br>
-                                    <small class="mb-1" th:text="'Postal code: '+${a.postalCode}"></small><br>
-                                    <small class="mb-1" th:text="'Country: '+${a.country}"></small>
-                                    <button type="button" th:data-aid="${a.id}" data-bs-dismiss="modal"
-                                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-1 me-4 btn-a-select">Select</button>
+                                    <small class="mb-1" th:text="'Description: '+${d.desc}"></small><br>
+                                    <small class="mb-1" th:text="'Percent: '+${d.disc}+'%'"></small><br>
+                                    <small class="mb-1 me-2" th:text="'Start date: '+${d.startDate}"></small>
+                                    <small class="mb-1" th:text="'End date: '+${d.endDate}"></small>
+
+                                    <button type="button" data-bs-dismiss="modal"
+                                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-2 me-2 select-d-btn"
+                                        th:data-did="${d.id}">Select</button>
                                 </div>
                             </div>
                         </div>
@@ -202,7 +204,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-index="0" th:each="p:${products}" th:object="${p}">
+                                    <tr th:each="p:${products}" th:object="${p}">
                                         <td th:text="*{name}"></td>
                                         <td th:text="*{category.first.name} + ' / '+ *{category.second.name}"></td>
                                         <td th:text="*{price}"></td>
@@ -211,8 +213,8 @@
                                         <td>
                                             <a class="text-dark" th:href="@{/product/delete}">Delete</a>
                                             <a class="text-dark" th:href="@{/product/edit}">Edit</a>
-                                            <a class="text-dark" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#myModalDiscount">Discount</a>
+                                            <a class="text-dark discount" data-bs-toggle="modal"
+                                                data-bs-target="#myModalDiscount" th:data-pid="*{p.id}">Discount</a>
                                         </td>
                                     </tr>
 

@@ -9,5 +9,5 @@ public interface DiscountService {
     public List<DiscountDto> findAllDiscountByUser(String username);
     public void saveDiscount(DiscountDto discountDto);
     public Double productDiscount(ProductDto productDto);
-    //public List<DiscountDto> findActiveDiscountByUser(String username);
+    public List<DiscountDto> findActiveDiscountsByUser(String username);
 }

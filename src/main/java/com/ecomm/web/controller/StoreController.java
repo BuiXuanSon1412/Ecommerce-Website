@@ -103,7 +103,7 @@ public class StoreController {
         List<ProductDto> products = productService.findProductByUser(username);
         AddProductForm product = AddProductForm.builder().build();
         List<CategoriesDto> categories = categoryService.findAllLevelCategories();
-        List<DiscountDto> discounts = discountService.findAllDiscountByUser(username);
+        List<DiscountDto> discounts = discountService.findActiveDiscountsByUser(username);
         model.addAttribute("discounts", discounts);
         model.addAttribute("product", product);
         model.addAttribute("products", products);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.product.DiscountDto;
@@ -38,15 +39,15 @@ public class DiscountServiceImpl implements DiscountService{
         List<Discount> dicounts = discountRepository.findByStore(store);
         return dicounts.stream().map((discount) -> mapToDiscountDto(discount)).collect(Collectors.toList());
     }
-    /*
+    
     @Override
-    public List<DiscountDto> findActiveDiscountByUser(String username) {
+    public List<DiscountDto> findActiveDiscountsByUser(String username) {
         UserEntity user = userRepository.findByUsername(username);
         Store store = storeRepository.findByUser(user);
         List<Discount> dicounts = discountRepository.findActiveDiscountsByStore(store.getId());
         return dicounts.stream().map((discount) -> mapToDiscountDto(discount)).collect(Collectors.toList());
     }
-    */
+    
     
     @Override
     public void saveDiscount(DiscountDto discountDto) {

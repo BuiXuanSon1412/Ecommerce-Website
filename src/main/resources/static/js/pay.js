@@ -3,19 +3,20 @@ $(document).ready(function () {
     var pid, aid;
     $(".btn-p-select").on('click', function () {
         pid = $(this).data('pid');
-        $("#paymentType").text($("#payment"+pid).find("small:nth-child(2)").text());
-        $("#provider").text($("#payment"+pid).find("small:nth-child(3)").text());
-        $("#accountNo").text($("#payment"+pid).find("small:nth-child(4)").text());
-        $("#expiry").text($("#payment"+pid).find("small:nth-child(5)").text());       
+        $("#paymentType").text($("#payment"+pid).find(".pay1").text());
+        $("#provider").text($("#payment"+pid).find(".pay2").text());
+        $("#accountNo").text($("#payment"+pid).find(".pay3").text());
+        $("#expiry").text($("#payment"+pid).find(".pay4").text());
+        
         $("#payment").removeClass("d-none");
         console.log(pid);
     });
     $(".btn-a-select").on('click', function () {
         aid = $(this).data('aid');
-        $("#details").text($("address"+aid).find("small:nth-child(2)").text());
-        $("#city").text($("address"+aid).find("small:nth-child(3)").text());
-        $("#postalCode").text($("address"+aid).find("small:nth-child(4)").text());
-        $("#country").text($("address"+aid).find("small:nth-child(5)").text());
+        $("#details").text($("#address"+aid).find(".add1").text());
+        $("#city").text($("#address"+aid).find(".add2").text());
+        $("#postalCode").text($("#address"+aid).find(".add3").text());
+        $("#country").text($("#address"+aid).find(".add4").text());
         $("#address").removeClass("d-none");
         console.log(aid);
     });

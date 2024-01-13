@@ -33,10 +33,10 @@
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5 class="mb-1">Payment</h5>
                                     </div>
-                                    <small class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></small><br>
-                                    <small class="mb-1" th:text="'Provider: '+${p.provider}"></small><br>
-                                    <small class="mb-1" th:text="'Account Number: '+${p.accountNo}"></small><br>
-                                    <small class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></small>
+                                    <small class="pay1 mb-1" th:text="'Payment Type: '+${p.paymentType}"></small><br>
+                                    <small class="pay2 mb-1" th:text="'Provider: '+${p.provider}"></small><br>
+                                    <small class="pay3 mb-1" th:text="'Account Number: '+${p.accountNo}"></small><br>
+                                    <small class="pay4 mb-1" th:text="'Expiry Date: '+${p.expiry}"></small>
                                     <button type="button" th:data-pid="${p.id}" data-bs-dismiss="modal"
                                         class="btn btn-secondary btn-sm position-absolute top-0 end-0 mt-1 me-4 btn-p-select">Select</button>
                                 </div>
@@ -65,10 +65,10 @@
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5 class="mb-1">Address</h5>
                                     </div>
-                                    <small class="mb-1" th:text="'Details: '+${a.address}"></small><br>
-                                    <small class="mb-1" th:text="'City: '+${a.city}"></small><br>
-                                    <small class="mb-1" th:text="'Postal code: '+${a.postalCode}"></small><br>
-                                    <small class="mb-1" th:text="'Country: '+${a.country}"></small>
+                                    <small class="add1 mb-1" th:text="'Details: '+${a.address}"></small><br>
+                                    <small class="add2 mb-1" th:text="'City: '+${a.city}"></small><br>
+                                    <small class="add3 mb-1" th:text="'Postal code: '+${a.postalCode}"></small><br>
+                                    <small class="add4 mb-1" th:text="'Country: '+${a.country}"></small>
                                     <button type="button" th:data-aid="${a.id}" data-bs-dismiss="modal"
                                         class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-1 me-4 btn-a-select">Select</button>
                                 </div>
@@ -155,9 +155,9 @@
                                                         <div class="d-flex w-100 justify-content-between">
                                                             <h5 class="mb-1">Payment</h5>
                                                         </div>
-                                                        <small class="mb-1" id="paymentType"></small>
-                                                        <small class="mb-1" id="provider"></small>
-                                                        <small class="mb-1" id="accountNo"></small>
+                                                        <small class="mb-1" id="paymentType"></small><br>
+                                                        <small class="mb-1" id="provider"></small><br>
+                                                        <small class="mb-1" id="accountNo"></small><br>
                                                         <small class="mb-1" id="expiry"></small>
                                                     </div>
                                                 </div>
@@ -167,15 +167,15 @@
                                                 <button type="button" class="btn btn-light mb-5 col-3" data-bs-toggle="modal"
                                                     data-bs-target="#myModalAddress">Use
                                                     saved address</button>
-                                                <div class="list-group col-9 d-none">
+                                                <div class="list-group col-9 d-none" id="address">
                                                     <div class="list-group-item list-group-item-action"
                                                         style="position: relative;">
                                                         <div class="d-flex w-100 justify-content-between">
                                                             <h5 class="mb-1">Address</h5>
                                                         </div>
-                                                        <small class="mb-1" id="details"></small>
-                                                        <small class="mb-1" id="city"></small>
-                                                        <small class="mb-1" id="postalCode"></small>
+                                                        <small class="mb-1" id="details"></small><br>
+                                                        <small class="mb-1" id="city"></small><br>
+                                                        <small class="mb-1" id="postalCode"></small><br>
                                                         <small class="mb-1" id="country"></small>   
                                                     </div>
                                                 </div>

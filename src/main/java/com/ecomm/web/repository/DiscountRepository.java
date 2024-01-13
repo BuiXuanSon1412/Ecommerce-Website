@@ -11,7 +11,7 @@ import com.ecomm.web.model.store.Store;
 
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount, Integer>{
-    //@Query(value = "SELECT d.* FROM product.discount d WHERE is_active = true AND store_id = :storeId")
-    //List<Discount> findActiveDiscountsByStore(Integer storeId);
+    @Query(value = "SELECT d.* FROM product.discount d WHERE is_active = true AND store_id = :storeId", nativeQuery = true)
+    List<Discount> findActiveDiscountsByStore(Integer storeId);
     List<Discount> findByStore(Store store);
 }
