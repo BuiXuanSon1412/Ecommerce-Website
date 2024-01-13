@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
                                             .product(product)
                                             .quantity(productForm.getQuantity())
                                             .status(true)
-                                            //.minimumStock(10)
+                                            .minimumStock(10)
                                             .build();
         inventoryRepository.save(inventory);
     }
@@ -83,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findByStore(store);
         List<ProductDto> productDtos = new ArrayList<>();
         for(Product product : products) {
+            if(product == null) return null;
             ProductDto productDto = mapToProductDto(product);
             productDto.setCategory(categoryService.findCategoryByProduct(product.getId()));
             productDto.setQuantity(inventoryRepository.findByProduct(product).getQuantity());
