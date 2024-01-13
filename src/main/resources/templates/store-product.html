@@ -9,17 +9,18 @@
     <main layout:fragment="body">
         <!-- Header-->
         <!-- Model Address -->
+        
         <div class="modal" id="myModalDiscount">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
-                    <!-- Modal Header -->
+                    
                     <div class="modal-header">
                         <h4 class="modal-title">Active Discounts</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <!-- Modal body -->
+                    
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="list-group" th:each="d:${discounts}">

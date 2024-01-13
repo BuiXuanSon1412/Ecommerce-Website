@@ -8,7 +8,7 @@ public class DiscountMapper {
     public static DiscountDto mapToDiscountDto(Discount discount) {
         if(discount == null) return null;
         return DiscountDto.builder()
-                            .id(discount.getId())
+                            //.id(discount.getId())
                             .name(discount.getName())
                             .desc(discount.getDesc())
                             .disc(discount.getDisc())

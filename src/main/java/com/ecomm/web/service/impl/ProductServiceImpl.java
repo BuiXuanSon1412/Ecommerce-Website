@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
                                             .product(product)
                                             .quantity(productForm.getQuantity())
                                             .status(true)
-                                            .minimumStock(10)
+                                            //.minimumStock(10)
                                             .build();
         inventoryRepository.save(inventory);
     }

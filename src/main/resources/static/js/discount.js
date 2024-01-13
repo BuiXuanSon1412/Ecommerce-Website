@@ -4,6 +4,7 @@ $(document).ready(function () {
         pid = $(this).data('pid');
     })
     $(".select-d-btn").on('click', function() {
+        console.log("hello");
         did = $(this).data('did');
         $.ajax({
             method: "POST",
