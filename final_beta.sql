@@ -5,7 +5,7 @@
 -- Dumped from database version 16.0
 -- Dumped by pg_dump version 16.0
 
--- Started on 2024-01-12 15:59:02
+-- Started on 2024-01-12 21:57:52
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -49,7 +49,7 @@ CREATE SCHEMA product;
 ALTER SCHEMA product OWNER TO postgres;
 
 --
--- TOC entry 5207 (class 0 OID 0)
+-- TOC entry 5209 (class 0 OID 0)
 -- Dependencies: 8
 -- Name: SCHEMA product; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -88,7 +88,7 @@ CREATE SCHEMA timetable;
 ALTER SCHEMA timetable OWNER TO postgres;
 
 --
--- TOC entry 928 (class 1247 OID 30008)
+-- TOC entry 929 (class 1247 OID 30008)
 -- Name: command_kind; Type: TYPE; Schema: timetable; Owner: postgres
 --
 
@@ -180,7 +180,7 @@ $_$;
 ALTER FUNCTION timetable.cron_split_to_arrays(cron text, OUT mins integer[], OUT hours integer[], OUT days integer[], OUT months integer[], OUT dow integer[]) OWNER TO postgres;
 
 --
--- TOC entry 931 (class 1247 OID 30017)
+-- TOC entry 932 (class 1247 OID 30017)
 -- Name: cron; Type: DOMAIN; Schema: timetable; Owner: postgres
 --
 
@@ -191,8 +191,8 @@ CREATE DOMAIN timetable.cron AS text
 ALTER DOMAIN timetable.cron OWNER TO postgres;
 
 --
--- TOC entry 5208 (class 0 OID 0)
--- Dependencies: 931
+-- TOC entry 5210 (class 0 OID 0)
+-- Dependencies: 932
 -- Name: DOMAIN cron; Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -200,7 +200,7 @@ COMMENT ON DOMAIN timetable.cron IS 'Extended CRON-style notation with support o
 
 
 --
--- TOC entry 935 (class 1247 OID 30020)
+-- TOC entry 936 (class 1247 OID 30020)
 -- Name: log_type; Type: TYPE; Schema: timetable; Owner: postgres
 --
 
@@ -215,6 +215,25 @@ CREATE TYPE timetable.log_type AS ENUM (
 
 
 ALTER TYPE timetable.log_type OWNER TO postgres;
+
+--
+-- TOC entry 287 (class 1255 OID 30981)
+-- Name: auto_update_cost_product(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.auto_update_cost_product() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    UPDATE product.product
+    SET discount_id = NEW.discount_id
+    WHERE store_id = NEW.store_id;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.auto_update_cost_product() OWNER TO postgres;
 
 --
 -- TOC entry 286 (class 1255 OID 30033)
@@ -334,7 +353,7 @@ $$;
 ALTER FUNCTION public.update_active_product() OWNER TO postgres;
 
 --
--- TOC entry 298 (class 1255 OID 30038)
+-- TOC entry 299 (class 1255 OID 30038)
 -- Name: update_and_delete_discount(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -425,7 +444,7 @@ $$;
 ALTER FUNCTION timetable._validate_json_schema_type(type text, data jsonb) OWNER TO postgres;
 
 --
--- TOC entry 300 (class 1255 OID 30053)
+-- TOC entry 301 (class 1255 OID 30053)
 -- Name: add_job(text, timetable.cron, text, jsonb, timetable.command_kind, text, integer, boolean, boolean, boolean, boolean, text); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -455,8 +474,8 @@ $$;
 ALTER FUNCTION timetable.add_job(job_name text, job_schedule timetable.cron, job_command text, job_parameters jsonb, job_kind timetable.command_kind, job_client_name text, job_max_instances integer, job_live boolean, job_self_destruct boolean, job_ignore_errors boolean, job_exclusive boolean, job_on_error text) OWNER TO postgres;
 
 --
--- TOC entry 5209 (class 0 OID 0)
--- Dependencies: 300
+-- TOC entry 5211 (class 0 OID 0)
+-- Dependencies: 301
 -- Name: FUNCTION add_job(job_name text, job_schedule timetable.cron, job_command text, job_parameters jsonb, job_kind timetable.command_kind, job_client_name text, job_max_instances integer, job_live boolean, job_self_destruct boolean, job_ignore_errors boolean, job_exclusive boolean, job_on_error text); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -464,7 +483,7 @@ COMMENT ON FUNCTION timetable.add_job(job_name text, job_schedule timetable.cron
 
 
 --
--- TOC entry 301 (class 1255 OID 30054)
+-- TOC entry 302 (class 1255 OID 30054)
 -- Name: add_task(timetable.command_kind, text, bigint, double precision); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -480,8 +499,8 @@ $_$;
 ALTER FUNCTION timetable.add_task(kind timetable.command_kind, command text, parent_id bigint, order_delta double precision) OWNER TO postgres;
 
 --
--- TOC entry 5210 (class 0 OID 0)
--- Dependencies: 301
+-- TOC entry 5212 (class 0 OID 0)
+-- Dependencies: 302
 -- Name: FUNCTION add_task(kind timetable.command_kind, command text, parent_id bigint, order_delta double precision); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -489,7 +508,7 @@ COMMENT ON FUNCTION timetable.add_task(kind timetable.command_kind, command text
 
 
 --
--- TOC entry 302 (class 1255 OID 30055)
+-- TOC entry 303 (class 1255 OID 30055)
 -- Name: cron_days(timestamp with time zone, integer[], integer[], integer[]); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -515,7 +534,7 @@ $$;
 ALTER FUNCTION timetable.cron_days(from_ts timestamp with time zone, allowed_months integer[], allowed_days integer[], allowed_week_days integer[]) OWNER TO postgres;
 
 --
--- TOC entry 303 (class 1255 OID 30056)
+-- TOC entry 304 (class 1255 OID 30056)
 -- Name: cron_months(timestamp with time zone, integer[]); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -535,7 +554,7 @@ $$;
 ALTER FUNCTION timetable.cron_months(from_ts timestamp with time zone, allowed_months integer[]) OWNER TO postgres;
 
 --
--- TOC entry 304 (class 1255 OID 30057)
+-- TOC entry 305 (class 1255 OID 30057)
 -- Name: cron_runs(timestamp with time zone, text); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -555,7 +574,7 @@ $$;
 ALTER FUNCTION timetable.cron_runs(from_ts timestamp with time zone, cron text) OWNER TO postgres;
 
 --
--- TOC entry 305 (class 1255 OID 30058)
+-- TOC entry 306 (class 1255 OID 30058)
 -- Name: cron_times(integer[], integer[]); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -572,7 +591,7 @@ $$;
 ALTER FUNCTION timetable.cron_times(allowed_hours integer[], allowed_minutes integer[]) OWNER TO postgres;
 
 --
--- TOC entry 306 (class 1255 OID 30059)
+-- TOC entry 307 (class 1255 OID 30059)
 -- Name: delete_job(text); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -587,8 +606,8 @@ $_$;
 ALTER FUNCTION timetable.delete_job(job_name text) OWNER TO postgres;
 
 --
--- TOC entry 5211 (class 0 OID 0)
--- Dependencies: 306
+-- TOC entry 5213 (class 0 OID 0)
+-- Dependencies: 307
 -- Name: FUNCTION delete_job(job_name text); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -596,7 +615,7 @@ COMMENT ON FUNCTION timetable.delete_job(job_name text) IS 'Delete the chain and
 
 
 --
--- TOC entry 307 (class 1255 OID 30060)
+-- TOC entry 308 (class 1255 OID 30060)
 -- Name: delete_task(bigint); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -611,8 +630,8 @@ $_$;
 ALTER FUNCTION timetable.delete_task(task_id bigint) OWNER TO postgres;
 
 --
--- TOC entry 5212 (class 0 OID 0)
--- Dependencies: 307
+-- TOC entry 5214 (class 0 OID 0)
+-- Dependencies: 308
 -- Name: FUNCTION delete_task(task_id bigint); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -620,7 +639,7 @@ COMMENT ON FUNCTION timetable.delete_task(task_id bigint) IS 'Delete the task fr
 
 
 --
--- TOC entry 308 (class 1255 OID 30061)
+-- TOC entry 309 (class 1255 OID 30061)
 -- Name: get_client_name(integer); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -659,7 +678,7 @@ $$;
 ALTER FUNCTION timetable.is_cron_in_time(run_at timetable.cron, ts timestamp with time zone) OWNER TO postgres;
 
 --
--- TOC entry 291 (class 1255 OID 30063)
+-- TOC entry 292 (class 1255 OID 30063)
 -- Name: move_task_down(bigint); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -688,8 +707,8 @@ $_$;
 ALTER FUNCTION timetable.move_task_down(task_id bigint) OWNER TO postgres;
 
 --
--- TOC entry 5213 (class 0 OID 0)
--- Dependencies: 291
+-- TOC entry 5215 (class 0 OID 0)
+-- Dependencies: 292
 -- Name: FUNCTION move_task_down(task_id bigint); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -697,7 +716,7 @@ COMMENT ON FUNCTION timetable.move_task_down(task_id bigint) IS 'Switch the orde
 
 
 --
--- TOC entry 309 (class 1255 OID 30064)
+-- TOC entry 310 (class 1255 OID 30064)
 -- Name: move_task_up(bigint); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -726,8 +745,8 @@ $_$;
 ALTER FUNCTION timetable.move_task_up(task_id bigint) OWNER TO postgres;
 
 --
--- TOC entry 5214 (class 0 OID 0)
--- Dependencies: 309
+-- TOC entry 5216 (class 0 OID 0)
+-- Dependencies: 310
 -- Name: FUNCTION move_task_up(task_id bigint); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -735,7 +754,7 @@ COMMENT ON FUNCTION timetable.move_task_up(task_id bigint) IS 'Switch the order 
 
 
 --
--- TOC entry 310 (class 1255 OID 30065)
+-- TOC entry 311 (class 1255 OID 30065)
 -- Name: next_run(timetable.cron); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -749,7 +768,7 @@ $$;
 ALTER FUNCTION timetable.next_run(cron timetable.cron) OWNER TO postgres;
 
 --
--- TOC entry 311 (class 1255 OID 30066)
+-- TOC entry 312 (class 1255 OID 30066)
 -- Name: notify_chain_start(bigint, text, interval); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -770,8 +789,8 @@ $$;
 ALTER FUNCTION timetable.notify_chain_start(chain_id bigint, worker_name text, start_delay interval) OWNER TO postgres;
 
 --
--- TOC entry 5215 (class 0 OID 0)
--- Dependencies: 311
+-- TOC entry 5217 (class 0 OID 0)
+-- Dependencies: 312
 -- Name: FUNCTION notify_chain_start(chain_id bigint, worker_name text, start_delay interval); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -779,7 +798,7 @@ COMMENT ON FUNCTION timetable.notify_chain_start(chain_id bigint, worker_name te
 
 
 --
--- TOC entry 312 (class 1255 OID 30067)
+-- TOC entry 313 (class 1255 OID 30067)
 -- Name: notify_chain_stop(bigint, text); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -798,8 +817,8 @@ $$;
 ALTER FUNCTION timetable.notify_chain_stop(chain_id bigint, worker_name text) OWNER TO postgres;
 
 --
--- TOC entry 5216 (class 0 OID 0)
--- Dependencies: 312
+-- TOC entry 5218 (class 0 OID 0)
+-- Dependencies: 313
 -- Name: FUNCTION notify_chain_stop(chain_id bigint, worker_name text); Type: COMMENT; Schema: timetable; Owner: postgres
 --
 
@@ -807,7 +826,7 @@ COMMENT ON FUNCTION timetable.notify_chain_stop(chain_id bigint, worker_name tex
 
 
 --
--- TOC entry 313 (class 1255 OID 30068)
+-- TOC entry 314 (class 1255 OID 30068)
 -- Name: try_lock_client_name(bigint, text); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -853,7 +872,7 @@ $$;
 ALTER FUNCTION timetable.try_lock_client_name(worker_pid bigint, worker_name text) OWNER TO postgres;
 
 --
--- TOC entry 314 (class 1255 OID 30069)
+-- TOC entry 315 (class 1255 OID 30069)
 -- Name: validate_json_schema(jsonb, jsonb, jsonb); Type: FUNCTION; Schema: timetable; Owner: postgres
 --
 
@@ -1142,7 +1161,7 @@ CREATE SEQUENCE account.address_address_id_seq
 ALTER SEQUENCE account.address_address_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5217 (class 0 OID 0)
+-- TOC entry 5219 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: address_address_id_seq; Type: SEQUENCE OWNED BY; Schema: account; Owner: postgres
 --
@@ -1167,7 +1186,7 @@ CREATE SEQUENCE account.address_user_id_seq
 ALTER SEQUENCE account.address_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5218 (class 0 OID 0)
+-- TOC entry 5220 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: address_user_id_seq; Type: SEQUENCE OWNED BY; Schema: account; Owner: postgres
 --
@@ -1210,7 +1229,7 @@ CREATE SEQUENCE account.payment_register_pay_id_seq
 ALTER SEQUENCE account.payment_register_pay_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5219 (class 0 OID 0)
+-- TOC entry 5221 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: payment_register_pay_id_seq; Type: SEQUENCE OWNED BY; Schema: account; Owner: postgres
 --
@@ -1235,7 +1254,7 @@ CREATE SEQUENCE account.payment_register_user_id_seq
 ALTER SEQUENCE account.payment_register_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5220 (class 0 OID 0)
+-- TOC entry 5222 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: payment_register_user_id_seq; Type: SEQUENCE OWNED BY; Schema: account; Owner: postgres
 --
@@ -1273,7 +1292,7 @@ CREATE SEQUENCE account.role_role_id_seq
 ALTER SEQUENCE account.role_role_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5221 (class 0 OID 0)
+-- TOC entry 5223 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: role_role_id_seq; Type: SEQUENCE OWNED BY; Schema: account; Owner: postgres
 --
@@ -1330,7 +1349,7 @@ CREATE SEQUENCE account.user_user_id_seq
 ALTER SEQUENCE account.user_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5222 (class 0 OID 0)
+-- TOC entry 5224 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: user_user_id_seq; Type: SEQUENCE OWNED BY; Schema: account; Owner: postgres
 --
@@ -1373,7 +1392,7 @@ CREATE SEQUENCE delivery.delivery_provider_delivery_provider_id_seq
 ALTER SEQUENCE delivery.delivery_provider_delivery_provider_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5223 (class 0 OID 0)
+-- TOC entry 5225 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: delivery_provider_delivery_provider_id_seq; Type: SEQUENCE OWNED BY; Schema: delivery; Owner: postgres
 --
@@ -1416,7 +1435,7 @@ CREATE SEQUENCE product.category_category_id_seq
 ALTER SEQUENCE product.category_category_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5224 (class 0 OID 0)
+-- TOC entry 5226 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: category_category_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1441,7 +1460,7 @@ CREATE SEQUENCE product.category_parent_id_seq
 ALTER SEQUENCE product.category_parent_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5225 (class 0 OID 0)
+-- TOC entry 5227 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: category_parent_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1488,7 +1507,7 @@ CREATE SEQUENCE product.discount_discount_id_seq
 ALTER SEQUENCE product.discount_discount_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5226 (class 0 OID 0)
+-- TOC entry 5228 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: discount_discount_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1531,7 +1550,7 @@ CREATE SEQUENCE product.inventory_inventory_id_seq
 ALTER SEQUENCE product.inventory_inventory_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5227 (class 0 OID 0)
+-- TOC entry 5229 (class 0 OID 0)
 -- Dependencies: 240
 -- Name: inventory_inventory_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1556,7 +1575,7 @@ CREATE SEQUENCE product.inventory_product_id_seq
 ALTER SEQUENCE product.inventory_product_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5228 (class 0 OID 0)
+-- TOC entry 5230 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: inventory_product_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1620,7 +1639,7 @@ CREATE SEQUENCE product.product_category_id_seq
 ALTER SEQUENCE product.product_category_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5229 (class 0 OID 0)
+-- TOC entry 5231 (class 0 OID 0)
 -- Dependencies: 244
 -- Name: product_category_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1645,7 +1664,7 @@ CREATE SEQUENCE product."product_discount_Id_seq"
 ALTER SEQUENCE product."product_discount_Id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5230 (class 0 OID 0)
+-- TOC entry 5232 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: product_discount_Id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1670,7 +1689,7 @@ CREATE SEQUENCE product.product_product_id_seq
 ALTER SEQUENCE product.product_product_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5231 (class 0 OID 0)
+-- TOC entry 5233 (class 0 OID 0)
 -- Dependencies: 246
 -- Name: product_product_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1695,7 +1714,7 @@ CREATE SEQUENCE product.product_store_id_seq
 ALTER SEQUENCE product.product_store_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5232 (class 0 OID 0)
+-- TOC entry 5234 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: product_store_id_seq; Type: SEQUENCE OWNED BY; Schema: product; Owner: postgres
 --
@@ -1752,7 +1771,7 @@ CREATE SEQUENCE shopping.cart_item_cart_item_id_seq
 ALTER SEQUENCE shopping.cart_item_cart_item_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5233 (class 0 OID 0)
+-- TOC entry 5235 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: cart_item_cart_item_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1777,7 +1796,7 @@ CREATE SEQUENCE shopping.cart_item_product_id_seq
 ALTER SEQUENCE shopping.cart_item_product_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5234 (class 0 OID 0)
+-- TOC entry 5236 (class 0 OID 0)
 -- Dependencies: 250
 -- Name: cart_item_product_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1802,7 +1821,7 @@ CREATE SEQUENCE shopping.cart_item_session_id_seq
 ALTER SEQUENCE shopping.cart_item_session_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5235 (class 0 OID 0)
+-- TOC entry 5237 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: cart_item_session_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1845,7 +1864,7 @@ CREATE SEQUENCE shopping.order_detail_order_detail_id_seq
 ALTER SEQUENCE shopping.order_detail_order_detail_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5236 (class 0 OID 0)
+-- TOC entry 5238 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: order_detail_order_detail_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1870,7 +1889,7 @@ CREATE SEQUENCE shopping.order_detail_user_id_seq
 ALTER SEQUENCE shopping.order_detail_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5237 (class 0 OID 0)
+-- TOC entry 5239 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: order_detail_user_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1917,7 +1936,7 @@ CREATE SEQUENCE shopping.order_item_order_detail_id_seq
 ALTER SEQUENCE shopping.order_item_order_detail_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5238 (class 0 OID 0)
+-- TOC entry 5240 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: order_item_order_detail_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1942,7 +1961,7 @@ CREATE SEQUENCE shopping.order_item_order_item_id_seq
 ALTER SEQUENCE shopping.order_item_order_item_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5239 (class 0 OID 0)
+-- TOC entry 5241 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: order_item_order_item_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -1967,7 +1986,7 @@ CREATE SEQUENCE shopping.order_item_product_id_seq
 ALTER SEQUENCE shopping.order_item_product_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5240 (class 0 OID 0)
+-- TOC entry 5242 (class 0 OID 0)
 -- Dependencies: 258
 -- Name: order_item_product_id_seq; Type: SEQUENCE OWNED BY; Schema: shopping; Owner: postgres
 --
@@ -2011,7 +2030,7 @@ CREATE SEQUENCE store.delivery_methods_delivery_method_id_seq
 ALTER SEQUENCE store.delivery_methods_delivery_method_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5241 (class 0 OID 0)
+-- TOC entry 5243 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: delivery_methods_delivery_method_id_seq; Type: SEQUENCE OWNED BY; Schema: store; Owner: postgres
 --
@@ -2036,7 +2055,7 @@ CREATE SEQUENCE store.delivery_methods_store_id_seq
 ALTER SEQUENCE store.delivery_methods_store_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5242 (class 0 OID 0)
+-- TOC entry 5244 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: delivery_methods_store_id_seq; Type: SEQUENCE OWNED BY; Schema: store; Owner: postgres
 --
@@ -2078,7 +2097,7 @@ CREATE SEQUENCE store.store_store_id_seq
 ALTER SEQUENCE store.store_store_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5243 (class 0 OID 0)
+-- TOC entry 5245 (class 0 OID 0)
 -- Dependencies: 263
 -- Name: store_store_id_seq; Type: SEQUENCE OWNED BY; Schema: store; Owner: postgres
 --
@@ -2103,7 +2122,7 @@ CREATE SEQUENCE store.store_user_id_seq
 ALTER SEQUENCE store.store_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5244 (class 0 OID 0)
+-- TOC entry 5246 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: store_user_id_seq; Type: SEQUENCE OWNED BY; Schema: store; Owner: postgres
 --
@@ -2126,7 +2145,7 @@ CREATE UNLOGGED TABLE timetable.active_chain (
 ALTER TABLE timetable.active_chain OWNER TO postgres;
 
 --
--- TOC entry 5245 (class 0 OID 0)
+-- TOC entry 5247 (class 0 OID 0)
 -- Dependencies: 265
 -- Name: TABLE active_chain; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2150,7 +2169,7 @@ CREATE UNLOGGED TABLE timetable.active_session (
 ALTER TABLE timetable.active_session OWNER TO postgres;
 
 --
--- TOC entry 5246 (class 0 OID 0)
+-- TOC entry 5248 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: TABLE active_session; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2180,7 +2199,7 @@ CREATE TABLE timetable.chain (
 ALTER TABLE timetable.chain OWNER TO postgres;
 
 --
--- TOC entry 5247 (class 0 OID 0)
+-- TOC entry 5249 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: TABLE chain; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2189,7 +2208,7 @@ COMMENT ON TABLE timetable.chain IS 'Stores information about chains schedule';
 
 
 --
--- TOC entry 5248 (class 0 OID 0)
+-- TOC entry 5250 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.run_at; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2198,7 +2217,7 @@ COMMENT ON COLUMN timetable.chain.run_at IS 'Extended CRON-style time notation t
 
 
 --
--- TOC entry 5249 (class 0 OID 0)
+-- TOC entry 5251 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.max_instances; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2207,7 +2226,7 @@ COMMENT ON COLUMN timetable.chain.max_instances IS 'Number of instances (clients
 
 
 --
--- TOC entry 5250 (class 0 OID 0)
+-- TOC entry 5252 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.timeout; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2216,7 +2235,7 @@ COMMENT ON COLUMN timetable.chain.timeout IS 'Abort any chain that takes more th
 
 
 --
--- TOC entry 5251 (class 0 OID 0)
+-- TOC entry 5253 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.live; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2225,7 +2244,7 @@ COMMENT ON COLUMN timetable.chain.live IS 'Indication that the chain is ready to
 
 
 --
--- TOC entry 5252 (class 0 OID 0)
+-- TOC entry 5254 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.self_destruct; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2234,7 +2253,7 @@ COMMENT ON COLUMN timetable.chain.self_destruct IS 'Indication that this chain w
 
 
 --
--- TOC entry 5253 (class 0 OID 0)
+-- TOC entry 5255 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.exclusive_execution; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2243,7 +2262,7 @@ COMMENT ON COLUMN timetable.chain.exclusive_execution IS 'All parallel chains sh
 
 
 --
--- TOC entry 5254 (class 0 OID 0)
+-- TOC entry 5256 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: COLUMN chain.client_name; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2267,7 +2286,7 @@ CREATE SEQUENCE timetable.chain_chain_id_seq
 ALTER SEQUENCE timetable.chain_chain_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5255 (class 0 OID 0)
+-- TOC entry 5257 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: chain_chain_id_seq; Type: SEQUENCE OWNED BY; Schema: timetable; Owner: postgres
 --
@@ -2299,7 +2318,7 @@ CREATE TABLE timetable.execution_log (
 ALTER TABLE timetable.execution_log OWNER TO postgres;
 
 --
--- TOC entry 5256 (class 0 OID 0)
+-- TOC entry 5258 (class 0 OID 0)
 -- Dependencies: 269
 -- Name: TABLE execution_log; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2325,7 +2344,7 @@ CREATE TABLE timetable.log (
 ALTER TABLE timetable.log OWNER TO postgres;
 
 --
--- TOC entry 5257 (class 0 OID 0)
+-- TOC entry 5259 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: TABLE log; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2362,7 +2381,7 @@ CREATE TABLE timetable.parameter (
 ALTER TABLE timetable.parameter OWNER TO postgres;
 
 --
--- TOC entry 5258 (class 0 OID 0)
+-- TOC entry 5260 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: TABLE parameter; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2393,7 +2412,7 @@ CREATE TABLE timetable.task (
 ALTER TABLE timetable.task OWNER TO postgres;
 
 --
--- TOC entry 5259 (class 0 OID 0)
+-- TOC entry 5261 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: TABLE task; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2402,7 +2421,7 @@ COMMENT ON TABLE timetable.task IS 'Holds information about chain elements aka t
 
 
 --
--- TOC entry 5260 (class 0 OID 0)
+-- TOC entry 5262 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.chain_id; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2411,7 +2430,7 @@ COMMENT ON COLUMN timetable.task.chain_id IS 'Link to the chain, if NULL task co
 
 
 --
--- TOC entry 5261 (class 0 OID 0)
+-- TOC entry 5263 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.task_order; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2420,7 +2439,7 @@ COMMENT ON COLUMN timetable.task.task_order IS 'Indicates the order of task with
 
 
 --
--- TOC entry 5262 (class 0 OID 0)
+-- TOC entry 5264 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.kind; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2429,7 +2448,7 @@ COMMENT ON COLUMN timetable.task.kind IS 'Indicates whether "command" is SQL, bu
 
 
 --
--- TOC entry 5263 (class 0 OID 0)
+-- TOC entry 5265 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.command; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2438,7 +2457,7 @@ COMMENT ON COLUMN timetable.task.command IS 'Contains either an SQL command, or 
 
 
 --
--- TOC entry 5264 (class 0 OID 0)
+-- TOC entry 5266 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.run_as; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2447,7 +2466,7 @@ COMMENT ON COLUMN timetable.task.run_as IS 'Role name to run task as. Uses SET R
 
 
 --
--- TOC entry 5265 (class 0 OID 0)
+-- TOC entry 5267 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.ignore_error; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2456,7 +2475,7 @@ COMMENT ON COLUMN timetable.task.ignore_error IS 'Indicates whether a next task 
 
 
 --
--- TOC entry 5266 (class 0 OID 0)
+-- TOC entry 5268 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: COLUMN task.timeout; Type: COMMENT; Schema: timetable; Owner: postgres
 --
@@ -2480,7 +2499,7 @@ CREATE SEQUENCE timetable.task_task_id_seq
 ALTER SEQUENCE timetable.task_task_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5267 (class 0 OID 0)
+-- TOC entry 5269 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: task_task_id_seq; Type: SEQUENCE OWNED BY; Schema: timetable; Owner: postgres
 --
@@ -2489,7 +2508,7 @@ ALTER SEQUENCE timetable.task_task_id_seq OWNED BY timetable.task.task_id;
 
 
 --
--- TOC entry 4854 (class 2604 OID 30246)
+-- TOC entry 4855 (class 2604 OID 30246)
 -- Name: address address_id; Type: DEFAULT; Schema: account; Owner: postgres
 --
 
@@ -2497,7 +2516,7 @@ ALTER TABLE ONLY account.address ALTER COLUMN address_id SET DEFAULT nextval('ac
 
 
 --
--- TOC entry 4855 (class 2604 OID 30247)
+-- TOC entry 4856 (class 2604 OID 30247)
 -- Name: payment payment_id; Type: DEFAULT; Schema: account; Owner: postgres
 --
 
@@ -2505,7 +2524,7 @@ ALTER TABLE ONLY account.payment ALTER COLUMN payment_id SET DEFAULT nextval('ac
 
 
 --
--- TOC entry 4857 (class 2604 OID 30248)
+-- TOC entry 4858 (class 2604 OID 30248)
 -- Name: role role_id; Type: DEFAULT; Schema: account; Owner: postgres
 --
 
@@ -2513,7 +2532,7 @@ ALTER TABLE ONLY account.role ALTER COLUMN role_id SET DEFAULT nextval('account.
 
 
 --
--- TOC entry 4858 (class 2604 OID 30472)
+-- TOC entry 4859 (class 2604 OID 30472)
 -- Name: user user_id; Type: DEFAULT; Schema: account; Owner: postgres
 --
 
@@ -2521,7 +2540,7 @@ ALTER TABLE ONLY account."user" ALTER COLUMN user_id SET DEFAULT nextval('accoun
 
 
 --
--- TOC entry 4861 (class 2604 OID 30250)
+-- TOC entry 4862 (class 2604 OID 30250)
 -- Name: delivery_provider delivery_provider_id; Type: DEFAULT; Schema: delivery; Owner: postgres
 --
 
@@ -2529,7 +2548,7 @@ ALTER TABLE ONLY delivery.delivery_provider ALTER COLUMN delivery_provider_id SE
 
 
 --
--- TOC entry 4864 (class 2604 OID 30251)
+-- TOC entry 4865 (class 2604 OID 30251)
 -- Name: category category_id; Type: DEFAULT; Schema: product; Owner: postgres
 --
 
@@ -2537,7 +2556,7 @@ ALTER TABLE ONLY product.category ALTER COLUMN category_id SET DEFAULT nextval('
 
 
 --
--- TOC entry 4868 (class 2604 OID 30252)
+-- TOC entry 4869 (class 2604 OID 30252)
 -- Name: discount discount_id; Type: DEFAULT; Schema: product; Owner: postgres
 --
 
@@ -2545,7 +2564,7 @@ ALTER TABLE ONLY product.discount ALTER COLUMN discount_id SET DEFAULT nextval('
 
 
 --
--- TOC entry 4872 (class 2604 OID 30253)
+-- TOC entry 4873 (class 2604 OID 30253)
 -- Name: inventory inventory_id; Type: DEFAULT; Schema: product; Owner: postgres
 --
 
@@ -2553,7 +2572,7 @@ ALTER TABLE ONLY product.inventory ALTER COLUMN inventory_id SET DEFAULT nextval
 
 
 --
--- TOC entry 4878 (class 2604 OID 30254)
+-- TOC entry 4879 (class 2604 OID 30254)
 -- Name: product product_id; Type: DEFAULT; Schema: product; Owner: postgres
 --
 
@@ -2561,7 +2580,7 @@ ALTER TABLE ONLY product.product ALTER COLUMN product_id SET DEFAULT nextval('pr
 
 
 --
--- TOC entry 4882 (class 2604 OID 30255)
+-- TOC entry 4883 (class 2604 OID 30255)
 -- Name: cart_item cart_item_id; Type: DEFAULT; Schema: shopping; Owner: postgres
 --
 
@@ -2569,7 +2588,7 @@ ALTER TABLE ONLY shopping.cart_item ALTER COLUMN cart_item_id SET DEFAULT nextva
 
 
 --
--- TOC entry 4885 (class 2604 OID 30256)
+-- TOC entry 4886 (class 2604 OID 30256)
 -- Name: order_detail order_detail_id; Type: DEFAULT; Schema: shopping; Owner: postgres
 --
 
@@ -2577,7 +2596,7 @@ ALTER TABLE ONLY shopping.order_detail ALTER COLUMN order_detail_id SET DEFAULT 
 
 
 --
--- TOC entry 4889 (class 2604 OID 30257)
+-- TOC entry 4890 (class 2604 OID 30257)
 -- Name: order_item order_item_id; Type: DEFAULT; Schema: shopping; Owner: postgres
 --
 
@@ -2585,7 +2604,7 @@ ALTER TABLE ONLY shopping.order_item ALTER COLUMN order_item_id SET DEFAULT next
 
 
 --
--- TOC entry 4893 (class 2604 OID 30258)
+-- TOC entry 4894 (class 2604 OID 30258)
 -- Name: delivery_method delivery_method_id; Type: DEFAULT; Schema: store; Owner: postgres
 --
 
@@ -2593,7 +2612,7 @@ ALTER TABLE ONLY store.delivery_method ALTER COLUMN delivery_method_id SET DEFAU
 
 
 --
--- TOC entry 4897 (class 2604 OID 30259)
+-- TOC entry 4898 (class 2604 OID 30259)
 -- Name: store store_id; Type: DEFAULT; Schema: store; Owner: postgres
 --
 
@@ -2601,7 +2620,7 @@ ALTER TABLE ONLY store.store ALTER COLUMN store_id SET DEFAULT nextval('store.st
 
 
 --
--- TOC entry 4902 (class 2604 OID 30260)
+-- TOC entry 4903 (class 2604 OID 30260)
 -- Name: chain chain_id; Type: DEFAULT; Schema: timetable; Owner: postgres
 --
 
@@ -2609,7 +2628,7 @@ ALTER TABLE ONLY timetable.chain ALTER COLUMN chain_id SET DEFAULT nextval('time
 
 
 --
--- TOC entry 4910 (class 2604 OID 30261)
+-- TOC entry 4911 (class 2604 OID 30261)
 -- Name: task task_id; Type: DEFAULT; Schema: timetable; Owner: postgres
 --
 
@@ -2617,7 +2636,7 @@ ALTER TABLE ONLY timetable.task ALTER COLUMN task_id SET DEFAULT nextval('timeta
 
 
 --
--- TOC entry 5148 (class 0 OID 30071)
+-- TOC entry 5150 (class 0 OID 30071)
 -- Dependencies: 221
 -- Data for Name: address; Type: TABLE DATA; Schema: account; Owner: postgres
 --
@@ -3629,7 +3648,7 @@ COPY account.address (address_id, user_id, address, city, postal_code, country) 
 
 
 --
--- TOC entry 5151 (class 0 OID 30076)
+-- TOC entry 5153 (class 0 OID 30076)
 -- Dependencies: 224
 -- Data for Name: payment; Type: TABLE DATA; Schema: account; Owner: postgres
 --
@@ -4641,7 +4660,7 @@ COPY account.payment (payment_id, user_id, payment_type, provider, account_no, e
 
 
 --
--- TOC entry 5154 (class 0 OID 30082)
+-- TOC entry 5156 (class 0 OID 30082)
 -- Dependencies: 227
 -- Data for Name: role; Type: TABLE DATA; Schema: account; Owner: postgres
 --
@@ -4653,7 +4672,7 @@ COPY account.role (role_id, name) FROM stdin;
 
 
 --
--- TOC entry 5156 (class 0 OID 30086)
+-- TOC entry 5158 (class 0 OID 30086)
 -- Dependencies: 229
 -- Data for Name: user; Type: TABLE DATA; Schema: account; Owner: postgres
 --
@@ -5666,7 +5685,7 @@ COPY account."user" (user_id, username, password, first_name, last_name, created
 
 
 --
--- TOC entry 5157 (class 0 OID 30091)
+-- TOC entry 5159 (class 0 OID 30091)
 -- Dependencies: 230
 -- Data for Name: user_role; Type: TABLE DATA; Schema: account; Owner: postgres
 --
@@ -6704,7 +6723,7 @@ COPY account.user_role (user_id, role_id) FROM stdin;
 
 
 --
--- TOC entry 5159 (class 0 OID 30095)
+-- TOC entry 5161 (class 0 OID 30095)
 -- Dependencies: 232
 -- Data for Name: delivery_provider; Type: TABLE DATA; Schema: delivery; Owner: postgres
 --
@@ -6815,7 +6834,7 @@ COPY delivery.delivery_provider (delivery_provider_id, name, contact_email, cont
 
 
 --
--- TOC entry 5161 (class 0 OID 30101)
+-- TOC entry 5163 (class 0 OID 30101)
 -- Dependencies: 234
 -- Data for Name: category; Type: TABLE DATA; Schema: product; Owner: postgres
 --
@@ -6851,7 +6870,7 @@ COPY product.category (category_id, name, description, is_active, created_at, mo
 
 
 --
--- TOC entry 5164 (class 0 OID 30111)
+-- TOC entry 5166 (class 0 OID 30111)
 -- Dependencies: 237
 -- Data for Name: discount; Type: TABLE DATA; Schema: product; Owner: postgres
 --
@@ -6861,7 +6880,7 @@ COPY product.discount (discount_id, name, description, discount_percent, start_d
 
 
 --
--- TOC entry 5166 (class 0 OID 30120)
+-- TOC entry 5168 (class 0 OID 30120)
 -- Dependencies: 239
 -- Data for Name: inventory; Type: TABLE DATA; Schema: product; Owner: postgres
 --
@@ -6885,7 +6904,6 @@ COPY product.inventory (inventory_id, product_id, quantity, minimum_stock, statu
 19	19	50	10	t	2024-01-11 22:25:06.583065+07	2024-01-11 22:25:06.583065+07
 20	20	50	10	t	2024-01-11 22:25:06.583065+07	2024-01-11 22:25:06.583065+07
 21	21	50	10	t	2024-01-11 22:25:06.583065+07	2024-01-11 22:25:06.583065+07
-22	22	50	10	t	2024-01-11 22:39:59.092997+07	2024-01-11 22:39:59.092997+07
 23	23	50	10	t	2024-01-11 22:39:59.092997+07	2024-01-11 22:39:59.092997+07
 24	24	50	10	t	2024-01-11 22:39:59.092997+07	2024-01-11 22:39:59.092997+07
 25	25	50	10	t	2024-01-11 22:39:59.092997+07	2024-01-11 22:39:59.092997+07
@@ -6946,11 +6964,12 @@ COPY product.inventory (inventory_id, product_id, quantity, minimum_stock, statu
 78	79	47	10	t	2024-01-12 01:01:26.441705+07	2024-01-12 12:15:31.858117+07
 76	77	43	10	t	2024-01-12 01:01:07.406776+07	2024-01-12 12:19:02.386011+07
 4	4	48	10	t	2024-01-11 22:02:32.026788+07	2024-01-12 12:20:34.518831+07
+22	22	48	10	t	2024-01-11 22:39:59.092997+07	2024-01-12 21:19:32.469622+07
 \.
 
 
 --
--- TOC entry 5169 (class 0 OID 30129)
+-- TOC entry 5171 (class 0 OID 30129)
 -- Dependencies: 242
 -- Data for Name: product; Type: TABLE DATA; Schema: product; Owner: postgres
 --
@@ -7000,10 +7019,6 @@ COPY product.product (product_id, name, image, description, sku, category_id, pr
 69	Vacheron Constantin Patrimony	https://cdn.luxshopping.vn/Thumnails/Uploads/News/patrimony-1110u-000r-b085-manual-wind-42mm.png.webp	Stay stylish with our Vacheron Constantin Patrimony. It is designed for comfort and durability.	VCP-001	24	20999.99	\N	54	t	2024-01-12 00:42:29.439807+07	2024-01-12 01:23:20.326866+07
 70	Breitling Navitimer	https://mrwatch.vn/product_images/dong-ho-navitimer-b01-chronograph-46-ab0137211c1a1-chinh-hang-16578.png	Experience elegance and precision with our Breitling Navitimer. Perfect for all occasions.	BN-001	24	4999.99	\N	55	t	2024-01-12 00:43:37.272241+07	2024-01-12 01:23:20.326866+07
 51	Protein Powder	https://www.optimumnutritionsea.com/frontend/images/products/whey_bottele.png	Our Protein Powder offers a high-quality protein source for muscle recovery and growth. It is perfect for post-workout nutrition.	PP-001	4	29.99	\N	40	t	2024-01-12 00:11:54.794403+07	2024-01-12 01:00:39.645704+07
-22	Channel Men's Shirt	https://images-na.ssl-images-amazon.com/images/I/61DzSMfKqKL._AC_UX679_.jpg	Experience comfort and style with our Men's Shirt. Perfect for casual and formal occasions.	MCS-001	12	49.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 01:08:16.639786+07
-23	Channel Men's Jeans	https://th.bing.com/th/id/R.387118410c8ba47bca3f9530266ccd1e?rik=kOm%2b%2bXgM%2bk88Tg&pid=ImgRaw&r=0	Our Men's Jeans offer a classic look with a modern fit. They're perfect for everyday wear.	MCJ-001	12	79.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 01:08:58.411662+07
-24	Channel Men's Jacket	https://th.bing.com/th/id/OIP.qtMQRtX2qUunW2_6mKPGogHaJQ?rs=1&pid=ImgDetMain	Stay warm and stylish with our Men's Jacket. It's designed for comfort and durability.	MCJK-001	12	99.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 01:08:58.411662+07
-25	Channel Men's Shoes	https://th.bing.com/th/id/R.a023032dc662881cc5bea413b76924fd?rik=pBz3jYEEVKbamg&pid=ImgRaw&r=0	Step into comfort with our Men's Shoes. They're designed for style and long-lasting comfort.	MCSH-001	14	69.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 01:10:28.410629+07
 26	Louis Vuitton Bag	https://th.bing.com/th/id/OIP.U33MPbXUa6Tf5-4Wcm3J9QHaHa?rs=1&pid=ImgDetMain	Experience luxury and style with our Louis Vuitton Bag. Perfect for all occasions.	LVB-001	6	1499.99	\N	10	t	2024-01-11 23:05:31.46191+07	2024-01-12 01:11:55.990147+07
 27	Louis Vuitton Wallet	https://th.bing.com/th/id/OIP.tgSLphr1zXTd5eYjuuU1igHaHa?rs=1&pid=ImgDetMain	Our Louis Vuitton Wallet offers a classic look with a modern design. It is perfect for everyday use.	LVW-001	6	499.99	\N	10	t	2024-01-11 23:05:31.46191+07	2024-01-12 01:11:55.990147+07
 28	Louis Vuitton Belt	https://th.bing.com/th/id/R.bdfd528985daaebbf248d2ca682a89c9?rik=e4CEwY3Ij%2bo%2fOQ&pid=ImgRaw&r=0	Stay stylish with our Louis Vuitton Belt. It is designed for comfort and durability.	LVBELT-001	6	299.99	\N	10	t	2024-01-11 23:05:31.46191+07	2024-01-12 01:11:55.990147+07
@@ -7014,7 +7029,6 @@ COPY product.product (product_id, name, image, description, sku, category_id, pr
 34	Gucci Bag	https://th.bing.com/th/id/R.1cc1d9a8afe5802035c0f248b4952dba?rik=5sdba%2byQNdpU4g&pid=ImgRaw&r=0	Experience luxury and style with our Gucci Bag. Perfect for all occasions.	GB-001	27	1599.99	\N	5	t	2024-01-11 23:16:33.113553+07	2024-01-12 01:13:18.324927+07
 35	Gucci Shoes	https://th.bing.com/th/id/R.5ddb34c69fcbd49f3e9dedec52f2c355?rik=pe%2bZynpiUlT4Xg&pid=ImgRaw&r=0	Step into comfort with our Gucci Shoes. They are designed for style and long-lasting comfort.	GSH-001	15	799.99	\N	5	t	2024-01-11 23:16:33.113553+07	2024-01-12 01:18:46.274098+07
 36	H&M Men's T-Shirt	https://lp2.hm.com/hmgoepprod?set=quality[79]%2Csource[%2F96%2Fff%2F96ff51865c7fa3d337cb5a9058051e6bc66b3f29.jpg]%2Corigin[dam]%2Ccategory[men_tshirtstanks_shortsleeve]%2Ctype[DESCRIPTIVESTILLLIFE]%2Cres[m]%2Chmver[1]&call=url[file:/product/main]	Experience comfort and style with our H&M Men's T-Shirt. Perfect for casual occasions.	HMMT-001	12	19.99	\N	17	t	2024-01-11 23:31:25.668482+07	2024-01-12 01:08:16.639786+07
-38	Nike Men's Shoes	https://th.bing.com/th/id/OIP.TkUqG3LhW3a65Sa5ZTx6ZAHaE8?rs=1&pid=ImgDetMain	Step into comfort with our Men's Shoes. They're designed for style and long-lasting comfort.	NMS-001	14	69.99	\N	9	t	2024-01-11 23:42:14.791481+07	2024-01-12 01:10:28.410629+07
 37	H&M Women's Dress	https://www.fashiongonerogue.com/wp-content/uploads/2016/06/HM-Beaded-Dress.jpg	Our H&M Women's Dress offers a classic look with a modern design. It is perfect for special occasions.	HMWD-001	13	49.99	\N	17	t	2024-01-11 23:31:25.668482+07	2024-01-12 01:15:22.614481+07
 41	Puma Women's Shoes	https://cdnd.lystit.com/photos/puma/24b08306/puma-Puma-Black-Spiced-Coral-Riaze-Prowl-Womens-Running-Shoes.jpeg	Our Puma Women's Shoes offer a classic look with a modern design. They are perfect for everyday use.	PWS-001	15	79.99	\N	20	t	2024-01-11 23:45:49.976991+07	2024-01-12 01:17:03.32295+07
 39	Nike Women's Shoes	https://th.bing.com/th/id/OIP.7GKjovh7YjSB86COsZxbVgHaEO?rs=1&pid=ImgDetMain	Our Nike Women's Shoes offer a classic look with a modern design. They are perfect for everyday use.	NWS-001	15	99.99	\N	18	t	2024-01-11 23:42:14.791481+07	2024-01-12 01:18:46.274098+07
@@ -7026,20 +7040,25 @@ COPY product.product (product_id, name, image, description, sku, category_id, pr
 57	Nike Air Force 1	https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/2eff461f-f3ac-4285-9c6a-2f22173aac42/custom-nike-air-force-1-low-by-you.png	Our Nike Air Force 1 offers a classic look with a modern design. It is perfect for everyday use.	NAF1-001	22	89.99	\N	51	t	2024-01-12 00:29:48.122025+07	2024-01-12 01:21:29.214336+07
 58	Adidas Yeezy Boost 350	https://cdn-images.farfetch-contents.com/21/28/57/99/21285799_51225739_600.jpg	Stay stylish with our Adidas Yeezy Boost 350. It is designed for comfort and durability.	AYB350-001	22	219.99	\N	51	t	2024-01-12 00:29:48.122025+07	2024-01-12 01:21:29.214336+07
 59	Puma Suede Classic	https://product.hstatic.net/1000284478/product/01_374915_1_b622d15c43ee4f2e85180cbb5b850fd3.jpg	Step into comfort with our Puma Suede Classic. They are designed for style and long-lasting comfort.	PSC-001	22	59.99	\N	51	t	2024-01-12 00:29:48.122025+07	2024-01-12 01:21:29.214336+07
-62	Reebok Classic Leather	https://sneaker.com.vn/uploads/product/02_2023/reebokclassicleather.jpg	Stay stylish with our Reebok Classic Leather. It is designed for comfort and durability.	RCL-001	21	69.99	\N	53	t	2024-01-12 00:30:07.142309+07	2024-01-12 01:22:15.526148+07
-63	Vans Old Skool	https://sneaker.com.vn/uploads/product/02_2023/vansoldskool.jpg	Step into comfort with our Vans Old Skool. They are designed for style and long-lasting comfort.	VOS-001	21	59.99	\N	53	t	2024-01-12 00:30:07.142309+07	2024-01-12 01:22:15.526148+07
 61	New Balance 574	https://supersports.com.vn/cdn/shop/products/U574LGNW-1.jpg?v=1700569343	Our New Balance 574 offers a classic look with a modern design. It is perfect for everyday use.	NB574-001	21	79.99	\N	53	t	2024-01-12 00:30:07.142309+07	2024-01-12 01:22:15.526148+07
-64	Rolex Submariner	https://watch.com.vn/uploads/product/02_2023/rolexsubmariner.jpg	Experience elegance and precision with our Rolex Submariner. Perfect for all occasions.	RS-001	24	7999.99	\N	52	t	2024-01-12 00:42:13.039261+07	2024-01-12 01:23:20.326866+07
 75	Jaeger-LeCoultre Reverso	https://bizweb.dktcdn.net/100/175/988/products/q397848j.jpg?v=1662691570727	Stay stylish with our Jaeger-LeCoultre Reverso. It is designed for comfort and durability.	JLR-001	24	7999.99	\N	56	t	2024-01-12 00:43:56.811991+07	2024-01-12 01:23:20.326866+07
 52	Fish Oil Capsules	https://bizweb.dktcdn.net/thumb/grande/100/063/010/products/imageservice-1-jpeg-0c0e3394-ccd0-4fea-8b97-353307fc53db.jpg?v=1678891350553	Stay healthy with our Fish Oil Capsules. They are designed to support heart and brain health.	FOC-001	4	39.99	\N	40	t	2024-01-12 00:11:54.794403+07	2024-01-12 01:00:39.645704+07
+38	Nike Men's Shoes	https://th.bing.com/th/id/OIP.TkUqG3LhW3a65Sa5ZTx6ZAHaE8?rs=1&pid=ImgDetMain	Step into comfort with our Men's Shoes. They're designed for style and long-lasting comfort.	NMS-001	14	69.99	\N	9	t	2024-01-11 23:42:14.791481+07	2024-01-12 21:46:40.288291+07
 53	Multivitamin	https://bizweb.dktcdn.net/thumb/grande/100/011/344/products/muscletech-platinum-multivitamin-gymstore.jpg?v=1641198668027	Support your overall health with our Multivitamin. It is designed to fill nutritional gaps in your diet.	MV-001	4	19.99	\N	41	t	2024-01-12 00:11:54.794403+07	2024-01-12 01:00:39.645704+07
 54	Probiotic Supplement	https://m.media-amazon.com/images/W/MEDIAX_792452-T2/images/I/81JstIWS+FL.jpg	Support your gut health with our Probiotic Supplement. It is designed to promote a healthy digestive system.	PS-001	4	29.99	\N	41	t	2024-01-12 00:11:54.794403+07	2024-01-12 01:00:39.645704+07
 55	Green Tea Extract	https://baconmeo.com/wp-content/uploads/2019/01/IMG_3775-scaled.jpg	Boost your metabolism with our Green Tea Extract. It is designed to support weight management and antioxidant protection.	GTE-001	4	39.99	\N	41	t	2024-01-12 00:11:54.794403+07	2024-01-12 01:00:39.645704+07
+62	Reebok Classic Leather	https://cdn.vortexs.io/api/images/5db825be-0b80-4ad7-986b-1032e81ee5fd/1920/w/giay-reebok-classic-leather-all-white-eg9415-ap-dung-chuyen-khoan.jpeg	Stay stylish with our Reebok Classic Leather. It is designed for comfort and durability.	RCL-001	21	69.99	\N	53	t	2024-01-12 00:30:07.142309+07	2024-01-12 16:51:31.603947+07
+63	Vans Old Skool	https://bizweb.dktcdn.net/100/140/774/files/giay-vans-skate-old-skool-black-white-vn0a5fcby28-3.jpg?v=1691834913583	Step into comfort with our Vans Old Skool. They are designed for style and long-lasting comfort.	VOS-001	21	59.99	\N	53	t	2024-01-12 00:30:07.142309+07	2024-01-12 16:51:31.603947+07
+64	Rolex Submariner	https://empireluxury.vn/wp-content/uploads/2022/04/dong-ho-rolex-submariner-41-126610lv-0002-mat-so-den-day-oyster-8.png	Experience elegance and precision with our Rolex Submariner. Perfect for all occasions.	RS-001	24	7999.99	\N	52	t	2024-01-12 00:42:13.039261+07	2024-01-12 16:51:31.603947+07
+22	Channel Men's Shirt	https://images-na.ssl-images-amazon.com/images/I/61DzSMfKqKL._AC_UX679_.jpg	Experience comfort and style with our Men's Shirt. Perfect for casual and formal occasions.	MCS-001	12	49.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 21:46:40.288291+07
+23	Channel Men's Jeans	https://th.bing.com/th/id/R.387118410c8ba47bca3f9530266ccd1e?rik=kOm%2b%2bXgM%2bk88Tg&pid=ImgRaw&r=0	Our Men's Jeans offer a classic look with a modern fit. They're perfect for everyday wear.	MCJ-001	12	79.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 21:46:40.288291+07
+24	Channel Men's Jacket	https://th.bing.com/th/id/OIP.qtMQRtX2qUunW2_6mKPGogHaJQ?rs=1&pid=ImgDetMain	Stay warm and stylish with our Men's Jacket. It's designed for comfort and durability.	MCJK-001	12	99.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 21:46:40.288291+07
+25	Channel Men's Shoes	https://th.bing.com/th/id/R.a023032dc662881cc5bea413b76924fd?rik=pBz3jYEEVKbamg&pid=ImgRaw&r=0	Step into comfort with our Men's Shoes. They're designed for style and long-lasting comfort.	MCSH-001	14	69.99	\N	9	t	2024-01-11 22:39:59.092997+07	2024-01-12 21:46:40.288291+07
 \.
 
 
 --
--- TOC entry 5174 (class 0 OID 30145)
+-- TOC entry 5176 (class 0 OID 30145)
 -- Dependencies: 248
 -- Data for Name: cart_item; Type: TABLE DATA; Schema: shopping; Owner: postgres
 --
@@ -7049,7 +7068,7 @@ COPY shopping.cart_item (cart_item_id, user_id, product_id, quantity, created_at
 
 
 --
--- TOC entry 5178 (class 0 OID 30153)
+-- TOC entry 5180 (class 0 OID 30153)
 -- Dependencies: 252
 -- Data for Name: order_detail; Type: TABLE DATA; Schema: shopping; Owner: postgres
 --
@@ -7074,11 +7093,13 @@ COPY shopping.order_detail (order_detail_id, user_id, total, created_at, modifie
 19	2	89.97	2024-01-12 12:19:02.354923+07	2024-01-12 12:19:02.354923+07	2	2
 20	2	0	2024-01-12 12:19:05.677798+07	2024-01-12 12:19:05.677798+07	2	2
 21	2	1399.98	2024-01-12 12:20:34.503699+07	2024-01-12 12:20:34.503699+07	2	2
+22	906	49.99	2024-01-12 20:54:00.46785+07	2024-01-12 20:54:00.46785+07	906	906
+23	906	49.99	2024-01-12 21:19:32.409705+07	2024-01-12 21:19:32.409705+07	906	906
 \.
 
 
 --
--- TOC entry 5181 (class 0 OID 30161)
+-- TOC entry 5183 (class 0 OID 30161)
 -- Dependencies: 255
 -- Data for Name: order_item; Type: TABLE DATA; Schema: shopping; Owner: postgres
 --
@@ -7089,11 +7110,13 @@ COPY shopping.order_item (order_item_id, order_detail_id, product_id, quantity, 
 18	19	77	3	Pending Confirmation	2024-01-12 12:19:02.388855+07	2024-01-12 12:19:02.378236+07	\N	business
 19	21	4	2	Pending Confirmation	2024-01-12 12:20:34.522771+07	2024-01-12 12:20:34.519268+07	\N	business
 15	3	2	1	Pending Confirmation	2024-01-12 11:32:45.836303+07	2024-01-12 15:49:52.604783+07	\N	express
+20	22	22	1	Pending Confirmation	2024-01-12 20:54:00.525747+07	2024-01-12 20:54:00.513023+07	\N	business
+21	23	22	1	Pending Confirmation	2024-01-12 21:19:32.480467+07	2024-01-12 21:19:32.478867+07	\N	business
 \.
 
 
 --
--- TOC entry 5185 (class 0 OID 30171)
+-- TOC entry 5187 (class 0 OID 30171)
 -- Dependencies: 259
 -- Data for Name: delivery_method; Type: TABLE DATA; Schema: store; Owner: postgres
 --
@@ -7178,7 +7201,7 @@ COPY store.delivery_method (delivery_method_id, store_id, method_name, price, is
 
 
 --
--- TOC entry 5188 (class 0 OID 30181)
+-- TOC entry 5190 (class 0 OID 30181)
 -- Dependencies: 262
 -- Data for Name: store; Type: TABLE DATA; Schema: store; Owner: postgres
 --
@@ -7213,7 +7236,7 @@ COPY store.store (store_id, user_id, name, description, created_at, modified_at)
 
 
 --
--- TOC entry 5191 (class 0 OID 30190)
+-- TOC entry 5193 (class 0 OID 30190)
 -- Dependencies: 265
 -- Data for Name: active_chain; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7223,7 +7246,7 @@ COPY timetable.active_chain (chain_id, client_name, started_at) FROM stdin;
 
 
 --
--- TOC entry 5192 (class 0 OID 30196)
+-- TOC entry 5194 (class 0 OID 30196)
 -- Dependencies: 266
 -- Data for Name: active_session; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7233,7 +7256,7 @@ COPY timetable.active_session (client_pid, server_pid, client_name, started_at) 
 
 
 --
--- TOC entry 5193 (class 0 OID 30202)
+-- TOC entry 5195 (class 0 OID 30202)
 -- Dependencies: 267
 -- Data for Name: chain; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7245,7 +7268,7 @@ COPY timetable.chain (chain_id, chain_name, run_at, max_instances, timeout, live
 
 
 --
--- TOC entry 5195 (class 0 OID 30212)
+-- TOC entry 5197 (class 0 OID 30212)
 -- Dependencies: 269
 -- Data for Name: execution_log; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7255,7 +7278,7 @@ COPY timetable.execution_log (chain_id, task_id, txid, last_run, finished, pid, 
 
 
 --
--- TOC entry 5196 (class 0 OID 30218)
+-- TOC entry 5198 (class 0 OID 30218)
 -- Dependencies: 270
 -- Data for Name: log; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7265,7 +7288,7 @@ COPY timetable.log (ts, pid, log_level, client_name, message, message_data) FROM
 
 
 --
--- TOC entry 5197 (class 0 OID 30225)
+-- TOC entry 5199 (class 0 OID 30225)
 -- Dependencies: 271
 -- Data for Name: migration; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7289,7 +7312,7 @@ COPY timetable.migration (id, version) FROM stdin;
 
 
 --
--- TOC entry 5198 (class 0 OID 30230)
+-- TOC entry 5200 (class 0 OID 30230)
 -- Dependencies: 272
 -- Data for Name: parameter; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7301,7 +7324,7 @@ COPY timetable.parameter (task_id, order_id, value) FROM stdin;
 
 
 --
--- TOC entry 5199 (class 0 OID 30236)
+-- TOC entry 5201 (class 0 OID 30236)
 -- Dependencies: 273
 -- Data for Name: task; Type: TABLE DATA; Schema: timetable; Owner: postgres
 --
@@ -7313,7 +7336,7 @@ COPY timetable.task (task_id, chain_id, task_order, task_name, kind, command, ru
 
 
 --
--- TOC entry 5268 (class 0 OID 0)
+-- TOC entry 5270 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: address_address_id_seq; Type: SEQUENCE SET; Schema: account; Owner: postgres
 --
@@ -7322,7 +7345,7 @@ SELECT pg_catalog.setval('account.address_address_id_seq', 1003, true);
 
 
 --
--- TOC entry 5269 (class 0 OID 0)
+-- TOC entry 5271 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: address_user_id_seq; Type: SEQUENCE SET; Schema: account; Owner: postgres
 --
@@ -7331,7 +7354,7 @@ SELECT pg_catalog.setval('account.address_user_id_seq', 1, false);
 
 
 --
--- TOC entry 5270 (class 0 OID 0)
+-- TOC entry 5272 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: payment_register_pay_id_seq; Type: SEQUENCE SET; Schema: account; Owner: postgres
 --
@@ -7340,7 +7363,7 @@ SELECT pg_catalog.setval('account.payment_register_pay_id_seq', 1003, true);
 
 
 --
--- TOC entry 5271 (class 0 OID 0)
+-- TOC entry 5273 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: payment_register_user_id_seq; Type: SEQUENCE SET; Schema: account; Owner: postgres
 --
@@ -7349,7 +7372,7 @@ SELECT pg_catalog.setval('account.payment_register_user_id_seq', 1, false);
 
 
 --
--- TOC entry 5272 (class 0 OID 0)
+-- TOC entry 5274 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: role_role_id_seq; Type: SEQUENCE SET; Schema: account; Owner: postgres
 --
@@ -7358,7 +7381,7 @@ SELECT pg_catalog.setval('account.role_role_id_seq', 2, true);
 
 
 --
--- TOC entry 5273 (class 0 OID 0)
+-- TOC entry 5275 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: user_user_id_seq; Type: SEQUENCE SET; Schema: account; Owner: postgres
 --
@@ -7367,7 +7390,7 @@ SELECT pg_catalog.setval('account.user_user_id_seq', 1007, true);
 
 
 --
--- TOC entry 5274 (class 0 OID 0)
+-- TOC entry 5276 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: delivery_provider_delivery_provider_id_seq; Type: SEQUENCE SET; Schema: delivery; Owner: postgres
 --
@@ -7376,7 +7399,7 @@ SELECT pg_catalog.setval('delivery.delivery_provider_delivery_provider_id_seq', 
 
 
 --
--- TOC entry 5275 (class 0 OID 0)
+-- TOC entry 5277 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: category_category_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7385,7 +7408,7 @@ SELECT pg_catalog.setval('product.category_category_id_seq', 27, true);
 
 
 --
--- TOC entry 5276 (class 0 OID 0)
+-- TOC entry 5278 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: category_parent_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7394,16 +7417,16 @@ SELECT pg_catalog.setval('product.category_parent_id_seq', 6, true);
 
 
 --
--- TOC entry 5277 (class 0 OID 0)
+-- TOC entry 5279 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: discount_discount_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
 
-SELECT pg_catalog.setval('product.discount_discount_id_seq', 2, true);
+SELECT pg_catalog.setval('product.discount_discount_id_seq', 9, true);
 
 
 --
--- TOC entry 5278 (class 0 OID 0)
+-- TOC entry 5280 (class 0 OID 0)
 -- Dependencies: 240
 -- Name: inventory_inventory_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7412,7 +7435,7 @@ SELECT pg_catalog.setval('product.inventory_inventory_id_seq', 80, true);
 
 
 --
--- TOC entry 5279 (class 0 OID 0)
+-- TOC entry 5281 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: inventory_product_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7421,7 +7444,7 @@ SELECT pg_catalog.setval('product.inventory_product_id_seq', 1, false);
 
 
 --
--- TOC entry 5280 (class 0 OID 0)
+-- TOC entry 5282 (class 0 OID 0)
 -- Dependencies: 244
 -- Name: product_category_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7430,7 +7453,7 @@ SELECT pg_catalog.setval('product.product_category_id_seq', 1, false);
 
 
 --
--- TOC entry 5281 (class 0 OID 0)
+-- TOC entry 5283 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: product_discount_Id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7439,7 +7462,7 @@ SELECT pg_catalog.setval('product."product_discount_Id_seq"', 2, true);
 
 
 --
--- TOC entry 5282 (class 0 OID 0)
+-- TOC entry 5284 (class 0 OID 0)
 -- Dependencies: 246
 -- Name: product_product_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7448,7 +7471,7 @@ SELECT pg_catalog.setval('product.product_product_id_seq', 81, true);
 
 
 --
--- TOC entry 5283 (class 0 OID 0)
+-- TOC entry 5285 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: product_store_id_seq; Type: SEQUENCE SET; Schema: product; Owner: postgres
 --
@@ -7457,7 +7480,7 @@ SELECT pg_catalog.setval('product.product_store_id_seq', 1, false);
 
 
 --
--- TOC entry 5284 (class 0 OID 0)
+-- TOC entry 5286 (class 0 OID 0)
 -- Dependencies: 275
 -- Name: temp_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -7466,16 +7489,16 @@ SELECT pg_catalog.setval('public.temp_seq', 1, false);
 
 
 --
--- TOC entry 5285 (class 0 OID 0)
+-- TOC entry 5287 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: cart_item_cart_item_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
 
-SELECT pg_catalog.setval('shopping.cart_item_cart_item_id_seq', 62, true);
+SELECT pg_catalog.setval('shopping.cart_item_cart_item_id_seq', 66, true);
 
 
 --
--- TOC entry 5286 (class 0 OID 0)
+-- TOC entry 5288 (class 0 OID 0)
 -- Dependencies: 250
 -- Name: cart_item_product_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
@@ -7484,7 +7507,7 @@ SELECT pg_catalog.setval('shopping.cart_item_product_id_seq', 1, false);
 
 
 --
--- TOC entry 5287 (class 0 OID 0)
+-- TOC entry 5289 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: cart_item_session_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
@@ -7493,16 +7516,16 @@ SELECT pg_catalog.setval('shopping.cart_item_session_id_seq', 1, false);
 
 
 --
--- TOC entry 5288 (class 0 OID 0)
+-- TOC entry 5290 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: order_detail_order_detail_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
 
-SELECT pg_catalog.setval('shopping.order_detail_order_detail_id_seq', 21, true);
+SELECT pg_catalog.setval('shopping.order_detail_order_detail_id_seq', 23, true);
 
 
 --
--- TOC entry 5289 (class 0 OID 0)
+-- TOC entry 5291 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: order_detail_user_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
@@ -7511,7 +7534,7 @@ SELECT pg_catalog.setval('shopping.order_detail_user_id_seq', 1, false);
 
 
 --
--- TOC entry 5290 (class 0 OID 0)
+-- TOC entry 5292 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: order_item_order_detail_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
@@ -7520,16 +7543,16 @@ SELECT pg_catalog.setval('shopping.order_item_order_detail_id_seq', 1, false);
 
 
 --
--- TOC entry 5291 (class 0 OID 0)
+-- TOC entry 5293 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: order_item_order_item_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
 
-SELECT pg_catalog.setval('shopping.order_item_order_item_id_seq', 19, true);
+SELECT pg_catalog.setval('shopping.order_item_order_item_id_seq', 21, true);
 
 
 --
--- TOC entry 5292 (class 0 OID 0)
+-- TOC entry 5294 (class 0 OID 0)
 -- Dependencies: 258
 -- Name: order_item_product_id_seq; Type: SEQUENCE SET; Schema: shopping; Owner: postgres
 --
@@ -7538,7 +7561,7 @@ SELECT pg_catalog.setval('shopping.order_item_product_id_seq', 1, false);
 
 
 --
--- TOC entry 5293 (class 0 OID 0)
+-- TOC entry 5295 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: delivery_methods_delivery_method_id_seq; Type: SEQUENCE SET; Schema: store; Owner: postgres
 --
@@ -7547,7 +7570,7 @@ SELECT pg_catalog.setval('store.delivery_methods_delivery_method_id_seq', 474, t
 
 
 --
--- TOC entry 5294 (class 0 OID 0)
+-- TOC entry 5296 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: delivery_methods_store_id_seq; Type: SEQUENCE SET; Schema: store; Owner: postgres
 --
@@ -7556,7 +7579,7 @@ SELECT pg_catalog.setval('store.delivery_methods_store_id_seq', 1, false);
 
 
 --
--- TOC entry 5295 (class 0 OID 0)
+-- TOC entry 5297 (class 0 OID 0)
 -- Dependencies: 263
 -- Name: store_store_id_seq; Type: SEQUENCE SET; Schema: store; Owner: postgres
 --
@@ -7565,7 +7588,7 @@ SELECT pg_catalog.setval('store.store_store_id_seq', 70, true);
 
 
 --
--- TOC entry 5296 (class 0 OID 0)
+-- TOC entry 5298 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: store_user_id_seq; Type: SEQUENCE SET; Schema: store; Owner: postgres
 --
@@ -7574,7 +7597,7 @@ SELECT pg_catalog.setval('store.store_user_id_seq', 1, false);
 
 
 --
--- TOC entry 5297 (class 0 OID 0)
+-- TOC entry 5299 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: chain_chain_id_seq; Type: SEQUENCE SET; Schema: timetable; Owner: postgres
 --
@@ -7583,7 +7606,7 @@ SELECT pg_catalog.setval('timetable.chain_chain_id_seq', 11, true);
 
 
 --
--- TOC entry 5298 (class 0 OID 0)
+-- TOC entry 5300 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: task_task_id_seq; Type: SEQUENCE SET; Schema: timetable; Owner: postgres
 --
@@ -7592,7 +7615,7 @@ SELECT pg_catalog.setval('timetable.task_task_id_seq', 9, true);
 
 
 --
--- TOC entry 4921 (class 2606 OID 30263)
+-- TOC entry 4922 (class 2606 OID 30263)
 -- Name: address address_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7601,7 +7624,7 @@ ALTER TABLE ONLY account.address
 
 
 --
--- TOC entry 4923 (class 2606 OID 30265)
+-- TOC entry 4924 (class 2606 OID 30265)
 -- Name: payment payment_register_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7610,7 +7633,7 @@ ALTER TABLE ONLY account.payment
 
 
 --
--- TOC entry 4925 (class 2606 OID 30267)
+-- TOC entry 4926 (class 2606 OID 30267)
 -- Name: role role_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7619,7 +7642,7 @@ ALTER TABLE ONLY account.role
 
 
 --
--- TOC entry 4927 (class 2606 OID 30474)
+-- TOC entry 4928 (class 2606 OID 30474)
 -- Name: user user_name; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7628,7 +7651,7 @@ ALTER TABLE ONLY account."user"
 
 
 --
--- TOC entry 4929 (class 2606 OID 30269)
+-- TOC entry 4930 (class 2606 OID 30269)
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7637,7 +7660,7 @@ ALTER TABLE ONLY account."user"
 
 
 --
--- TOC entry 4931 (class 2606 OID 30271)
+-- TOC entry 4932 (class 2606 OID 30271)
 -- Name: delivery_provider delivery_provider_pkey; Type: CONSTRAINT; Schema: delivery; Owner: postgres
 --
 
@@ -7646,7 +7669,7 @@ ALTER TABLE ONLY delivery.delivery_provider
 
 
 --
--- TOC entry 4933 (class 2606 OID 30273)
+-- TOC entry 4934 (class 2606 OID 30273)
 -- Name: category category_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7655,7 +7678,7 @@ ALTER TABLE ONLY product.category
 
 
 --
--- TOC entry 4935 (class 2606 OID 30275)
+-- TOC entry 4936 (class 2606 OID 30275)
 -- Name: discount discount_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7664,7 +7687,7 @@ ALTER TABLE ONLY product.discount
 
 
 --
--- TOC entry 4937 (class 2606 OID 30277)
+-- TOC entry 4938 (class 2606 OID 30277)
 -- Name: inventory inventory_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7673,7 +7696,7 @@ ALTER TABLE ONLY product.inventory
 
 
 --
--- TOC entry 4939 (class 2606 OID 30468)
+-- TOC entry 4940 (class 2606 OID 30468)
 -- Name: product name; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7682,7 +7705,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4941 (class 2606 OID 30279)
+-- TOC entry 4942 (class 2606 OID 30279)
 -- Name: product product_pkey; Type: CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7691,7 +7714,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4943 (class 2606 OID 30281)
+-- TOC entry 4944 (class 2606 OID 30281)
 -- Name: cart_item cart_item_pkey; Type: CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -7700,7 +7723,7 @@ ALTER TABLE ONLY shopping.cart_item
 
 
 --
--- TOC entry 4945 (class 2606 OID 30283)
+-- TOC entry 4946 (class 2606 OID 30283)
 -- Name: order_detail order_detail_pkey; Type: CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -7709,7 +7732,7 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4947 (class 2606 OID 30285)
+-- TOC entry 4948 (class 2606 OID 30285)
 -- Name: order_item order_item_pkey; Type: CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -7718,7 +7741,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4949 (class 2606 OID 30287)
+-- TOC entry 4950 (class 2606 OID 30287)
 -- Name: delivery_method delivery_methods_pkey; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7727,7 +7750,7 @@ ALTER TABLE ONLY store.delivery_method
 
 
 --
--- TOC entry 4951 (class 2606 OID 30458)
+-- TOC entry 4952 (class 2606 OID 30458)
 -- Name: store name; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7736,7 +7759,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4953 (class 2606 OID 30289)
+-- TOC entry 4954 (class 2606 OID 30289)
 -- Name: store store_pkey; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7745,7 +7768,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4955 (class 2606 OID 30491)
+-- TOC entry 4956 (class 2606 OID 30491)
 -- Name: store user; Type: CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -7754,7 +7777,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4957 (class 2606 OID 30291)
+-- TOC entry 4958 (class 2606 OID 30291)
 -- Name: chain chain_chain_name_key; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7763,7 +7786,7 @@ ALTER TABLE ONLY timetable.chain
 
 
 --
--- TOC entry 4959 (class 2606 OID 30293)
+-- TOC entry 4960 (class 2606 OID 30293)
 -- Name: chain chain_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7772,7 +7795,7 @@ ALTER TABLE ONLY timetable.chain
 
 
 --
--- TOC entry 4961 (class 2606 OID 30295)
+-- TOC entry 4962 (class 2606 OID 30295)
 -- Name: migration migration_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7781,7 +7804,7 @@ ALTER TABLE ONLY timetable.migration
 
 
 --
--- TOC entry 4963 (class 2606 OID 30297)
+-- TOC entry 4964 (class 2606 OID 30297)
 -- Name: parameter parameter_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7790,7 +7813,7 @@ ALTER TABLE ONLY timetable.parameter
 
 
 --
--- TOC entry 4965 (class 2606 OID 30299)
+-- TOC entry 4966 (class 2606 OID 30299)
 -- Name: task task_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -7799,7 +7822,7 @@ ALTER TABLE ONLY timetable.task
 
 
 --
--- TOC entry 4988 (class 2620 OID 30300)
+-- TOC entry 4989 (class 2620 OID 30300)
 -- Name: user auto_create_role; Type: TRIGGER; Schema: account; Owner: postgres
 --
 
@@ -7807,7 +7830,7 @@ CREATE TRIGGER auto_create_role AFTER INSERT ON account."user" FOR EACH ROW EXEC
 
 
 --
--- TOC entry 4989 (class 2620 OID 30513)
+-- TOC entry 4990 (class 2620 OID 30513)
 -- Name: user update_user; Type: TRIGGER; Schema: account; Owner: postgres
 --
 
@@ -7815,7 +7838,7 @@ CREATE TRIGGER update_user BEFORE UPDATE ON account."user" FOR EACH ROW EXECUTE 
 
 
 --
--- TOC entry 4990 (class 2620 OID 30302)
+-- TOC entry 4991 (class 2620 OID 30302)
 -- Name: delivery_provider update_delivery_provider; Type: TRIGGER; Schema: delivery; Owner: postgres
 --
 
@@ -7823,7 +7846,7 @@ CREATE TRIGGER update_delivery_provider BEFORE UPDATE ON delivery.delivery_provi
 
 
 --
--- TOC entry 4994 (class 2620 OID 30498)
+-- TOC entry 4996 (class 2620 OID 30498)
 -- Name: product auto_create_inv; Type: TRIGGER; Schema: product; Owner: postgres
 --
 
@@ -7831,7 +7854,15 @@ CREATE TRIGGER auto_create_inv AFTER INSERT ON product.product FOR EACH ROW EXEC
 
 
 --
--- TOC entry 4991 (class 2620 OID 30303)
+-- TOC entry 4993 (class 2620 OID 30982)
+-- Name: discount auto_update_cost_product; Type: TRIGGER; Schema: product; Owner: postgres
+--
+
+CREATE TRIGGER auto_update_cost_product AFTER INSERT ON product.discount FOR EACH ROW EXECUTE FUNCTION public.auto_update_cost_product();
+
+
+--
+-- TOC entry 4992 (class 2620 OID 30303)
 -- Name: category update_category; Type: TRIGGER; Schema: product; Owner: postgres
 --
 
@@ -7839,7 +7870,7 @@ CREATE TRIGGER update_category BEFORE UPDATE ON product.category FOR EACH ROW EX
 
 
 --
--- TOC entry 4992 (class 2620 OID 30304)
+-- TOC entry 4994 (class 2620 OID 30304)
 -- Name: discount update_discount; Type: TRIGGER; Schema: product; Owner: postgres
 --
 
@@ -7847,7 +7878,7 @@ CREATE TRIGGER update_discount BEFORE UPDATE ON product.discount FOR EACH ROW EX
 
 
 --
--- TOC entry 4993 (class 2620 OID 30305)
+-- TOC entry 4995 (class 2620 OID 30305)
 -- Name: inventory update_inventory; Type: TRIGGER; Schema: product; Owner: postgres
 --
 
@@ -7855,7 +7886,7 @@ CREATE TRIGGER update_inventory BEFORE UPDATE ON product.inventory FOR EACH ROW 
 
 
 --
--- TOC entry 4995 (class 2620 OID 30306)
+-- TOC entry 4997 (class 2620 OID 30306)
 -- Name: product update_product; Type: TRIGGER; Schema: product; Owner: postgres
 --
 
@@ -7863,7 +7894,7 @@ CREATE TRIGGER update_product BEFORE UPDATE ON product.product FOR EACH ROW EXEC
 
 
 --
--- TOC entry 4996 (class 2620 OID 30307)
+-- TOC entry 4998 (class 2620 OID 30307)
 -- Name: cart_item update_cart_item; Type: TRIGGER; Schema: shopping; Owner: postgres
 --
 
@@ -7871,7 +7902,7 @@ CREATE TRIGGER update_cart_item BEFORE UPDATE ON shopping.cart_item FOR EACH ROW
 
 
 --
--- TOC entry 4997 (class 2620 OID 30308)
+-- TOC entry 4999 (class 2620 OID 30308)
 -- Name: order_detail update_order_detail; Type: TRIGGER; Schema: shopping; Owner: postgres
 --
 
@@ -7879,7 +7910,7 @@ CREATE TRIGGER update_order_detail BEFORE UPDATE ON shopping.order_detail FOR EA
 
 
 --
--- TOC entry 4998 (class 2620 OID 30309)
+-- TOC entry 5000 (class 2620 OID 30309)
 -- Name: order_item update_order_item; Type: TRIGGER; Schema: shopping; Owner: postgres
 --
 
@@ -7887,7 +7918,7 @@ CREATE TRIGGER update_order_item BEFORE UPDATE ON shopping.order_item FOR EACH R
 
 
 --
--- TOC entry 5000 (class 2620 OID 30310)
+-- TOC entry 5002 (class 2620 OID 30310)
 -- Name: store auto_create_deli_method; Type: TRIGGER; Schema: store; Owner: postgres
 --
 
@@ -7895,7 +7926,7 @@ CREATE TRIGGER auto_create_deli_method AFTER INSERT ON store.store FOR EACH ROW 
 
 
 --
--- TOC entry 5001 (class 2620 OID 30311)
+-- TOC entry 5003 (class 2620 OID 30311)
 -- Name: store auto_reupdate_role; Type: TRIGGER; Schema: store; Owner: postgres
 --
 
@@ -7903,7 +7934,7 @@ CREATE TRIGGER auto_reupdate_role AFTER DELETE ON store.store FOR EACH ROW EXECU
 
 
 --
--- TOC entry 5002 (class 2620 OID 30312)
+-- TOC entry 5004 (class 2620 OID 30312)
 -- Name: store auto_update_role; Type: TRIGGER; Schema: store; Owner: postgres
 --
 
@@ -7911,7 +7942,7 @@ CREATE TRIGGER auto_update_role AFTER INSERT ON store.store FOR EACH ROW EXECUTE
 
 
 --
--- TOC entry 4999 (class 2620 OID 30313)
+-- TOC entry 5001 (class 2620 OID 30313)
 -- Name: delivery_method update_delimethod; Type: TRIGGER; Schema: store; Owner: postgres
 --
 
@@ -7919,7 +7950,7 @@ CREATE TRIGGER update_delimethod BEFORE UPDATE ON store.delivery_method FOR EACH
 
 
 --
--- TOC entry 5003 (class 2620 OID 30314)
+-- TOC entry 5005 (class 2620 OID 30314)
 -- Name: store update_store; Type: TRIGGER; Schema: store; Owner: postgres
 --
 
@@ -7927,7 +7958,7 @@ CREATE TRIGGER update_store BEFORE UPDATE ON store.store FOR EACH ROW EXECUTE FU
 
 
 --
--- TOC entry 4968 (class 2606 OID 30315)
+-- TOC entry 4969 (class 2606 OID 30315)
 -- Name: user_role role_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7936,7 +7967,7 @@ ALTER TABLE ONLY account.user_role
 
 
 --
--- TOC entry 4967 (class 2606 OID 30320)
+-- TOC entry 4968 (class 2606 OID 30320)
 -- Name: payment user_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7945,7 +7976,7 @@ ALTER TABLE ONLY account.payment
 
 
 --
--- TOC entry 4969 (class 2606 OID 30325)
+-- TOC entry 4970 (class 2606 OID 30325)
 -- Name: user_role user_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7954,7 +7985,7 @@ ALTER TABLE ONLY account.user_role
 
 
 --
--- TOC entry 4966 (class 2606 OID 30330)
+-- TOC entry 4967 (class 2606 OID 30330)
 -- Name: address user_fk; Type: FK CONSTRAINT; Schema: account; Owner: postgres
 --
 
@@ -7963,7 +7994,7 @@ ALTER TABLE ONLY account.address
 
 
 --
--- TOC entry 4970 (class 2606 OID 30335)
+-- TOC entry 4971 (class 2606 OID 30335)
 -- Name: category cate_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7972,7 +8003,7 @@ ALTER TABLE ONLY product.category
 
 
 --
--- TOC entry 4973 (class 2606 OID 30340)
+-- TOC entry 4974 (class 2606 OID 30340)
 -- Name: product cate_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7981,7 +8012,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4974 (class 2606 OID 30345)
+-- TOC entry 4975 (class 2606 OID 30345)
 -- Name: product dis_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7990,7 +8021,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4972 (class 2606 OID 30350)
+-- TOC entry 4973 (class 2606 OID 30350)
 -- Name: inventory prod_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -7999,7 +8030,7 @@ ALTER TABLE ONLY product.inventory
 
 
 --
--- TOC entry 4975 (class 2606 OID 30355)
+-- TOC entry 4976 (class 2606 OID 30355)
 -- Name: product store_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -8008,7 +8039,7 @@ ALTER TABLE ONLY product.product
 
 
 --
--- TOC entry 4971 (class 2606 OID 30483)
+-- TOC entry 4972 (class 2606 OID 30483)
 -- Name: discount store_fk; Type: FK CONSTRAINT; Schema: product; Owner: postgres
 --
 
@@ -8017,7 +8048,7 @@ ALTER TABLE ONLY product.discount
 
 
 --
--- TOC entry 4978 (class 2606 OID 30360)
+-- TOC entry 4979 (class 2606 OID 30360)
 -- Name: order_detail add_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8026,7 +8057,7 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4981 (class 2606 OID 30365)
+-- TOC entry 4982 (class 2606 OID 30365)
 -- Name: order_item deli_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8035,7 +8066,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4982 (class 2606 OID 30370)
+-- TOC entry 4983 (class 2606 OID 30370)
 -- Name: order_item detail_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8044,7 +8075,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4979 (class 2606 OID 30375)
+-- TOC entry 4980 (class 2606 OID 30375)
 -- Name: order_detail pay_id; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8053,7 +8084,7 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4976 (class 2606 OID 30380)
+-- TOC entry 4977 (class 2606 OID 30380)
 -- Name: cart_item prod_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8062,7 +8093,7 @@ ALTER TABLE ONLY shopping.cart_item
 
 
 --
--- TOC entry 4983 (class 2606 OID 30385)
+-- TOC entry 4984 (class 2606 OID 30385)
 -- Name: order_item prod_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8071,7 +8102,7 @@ ALTER TABLE ONLY shopping.order_item
 
 
 --
--- TOC entry 4977 (class 2606 OID 30390)
+-- TOC entry 4978 (class 2606 OID 30390)
 -- Name: cart_item user_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8080,7 +8111,7 @@ ALTER TABLE ONLY shopping.cart_item
 
 
 --
--- TOC entry 4980 (class 2606 OID 30395)
+-- TOC entry 4981 (class 2606 OID 30395)
 -- Name: order_detail user_fk; Type: FK CONSTRAINT; Schema: shopping; Owner: postgres
 --
 
@@ -8089,7 +8120,7 @@ ALTER TABLE ONLY shopping.order_detail
 
 
 --
--- TOC entry 4984 (class 2606 OID 30400)
+-- TOC entry 4985 (class 2606 OID 30400)
 -- Name: delivery_method deli_fk; Type: FK CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -8098,7 +8129,7 @@ ALTER TABLE ONLY store.delivery_method
 
 
 --
--- TOC entry 4985 (class 2606 OID 30405)
+-- TOC entry 4986 (class 2606 OID 30405)
 -- Name: store user_fk; Type: FK CONSTRAINT; Schema: store; Owner: postgres
 --
 
@@ -8107,7 +8138,7 @@ ALTER TABLE ONLY store.store
 
 
 --
--- TOC entry 4986 (class 2606 OID 30410)
+-- TOC entry 4987 (class 2606 OID 30410)
 -- Name: parameter parameter_task_id_fkey; Type: FK CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -8116,7 +8147,7 @@ ALTER TABLE ONLY timetable.parameter
 
 
 --
--- TOC entry 4987 (class 2606 OID 30415)
+-- TOC entry 4988 (class 2606 OID 30415)
 -- Name: task task_chain_id_fkey; Type: FK CONSTRAINT; Schema: timetable; Owner: postgres
 --
 
@@ -8124,7 +8155,7 @@ ALTER TABLE ONLY timetable.task
     ADD CONSTRAINT task_chain_id_fkey FOREIGN KEY (chain_id) REFERENCES timetable.chain(chain_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2024-01-12 15:59:03
+-- Completed on 2024-01-12 21:57:52
 
 --
 -- PostgreSQL database dump complete
