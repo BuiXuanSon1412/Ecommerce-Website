@@ -15,6 +15,6 @@ public class DiscountDto {
     private Double disc;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Boolean active;
+    private Boolean isActive;
     private StoreDto store;
 }

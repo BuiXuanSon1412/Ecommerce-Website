@@ -10,20 +10,12 @@
             <h1 class="my-4">Delivery Settings</h1>
             <h5 class="pt-1">Delivery Methods</h5>
             <small>Activate suitable methods for Store</small>
-            <div class="form-check form-switch mt-4">
-                <input class="form-check-input" type="checkbox" role="switch" id="businessSwitch">
-                <label class="form-check-label" for="businessSwitch">Business</label>
+            <div class="form-check form-switch mt-4" th:each="deliveryMethod : ${deliveryMethods}">
+                <input class="form-check-input" type="checkbox" th:checked="${deliveryMethod.isActive}" role="switch" th:data-method="${deliveryMethod.methodName}">
+                <label class="form-check-label" th:for="${deliveryMethod.methodName}" th:text="${deliveryMethod.methodName}"></label>
             </div>
-            <div class="form-check form-switch mt-4">
-                <input class="form-check-input" type="checkbox" role="switch" id="fastBusiness">
-                <label class="form-check-label" for="fastBusiness">Fast</label>
-            </div>
-            <div class="form-check form-switch mt-4">
-                <input class="form-check-input" type="checkbox" role="switch" id="expressBusiness">
-                <label class="form-check-label" for="expressBusiness">Express</label>
-            </div>
+            
         </div>
     </div>
 </section>
-
 </html>

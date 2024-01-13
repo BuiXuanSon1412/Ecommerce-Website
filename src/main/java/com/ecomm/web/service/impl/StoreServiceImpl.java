@@ -5,11 +5,14 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.dto.delivery.DeliveryProviderDto;
+import com.ecomm.web.dto.store.DeliveryMethodDto;
 import com.ecomm.web.dto.store.StoreDto;
 import com.ecomm.web.model.delivery.DeliveryProvider;
+import com.ecomm.web.model.store.DeliveryMethod;
 import com.ecomm.web.model.store.Store;
 import com.ecomm.web.model.user.Role;
 import com.ecomm.web.model.user.UserEntity;
+import com.ecomm.web.repository.DeliveryMethodRepository;
 import com.ecomm.web.repository.DeliveryProviderRepository;
 import com.ecomm.web.repository.RoleRepository;
 import com.ecomm.web.repository.StoreRepository;
@@ -20,6 +23,7 @@ import com.ecomm.web.service.StoreService;
 import jakarta.validation.OverridesAttribute;
 
 import static com.ecomm.web.mapper.StoreMapper.mapToStore;
+import static com.ecomm.web.mapper.DeliveryMethodMapper.mapToDeliveryMethodDto;
 import static com.ecomm.web.mapper.DeliveryProviderMapper.mapToDeliveryProviderDto;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +41,8 @@ public class StoreServiceImpl implements StoreService {
     private RoleRepository roleRepository;
     @Autowired
     private DeliveryProviderRepository deliveryProviderRepository;
+    @Autowired
+    private DeliveryMethodRepository deliveryMethodRepository;
     @Override
     public void registerStore(StoreDto storeDto) {
         String username = SecurityUtil.getSessionUser();
@@ -59,5 +65,24 @@ public class StoreServiceImpl implements StoreService {
     public void registerDeliveryProvider(Integer dpid) {
         DeliveryProvider deliveryProvider = deliveryProviderRepository.findById(dpid).get();
         
+    }
+    @Override
+    public List<DeliveryMethodDto> findDeliveryMethodByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        Store store = storeRepository.findByUser(user);
+        List<DeliveryMethod> deliveryMethods = deliveryMethodRepository.findByStore(store);
+        return deliveryMethods.stream().map((deliveryMethod) -> mapToDeliveryMethodDto(deliveryMethod)).collect(Collectors.toList());
+    }
+    @Override
+    public boolean updateMethod(String methodName, String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        Store store = storeRepository.findByUser(user);
+        DeliveryMethod deliveryMethod = deliveryMethodRepository.findByMethodNameAndStore(methodName, store.getId());
+        if(deliveryMethod != null) {
+            deliveryMethod.setIsActive(!deliveryMethod.getIsActive());
+            deliveryMethodRepository.save(deliveryMethod);
+            return true;
+        }
+        return false;
     }
 }

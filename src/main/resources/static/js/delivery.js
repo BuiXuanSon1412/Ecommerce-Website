@@ -1,32 +1,14 @@
 $(document).ready(function () {
-    var includedBusiness = $("#businessSwitch").prop("checked");
-    updateBusiness(includedBusiness);
-    var includedFast = $("#fastSwitch").prop("checked");
-    updateFast(includedFast);
-    var includedExpress = $("#expressSwitch").prop("checked");
-    updateExpress(includedExpress);
-
+    $(".form-check-input").on("change", function() {
+        console.log($(this).data('method'));
+        updateStatus($(this).data('method'));
+    })
 })
-function updateBusiness(includedBusiness) {
+function updateStatus(method) {
     $.ajax({
         method: "POST",
-        url: "/store/delivery?business="+includedBusiness
-    }).done(function () {
-
-    })
-}
-function updateFast(includedFast) {
-    $.ajax({
-        method: "POST",
-        url: "/store/delivery?fast"+includedFast
-    }).done(function () {
-
-    })
-}
-function updateExpress(includedExpress) {
-    $.ajax({
-        method: "POST",
-        url: "/store/delivery?express="+includedExpress
-    }).done(function () {
+        url: "/store/delivery?method=" + method
+    }).done(function (response) {
+        alert(response);
     })
 }

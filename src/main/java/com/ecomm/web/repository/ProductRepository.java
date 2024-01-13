@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.model.product.Product;
 import com.ecomm.web.model.store.Store;
 

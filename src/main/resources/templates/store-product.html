@@ -2,12 +2,44 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{store-layout}">
 
 <head>
-    <title>Store - Product</title>   
+    <title>Store - Product</title>
 </head>
 
 <body>
     <main layout:fragment="body">
         <!-- Header-->
+        <!-- Model Address -->
+        <div class="modal" id="myModalDiscount">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">List of active Discounts</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="list-group" th:each="a:${addresses}" th:id="'address'+${a.id}">
+                                <div class="list-group-item list-group-item-action" style="position: relative;">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Address</h5>
+                                    </div>
+                                    <small class="mb-1" th:text="'Details: '+${a.address}"></small><br>
+                                    <small class="mb-1" th:text="'City: '+${a.city}"></small><br>
+                                    <small class="mb-1" th:text="'Postal code: '+${a.postalCode}"></small><br>
+                                    <small class="mb-1" th:text="'Country: '+${a.country}"></small>
+                                    <button type="button" th:data-aid="${a.id}" data-bs-dismiss="modal"
+                                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-1 me-4 btn-a-select">Select</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container-fluid px-4">
             <h1 class="mt-4">Store Products</h1>
             <ol class="breadcrumb mb-4 row">
@@ -56,7 +88,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            
+
                                             <script th:inline="javascript">
 
                                                 $("#baseCategory").change(function () {
@@ -81,12 +113,12 @@
 
                                                 })
                                             </script>
-                                        
+
                                             <div class="col">
                                                 <label>Sub Category</label>
                                                 <div class="input-group mb-1">
                                                     <select class="form-select" id="subCategory" th:field="*{category}">
-                                                        
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -119,8 +151,8 @@
 
                                         <div class="form-group">
                                             <label>Price</label>
-                                            <input type="number" step="0.01" min="0" class="form-control" placeholder="Price in US $"
-                                                th:field="*{price}">
+                                            <input type="number" step="0.01" min="0" class="form-control"
+                                                placeholder="Price in US $" th:field="*{price}">
                                         </div>
                                         <p th:if="${#fields.hasErrors('price')}" class="text-danger"
                                             th:errors="*{price}"></p>
@@ -150,23 +182,7 @@
                 </div>
                 <div class="card-body">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
-                        <div class="datatable-top">
-                            <div class="datatable-dropdown">
-                                <label>
-                                    <select class="datatable-selector">
-                                        <option value="5">5</option>
-                                        <option value="10" selected="">10</option>
-                                        <option value="15">15</option>
-                                        <option value="20">20</option>
-                                        <option value="25">25</option>
-                                    </select> entries per page
-                                </label>
-                            </div>
-                            <div class="datatable-search">
-                                <input class="datatable-input" placeholder="Search..." type="search"
-                                    title="Search within table" aria-controls="datatablesSimple">
-                            </div>
-                        </div>
+
                         <div class="datatable-container">
                             <table id="datatablesSimple" class="datatable-table">
                                 <thead>
@@ -193,38 +209,17 @@
                                         <td th:text="*{sku}"></td>
                                         <td th:text="*{quantity}"></td>
                                         <td>
-                                            <a th:href="@{/product/delete}">Delete</a>
-                                            <a th:href="@{/product/edit}">Edit</a>
-                                            <a th:href="@{/product/discount}">Voucher</a>
+                                            <a class="text-dark" th:href="@{/product/delete}">Delete</a>
+                                            <a class="text-dark" th:href="@{/product/edit}">Edit</a>
+                                            <a class="text-dark" href="#" data-bs-toggle="modal"
+                                                data-bs-target="#myModalDiscount">Discount</a>
                                         </td>
                                     </tr>
 
                                 </tbody>
                             </table>
                         </div>
-                        <div class="datatable-bottom">
-                            <div class="datatable-info">Showing 1 to 10 of 57 entries</div>
-                            <nav class="datatable-pagination">
-                                <ul class="datatable-pagination-list">
-                                    <li class="datatable-pagination-list-item datatable-hidden datatable-disabled"><a
-                                            data-page="1" class="datatable-pagination-list-item-link">‹</a></li>
-                                    <li class="datatable-pagination-list-item datatable-active"><a data-page="1"
-                                            class="datatable-pagination-list-item-link">1</a></li>
-                                    <li class="datatable-pagination-list-item"><a data-page="2"
-                                            class="datatable-pagination-list-item-link">2</a></li>
-                                    <li class="datatable-pagination-list-item"><a data-page="3"
-                                            class="datatable-pagination-list-item-link">3</a></li>
-                                    <li class="datatable-pagination-list-item"><a data-page="4"
-                                            class="datatable-pagination-list-item-link">4</a></li>
-                                    <li class="datatable-pagination-list-item"><a data-page="5"
-                                            class="datatable-pagination-list-item-link">5</a></li>
-                                    <li class="datatable-pagination-list-item"><a data-page="6"
-                                            class="datatable-pagination-list-item-link">6</a></li>
-                                    <li class="datatable-pagination-list-item"><a data-page="2"
-                                            class="datatable-pagination-list-item-link">›</a></li>
-                                </ul>
-                            </nav>
-                        </div>
+
                     </div>
                 </div>
             </div>

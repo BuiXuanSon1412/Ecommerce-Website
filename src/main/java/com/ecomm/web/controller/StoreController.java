@@ -16,7 +16,9 @@ import com.ecomm.web.dto.product.CategoryDto;
 import com.ecomm.web.dto.product.DiscountDto;
 import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.dto.shopping.OrderItemDto;
+import com.ecomm.web.dto.store.DeliveryMethodDto;
 import com.ecomm.web.dto.store.StoreDto;
+import com.ecomm.web.model.store.DeliveryMethod;
 import com.ecomm.web.security.SecurityUtil;
 import com.ecomm.web.service.CategoryService;
 import com.ecomm.web.service.DiscountService;
@@ -53,17 +55,12 @@ public class StoreController {
             return "store-register";
         }
         storeService.registerStore(storeDto);
-        return "redirect:/store/dashboard";
+        return "redirect:/store/order";
     }
 
     @GetMapping("/store/profile")
     public String editStore(Model model) {
         return "store-profile";
-    }
-
-    @GetMapping("/store/dashboard")
-    public String dashboardStore() {
-        return "store-dashboard";
     }
 
     @GetMapping("/store/order")
@@ -102,6 +99,8 @@ public class StoreController {
         List<ProductDto> products = productService.findProductByUser(username);
         AddProductForm product = AddProductForm.builder().build();
         List<CategoriesDto> categories = categoryService.findAllLevelCategories();
+        List<DiscountDto> discounts = discountService.findAllDiscountByUser(username);
+        model.addAttribute("discounts", discounts);
         model.addAttribute("product", product);
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
@@ -112,10 +111,8 @@ public class StoreController {
     public String addProduct(@Valid @ModelAttribute("product") AddProductForm addProductForm, BindingResult result,
             Model model) {
         if (result.hasErrors()) {
-            //model.addAttribute("product", addProductForm);
             String username = SecurityUtil.getSessionUser();
             List<ProductDto> products = productService.findProductByUser(username);
-            //AddProductForm product = AddProductForm.builder().build();
             List<CategoryDto> categories = categoryService.findAllBaseCategories();
             model.addAttribute("product", addProductForm);
             model.addAttribute("products", products);
@@ -126,7 +123,10 @@ public class StoreController {
         return "redirect:/store/product";
     }
     @GetMapping("/store/delivery")
-    public String deliverySetting(Model model) {
+    public String deliverySettings(Model model) {
+        String username = SecurityUtil.getSessionUser();
+        List<DeliveryMethodDto> deliveryMethods = storeService.findDeliveryMethodByUsername(username);
+        model.addAttribute("deliveryMethods", deliveryMethods);
         return "store-delivery";
     }
 }

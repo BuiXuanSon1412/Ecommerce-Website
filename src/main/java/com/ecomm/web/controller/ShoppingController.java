@@ -2,15 +2,11 @@ package com.ecomm.web.controller;
 
 import java.util.List;
 
-import org.slf4j.event.KeyValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecomm.web.dto.shopping.CartItemDto;
 import com.ecomm.web.dto.user.AddressDto;

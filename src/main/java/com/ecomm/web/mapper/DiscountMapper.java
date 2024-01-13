@@ -13,7 +13,7 @@ public class DiscountMapper {
                             .disc(discount.getDisc())
                             .startDate(discount.getStartDate())
                             .endDate(discount.getEndDate())
-                            .active(discount.getActive())
+                            .isActive(discount.getIsActive())
                             .disc(discount.getDisc())
                             .store(mapToStoreDto(discount.getStore()))
                             .build();
@@ -25,7 +25,7 @@ public class DiscountMapper {
                         .disc(discountDto.getDisc())
                         .startDate(discountDto.getStartDate())
                         .endDate(discountDto.getEndDate())
-                        .active(true)
+                        .isActive(true)
                         .build();
     }
 }

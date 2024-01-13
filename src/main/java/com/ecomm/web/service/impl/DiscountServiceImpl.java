@@ -38,6 +38,15 @@ public class DiscountServiceImpl implements DiscountService{
         List<Discount> dicounts = discountRepository.findByStore(store);
         return dicounts.stream().map((discount) -> mapToDiscountDto(discount)).collect(Collectors.toList());
     }
+    /*
+    @Override
+    public List<DiscountDto> findActiveDiscountByUser(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        Store store = storeRepository.findByUser(user);
+        List<Discount> dicounts = discountRepository.findActiveDiscountsByStore(store.getId());
+        return dicounts.stream().map((discount) -> mapToDiscountDto(discount)).collect(Collectors.toList());
+    }
+    */
     @Override
     public void saveDiscount(DiscountDto discountDto) {
         String username = SecurityUtil.getSessionUser();

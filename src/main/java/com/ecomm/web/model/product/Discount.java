@@ -35,7 +35,7 @@ public class Discount {
     private Double disc;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Boolean active;
+    private Boolean isActive;
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
