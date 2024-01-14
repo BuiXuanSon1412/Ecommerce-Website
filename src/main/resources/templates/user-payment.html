@@ -88,7 +88,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="list-group" th:each="p:${payments}">
+            <div class="list-group" th:each="p:${payments}" th:id="'pid'+${p.id}">
                 <div class="list-group-item list-group-item-action" style="position: relative;">
                     <div class="d-flex w-100 justify-content-between">
                         <h6 class="mb-1" th:text="'Payment Type: '+${p.paymentType}"></h6>
@@ -96,11 +96,8 @@
                     <small class="mb-1" th:text="'Provider: '+${p.provider}"></small><br>
                     <small class="mb-1" th:text="'Account Number: '+${p.accountNo}"></small><br>
                     <small class="mb-1" th:text="'Expiry Date: '+${p.expiry}"></small>
-                    <button type="button"
-                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-2 me-2">Delete</button>
-                    <button type="button"
-                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-5 me-2">Edit</button>
-                </div>
+                    <button type="button" th:data-pid="${p.id}"
+                        class="btn btn-sm btn-secondary position-absolute top-0 end-0 mt-2 me-2 btn-p-delete">Delete</button>
             </div>
         </div>
     </div>

@@ -14,4 +14,5 @@ public interface ProductService {
     List<ProductDto> findPopolarItems();
     List<ProductDto> findNewReleases();
     boolean pinDiscountToProduct(Integer productId, Integer discountId);
+    boolean deleteProduct(Integer productId);
 }

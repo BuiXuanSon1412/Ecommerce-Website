@@ -9,7 +9,8 @@ import com.ecomm.web.dto.store.StoreDto;
 public interface StoreService {
     public void registerStore(StoreDto storeDto);
     List<DeliveryProviderDto> findAll();
-    void registerDeliveryProvider(Integer dpid);
-    List<DeliveryMethodDto> findDeliveryMethodByUsername(String username);
     boolean updateMethod(String methodName, String username);
+    List<DeliveryMethodDto> findDeliveryMethodByUsername(String username);
+    StoreDto findStoreByUsername(String username);
+    void saveStore(StoreDto store);
 }

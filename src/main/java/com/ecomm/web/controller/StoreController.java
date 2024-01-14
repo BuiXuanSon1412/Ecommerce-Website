@@ -59,12 +59,15 @@ public class StoreController {
         storeService.registerStore(storeDto);
         return "redirect:/store/order";
     }
-
+    /* 
     @GetMapping("/store/profile")
     public String editStore(Model model) {
-        return "store-profile";
+        String username = SecurityUtil.getSessionUser();
+        StoreDto store = storeService.findStoreByUsername(username);
+        model.addAttribute("store", store);
+        return "store-register";
     }
-
+    */
     @GetMapping("/store/order")
     public String allOrder(Model model) {
         String username = SecurityUtil.getSessionUser();

@@ -13,12 +13,14 @@ import com.ecomm.web.dto.user.AddressDto;
 import com.ecomm.web.dto.user.PaymentDto;
 import com.ecomm.web.dto.user.Profile;
 import com.ecomm.web.dto.user.UserEntityDto;
+import com.ecomm.web.model.shopping.OrderDetail;
 import com.ecomm.web.model.shopping.OrderItem;
 import com.ecomm.web.model.user.Address;
 import com.ecomm.web.model.user.Payment;
 import com.ecomm.web.model.user.Role;
 import com.ecomm.web.model.user.UserEntity;
 import com.ecomm.web.repository.AddressRepository;
+import com.ecomm.web.repository.OrderDetailRepository;
 import com.ecomm.web.repository.OrderItemRepository;
 import com.ecomm.web.repository.PaymentRepository;
 import com.ecomm.web.repository.RoleRepository;
@@ -48,9 +50,10 @@ public class UserServiceImpl implements UserService {
     private PaymentRepository paymentRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
     @Override
     public void register(UserEntityDto userEntityDto) {     
-        //UserEntity user = mapToUserEntity(userEntityDto);
         UserEntity user = new UserEntity();
         user.setUsername(userEntityDto.getUsername());
         user.setFirstName(userEntityDto.getFirstName());
@@ -114,12 +117,28 @@ public class UserServiceImpl implements UserService {
         paymentRepository.save(payment);
     }
     @Override
-    public void deleteAddressById(Integer addressId) {
-        addressRepository.deleteById(addressId);
+    public boolean deleteAddressById(Integer addressId) {
+        if(addressId != null) {
+            Address address = addressRepository.findById(addressId).get();
+            List<OrderDetail> orderDetails = orderDetailRepository.findByAddress(address);
+            if(orderDetails.isEmpty()) {
+                addressRepository.deleteById(addressId);
+                return true;
+            }
+        }
+        return false;
     }
     @Override
-    public void deletePaymentById(Integer paymentId) {
-        paymentRepository.deleteById(paymentId);
+    public boolean deletePaymentById(Integer paymentId) {
+        if(paymentId != null) {
+            Payment payment = paymentRepository.findById(paymentId).get();
+            List<OrderDetail> orderDetails = orderDetailRepository.findByPayment(payment);
+            if(orderDetails.isEmpty()) {
+                paymentRepository.deleteById(paymentId);
+                return true;
+            }
+        }
+        return false;
     }
     @Override
     public List<OrderItemDto> findPurchasesByUser(String username) {

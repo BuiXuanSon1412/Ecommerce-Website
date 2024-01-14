@@ -9,11 +9,12 @@
     <main layout:fragment="body">
         <!-- Header-->
         <div class="container-fluid px-4">
-            <h1 class="my-4"> Store Orders</h1>
+            <h1 class="my-4"> My Purchases</h1>
             <div class="container card mb-4">
                 <div class="card-header row">
                     <small class="col text-center"><a class="text-dark text-decoration-none"
                             th:href="@{/user/purchase}">All</a></small>
+                    <!--
                     <small class="col text-center"><a class="text-dark text-decoration-none"
                             th:href="@{/purchase/pending}">Pending</a></small>
                     <small class="col text-center"><a class="text-dark text-decoration-none"
@@ -24,6 +25,7 @@
                             th:href="@{/purchase/cancel}">Cancelled</a></small>
                     <small class="col text-center"><a class="text-dark text-decoration-none"
                             th:href="@{/purchase/return}">Return refund</a></small>
+                    -->
                 </div>
                 <div class="card-body">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
@@ -61,7 +63,7 @@
                                             th:text="${oi.product.price * oi.quantity}">
                                         </td>
                                         <td th:if="${oi.condition == 'Pending Confirmation' || oi.condition == 'Pending Pickup' || oi.condition == 'Completed Setup'}">Pending</td>
-                                        <td th:if="${oi.condition == 'In transit'}"> In Transit</td>
+                                        <td th:if="${oi.condition == 'In Transit'}"> In Transit</td>
                                         <td th:if="${oi.condition == 'Delivered'}"> Completed</td>
                                         <td th:if="${oi.condition == 'Order Cancelled'}">Cancelled</td>
                                         <td th:if="${oi.condition == 'Return Initiated'}">Return refund</td>

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.ecomm.web.model.shopping.OrderItem;
+import com.ecomm.web.model.product.Product;
+
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
@@ -16,4 +18,5 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
     List<OrderItem> findOrderItemsByStoreAndCondition(Integer storeId, String condition);
     @Query(value = "SELECT oi.* FROM shopping.order_item oi JOIN shopping.order_detail USING (order_detail_id) WHERE user_id = :userId", nativeQuery = true)
     List<OrderItem> findPurchasesByUser(Integer userId);
+    List<OrderItem> findByProduct(Product product);
 }

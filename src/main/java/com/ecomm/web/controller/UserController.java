@@ -41,7 +41,7 @@ public class UserController {
     public String saveUserProfile(@Valid @ModelAttribute("profile") Profile profile, BindingResult result, Model model){       
         if(result.hasErrors()) {
             model.addAttribute("profile", profile);
-            return "profile";
+            return "store-profile";
         }
         UserEntityDto newUser = userService.findByUsername(profile.getUsername());
         if(newUser != null 
@@ -98,15 +98,5 @@ public class UserController {
         List<OrderItemDto> orderItems = userService.findPurchasesByUser(username);
         model.addAttribute("orderItems", orderItems);
         return "user-purchase";
-    }
-    @PostMapping("/address/delete")
-    public String deleteAddress(@RequestParam(name = "aid") Integer addressId) {
-        userService.deleteAddressById(addressId);
-        return "redirect:/user/address";
-    } 
-    @PostMapping("/payment/delete")
-    public String deletePayment(@RequestParam(name = "pid") Integer paymentId) {
-        userService.deletePaymentById(paymentId);
-        return "redirect:/user/address";
     }
 }

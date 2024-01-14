@@ -23,6 +23,7 @@ import com.ecomm.web.service.StoreService;
 import jakarta.validation.OverridesAttribute;
 
 import static com.ecomm.web.mapper.StoreMapper.mapToStore;
+import static com.ecomm.web.mapper.StoreMapper.mapToStoreDto;
 import static com.ecomm.web.mapper.DeliveryMethodMapper.mapToDeliveryMethodDto;
 import static com.ecomm.web.mapper.DeliveryProviderMapper.mapToDeliveryProviderDto;
 import java.util.List;
@@ -61,11 +62,7 @@ public class StoreServiceImpl implements StoreService {
     public List<DeliveryProviderDto> findAll() {
         return deliveryProviderRepository.findAll().stream().map((deliveryProvider) -> mapToDeliveryProviderDto(deliveryProvider)).collect(Collectors.toList());
     }
-    @Override
-    public void registerDeliveryProvider(Integer dpid) {
-        DeliveryProvider deliveryProvider = deliveryProviderRepository.findById(dpid).get();
-        
-    }
+
     @Override
     public List<DeliveryMethodDto> findDeliveryMethodByUsername(String username) {
         UserEntity user = userRepository.findByUsername(username);
@@ -84,5 +81,18 @@ public class StoreServiceImpl implements StoreService {
             return true;
         }
         return false;
+    }
+    @Override
+    public StoreDto findStoreByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        Store store = storeRepository.findByUser(user);
+        return mapToStoreDto(store);
+    }
+    @Override
+    public void saveStore(StoreDto storeDto) {
+        Store store = storeRepository.findById(storeDto.getId()).get();
+        store.setName(storeDto.getName());
+        store.setDescription(store.getDescription());
+        storeRepository.save(store);
     }
 }

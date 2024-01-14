@@ -17,7 +17,7 @@ public interface UserService {
     void saveAddress(AddressDto addressDto);
     List<PaymentDto> findPaymentByUser(String username);
     void savePayment(PaymentDto paymentDto);
-    void deleteAddressById(Integer addressId);
-    void deletePaymentById(Integer paymentId);
+    boolean deleteAddressById(Integer addressId);
+    boolean deletePaymentById(Integer paymentId);
     List<OrderItemDto> findPurchasesByUser(String username);
 }

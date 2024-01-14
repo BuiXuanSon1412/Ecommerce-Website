@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.web.model.product.Product;
+import com.ecomm.web.model.shopping.OrderItem;
 import com.ecomm.web.dto.product.AddProductForm;
 import com.ecomm.web.dto.product.ProductDto;
 import com.ecomm.web.model.product.Category;
@@ -18,6 +19,7 @@ import com.ecomm.web.model.user.UserEntity;
 import com.ecomm.web.repository.CategoryRepository;
 import com.ecomm.web.repository.DiscountRepository;
 import com.ecomm.web.repository.InventoryRepository;
+import com.ecomm.web.repository.OrderItemRepository;
 import com.ecomm.web.repository.ProductRepository;
 import com.ecomm.web.repository.StoreRepository;
 import com.ecomm.web.repository.UserRepository;
@@ -44,6 +46,9 @@ public class ProductServiceImpl implements ProductService {
     private CategoryService categoryService;
     @Autowired
     private DiscountRepository discountRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Override
     public void saveProduct(AddProductForm productForm) {
         Category category = categoryRepository.findById(productForm.getCategory()).get();
@@ -129,6 +134,18 @@ public class ProductServiceImpl implements ProductService {
             product.setDiscount(discount);
             productRepository.save(product);
             return true;
+        }
+        return false;
+    }
+    @Override
+    public boolean deleteProduct(Integer productId) {
+        if(productId != null) {
+            Product product = productRepository.findById(productId).get();
+            List<OrderItem> orderItems = orderItemRepository.findByProduct(product);
+            if(orderItems.isEmpty()) {
+                productRepository.deleteById(productId);
+                return true;
+            }
         }
         return false;
     }
